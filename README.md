@@ -4,9 +4,11 @@ Personal Claude Code plugin marketplace — reusable AI-assisted development wor
 
 ## Contents
 
-| Plugin | What it carries |
-|---|---|
-| [`dev-workflow`](dev-workflow/) | Topic documentation skills (`topic-init`, `topic-plan`, `topic-test`, `topic-status`, `main-doc-verify`, `plan-doc-verify`, `doc-conciseness-review`, `workflow-self-correct`), their shared rules + doc templates, and the 19 AI-Assisted Development Principles + Topic Workflow Guide reference docs |
+- [`dev-workflow`](dev-workflow/)
+  - Topic documentation skills: `topic-init`, `topic-plan`, `topic-test`, `topic-status`, `main-doc-verify`, `plan-doc-verify`, `doc-conciseness-review`, `workflow-self-correct`
+  - Shared rules + doc templates
+  - The `self-update` skill
+  - 19 AI-Assisted Development Principles + Topic Workflow Guide reference docs
 
 Repo-agnostic by design: the adopting repo follows the `docs/ref/<MODULE>/<TOPIC>/` convention and adapts the marked path/command examples to its own layout. Phase A scope = skills/rules/templates/docs. Deterministic hook gates (a per-repo-configurable gate-core pattern) are planned as a later phase.
 
@@ -29,10 +31,10 @@ No `version` field is declared in `plugin.json` or the marketplace entry — plu
 claude plugin update dev-workflow@claude-tools
 ```
 
-…then start a fresh chat session. Or, from inside any Claude Code chat, the plugin ships its own updater command:
+…then start a fresh chat session. Or, from inside any Claude Code chat, the plugin ships its own updater skill (also invocable as a slash command):
 
 ```text
-/dev-workflow:update
+/dev-workflow:self-update
 ```
 
 It runs the same re-pin, confirms the new SHA from `~/.claude/plugins/installed_plugins.json`, and reminds you to restart the chat. Declare a `version` only if you want to pin installs.

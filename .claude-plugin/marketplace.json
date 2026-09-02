@@ -1,15 +1,21 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "claude-tools",
   "owner": {
-    "name": "ALimie"
+    "name": "Alimie Rosli"
   },
   "description": "Personal Claude Code tooling: reusable AI-assisted development workflow skills",
   "plugins": [
     {
       "name": "dev-workflow",
+      "displayName": "Dev Workflow",
       "source": "./dev-workflow",
       "description": "AI-assisted development workflow: topic docs (init/plan/test/status), doc verification, conciseness review, workflow self-correction, and the 19 AI-assisted development principles",
-      "author": { "name": "ALimie" }
+      "author": { "name": "Alimie Rosli" },
+      "homepage": "https://github.com/AlimieRosli/Claude-Tools",
+      "repository": "https://github.com/AlimieRosli/Claude-Tools",
+      "category": "productivity",
+      "tags": ["workflow", "documentation", "ai-development"]
     }
   ]
 }
