@@ -13,15 +13,17 @@ Repo-agnostic by design: the adopting repo follows the `docs/ref/<MODULE>/<TOPIC
 ## Install (any repo, once)
 
 ```text
-/plugin marketplace add ALimie/claude-tools
+/plugin marketplace add AlimieRosli/Claude-Tools
 /plugin install dev-workflow@claude-tools
 ```
+
+> Note the `@claude-tools` — that is the marketplace's `name` field inside `.claude-plugin/marketplace.json` (lowercase, kebab-case), **not** the repo name `Claude-Tools`.
 
 Private-repo note: cloning uses your normal git credentials. Background auto-update disables credential helpers — if private auto-update fails, use a read-only token via a git `insteadOf` rewrite.
 
 ## Update flow
 
-No `version` field is declared in `plugin.json` or the marketplace entry — the plugin updates automatically whenever this repo's commit SHA changes, picked up on the next Claude Code session. Declare a `version` only if you want to pin installs.
+No `version` field is declared in `plugin.json` or the marketplace entry — the plugin updates automatically whenever this repo's commit SHA changes, picked up on the next Claude Code session or `/reload-plugins`. Declare a `version` only if you want to pin installs.
 
 ## Development / testing
 
