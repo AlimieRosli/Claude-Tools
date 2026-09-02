@@ -1,6 +1,6 @@
 ---
 name: self-update
-description: "Update the dev-workflow plugin from its marketplace to the latest commit SHA. The plugin ships no version field (SHA-based updates) and third-party marketplaces have no auto-update in current builds, so the install must be re-pinned after every push to the plugin repo."
+description: "Update the dev-workflow plugin from its marketplace to the latest commit SHA. Updates are SHA-based (the manifest version is informational only) and third-party marketplaces have no auto-update in current builds, so the install must be re-pinned after every push to the plugin repo."
 ---
 
 Run this exact command via the Bash tool and show me the output:
