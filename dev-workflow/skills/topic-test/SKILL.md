@@ -31,7 +31,7 @@ argument-hint: "<ModuleName> <TopicName>"
 
 This skill is the **test doc owner** for a topic. The `topic-init` skill creates the main doc and `topic-plan` creates the plan doc — this skill writes the test suite that verifies the plan was implemented correctly, and continues to maintain it as tests are actually run (results, run log, fixes to run steps).
 
-The test doc is the single source of truth for **how to verify** a topic works: environment setup, expected results, side effects, and pass criteria. The required/optional category split and the Negative-Flow-before-fix rule are defined in [`${CLAUDE_PLUGIN_ROOT}/skills/topic-test/rules/topic-test-doc-writing.md`](rules/topic-test-doc-writing.md) — do not restate them here.
+The test doc is the single source of truth for **how to verify** a topic works: environment setup, expected results, side effects, and pass criteria. The required/optional category split and the Negative-Flow-before-fix rule are defined in [`${CLAUDE_PLUGIN_ROOT}/skills/topic-test/rules/topic-test-doc-writing.md`](rules/topic-test-doc-writing.md) — do not restate them here. That file is Mandatory reads #2: Read it before Step 3.
 
 In **test-only mode** (testing an existing feature with no code changes), the plan doc is not required — the test doc derives its test targets from the main doc and codebase exploration directly. See Step 1 for the existence gate details.
 
@@ -58,9 +58,21 @@ When testing an **existing feature** with **no code changes** (e.g. audit, regre
 
 ---
 
+## Mandatory reads
+
+Read each of these files with the Read tool at the indicated point. Inline references in the steps below are reminders, not substitutes — if you have not actually Read the file, do it before proceeding. Do not execute any step from memory alone.
+
+1. BEFORE Step 1: [`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/locate-topic.md`](../../_shared/rules/locate-topic.md) — required to resolve `<module>/<topic>` and derive the doc paths correctly (Step 1's existence gate depends on it).
+2. BEFORE Step 3 (and re-consulted in Steps 4, 5, 5.2, and 6): [`${CLAUDE_PLUGIN_ROOT}/skills/topic-test/rules/topic-test-doc-writing.md`](rules/topic-test-doc-writing.md) — the single source of truth for the required/optional category gating, Environment Scope, TOC/Last-Updated rules, and post-run update rules; the steps reference it repeatedly instead of restating it.
+3. BEFORE writing any test case (Step 5.1, and again in 5.2 when adding a category): [`${CLAUDE_PLUGIN_ROOT}/skills/topic-test/templates/test-doc.md`](templates/test-doc.md) — the doc skeleton; every section heading, position, and TOC entry must come from it.
+4. BEFORE Step 5.5: [`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md`](../../_shared/rules/human-review-checkpoint.md) — the blocking checkpoint's gate behavior, summary-table format, and presentation rules; the 5-row test-doc table must come from it.
+5. BEFORE Step 8: [`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md`](../../_shared/rules/topic-doc-writing-conventions.md) — the per-prompt and per-session discipline reminders that must be delivered verbatim at the end of the run.
+
+---
+
 ## Step 1 — Locate the Topic
 
-This skill requires the main doc to already exist — `topic-init` owns the main doc. The plan doc is **required when code changes are planned** (it provides phases, test targets, and rollback context), but **optional in test-only mode** (testing an existing feature with no code changes). Resolve the module and topic name, and derive the doc paths, per [Shared: Locating the Topic](`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/locate-topic.md`).
+This skill requires the main doc to already exist — `topic-init` owns the main doc. The plan doc is **required when code changes are planned** (it provides phases, test targets, and rollback context), but **optional in test-only mode** (testing an existing feature with no code changes). Read [`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/locate-topic.md`](../../_shared/rules/locate-topic.md) now (Mandatory reads #1) — then resolve the module and topic name, and derive the doc paths, per that file.
 
 **Verify the main doc exists** before proceeding. If it is missing, stop and tell the user to run `topic-init` first.
 
@@ -90,7 +102,7 @@ Look at the layers the target repo actually uses — e.g. in an Express.js app: 
 
 Minimum: 1 grep on topic keywords, 2 source files read, 1 existing test file (if any).
 
-**Local run & logging convention (example — adapt to the repo):** a typical Node/Express service runs locally via its dev-server command (e.g. `npm start`), which loads a gitignored `.env` for config vars and uses a structured logger (e.g. pino via a `loggerFor('ComponentName')` helper) at `debug` level for non-production runs. When a test needs to inspect runtime state, add a temporary `log.debug` via the repo's logger and read it from the dev-server terminal — **do not use `console.log`** (it bypasses structured/redacted logging and is hard to read in the terminal). See the "Environment Scope" rule in [`${CLAUDE_PLUGIN_ROOT}/skills/topic-test/rules/topic-test-doc-writing.md`](rules/topic-test-doc-writing.md) for the full convention.
+**Local run & logging convention (example — adapt to the repo):** a typical Node/Express service runs locally via its dev-server command (e.g. `npm start`), which loads a gitignored `.env` for config vars and uses a structured logger (e.g. pino via a `loggerFor('ComponentName')` helper) at `debug` level for non-production runs. When a test needs to inspect runtime state, add a temporary `log.debug` via the repo's logger and read it from the dev-server terminal — **do not use `console.log`** (it bypasses structured/redacted logging and is hard to read in the terminal). Read [`${CLAUDE_PLUGIN_ROOT}/skills/topic-test/rules/topic-test-doc-writing.md`](rules/topic-test-doc-writing.md) now if you have not already (Mandatory reads #2) — its "Environment Scope" rule has the full convention.
 
 **Reuse the already-running local service — NEVER start a duplicate.** Before running any local test, check whether the service is already up on its local port (e.g. `curl -s -o /dev/null -w "%{http_code}" http://localhost:<port>/...` — expect `200`/`401`, not `000`). If it responds, reuse it as-is; do not start it again. **If the repo's dev-start command kills any existing instance on the port first** (e.g. a `prestart` hook running a port-killer), running it while the user's instance is up destroys their service and causes `HTTP 000` / connection-refused on subsequent requests. A test that suddenly returns `000` is more likely caused by a duplicate dev-server start killing the port than by the code crashing — check the port first before assuming a code bug. If a restart is needed, ask the user to do it manually and continue only after they confirm; only restart it yourself if the user has explicitly authorized that.
 
@@ -98,7 +110,7 @@ Minimum: 1 grep on topic keywords, 2 source files read, 1 existing test file (if
 
 ## Step 4 — Identify Test Paths
 
-Enumerate cases across 7 categories. The required/optional gating is defined in [`${CLAUDE_PLUGIN_ROOT}/skills/topic-test/rules/topic-test-doc-writing.md`](rules/topic-test-doc-writing.md) — the table below lists the categories and ID prefixes for reference:
+Enumerate cases across 7 categories. Read [`${CLAUDE_PLUGIN_ROOT}/skills/topic-test/rules/topic-test-doc-writing.md`](rules/topic-test-doc-writing.md) now (Mandatory reads #2) — the required/optional gating is defined there; the table below lists the categories and ID prefixes for reference only:
 
 | Category | ID Prefix | Required? | What to test |
 |----------|-----------|-----------|-------------|
@@ -111,7 +123,7 @@ Enumerate cases across 7 categories. The required/optional gating is defined in 
 | Regression | `REG-` | **Conditionally required** — required when plan touches shared code paths | Existing endpoints/routes, cache keys, response format unchanged |
 | Performance | `PERF-` | Optional — only if requested | Response time under normal load, throughput, latency percentiles |
 
-The required/optional gating, run-order, and the Negative-Flow-before-fix rule are defined in [`${CLAUDE_PLUGIN_ROOT}/skills/topic-test/rules/topic-test-doc-writing.md`](rules/topic-test-doc-writing.md) — do not restate them here.
+The required/optional gating, run-order, and the Negative-Flow-before-fix rule are defined in [`${CLAUDE_PLUGIN_ROOT}/skills/topic-test/rules/topic-test-doc-writing.md`](rules/topic-test-doc-writing.md) — do not restate them here; they come from the file you Read in Mandatory reads #2.
 
 Each case needs: ID, scenario (one line), why needed, category, precondition, request, expected positive result, expected negative result (anti-pattern), side effects, how to run, pass criteria.
 
@@ -119,17 +131,17 @@ Each case needs: ID, scenario (one line), why needed, category, precondition, re
 
 ## Step 5 — Write or Update the Test Doc
 
-Follow the writing rules in [`${CLAUDE_PLUGIN_ROOT}/skills/topic-test/rules/topic-test-doc-writing.md`](rules/topic-test-doc-writing.md) — do not restate those rules here.
+Read [`${CLAUDE_PLUGIN_ROOT}/skills/topic-test/rules/topic-test-doc-writing.md`](rules/topic-test-doc-writing.md) now (Mandatory reads #2) and follow its writing rules — do not restate those rules here.
 
 ### 5.1 — First-time write (filling the stub or creating fresh)
 
-If the test doc does not exist yet, or is still the empty stub (from `topic-init`, if one was created), replace/create it entirely using the [test doc template](`${CLAUDE_PLUGIN_ROOT}/skills/topic-test/templates/test-doc.md`).
+If the test doc does not exist yet, or is still the empty stub (from `topic-init`, if one was created), Read the [test doc template](`${CLAUDE_PLUGIN_ROOT}/skills/topic-test/templates/test-doc.md`) now (Mandatory reads #3), then replace/create the doc entirely using it.
 
 Fill every section with real findings from Steps 2–4:
 
 1. **Frontmatter** — Service, topic folder, status (`Draft`/`In Progress`/`Complete`/`Blocked`), last updated date.
 2. **Table of Contents** — All `##` and key `###` sections (TOC rules are in [`${CLAUDE_PLUGIN_ROOT}/skills/topic-test/rules/topic-test-doc-writing.md`](rules/topic-test-doc-writing.md)).
-3. **Test Environment** — Prerequisites (infra, env vars, seed data) + setup/reset commands. Include both **Local** and **Staging** subsections when the service has a staging deployment — local for dev testing, staging for pre-prod validation. Staging entries must include the API endpoint URL, database/cache connection details, and any access requirements (VPN, headers). **Never write real connection information (URLs, hostnames, ports, credentials, DB connection strings) anywhere in the doc** — use placeholders (e.g. `<LOCAL_API_URL>`, `<STG_GATEWAY_URL>`, `<LOCAL_DB_HOST>`, plus e.g. `<LOCAL_REDIS_HOST>` if your stack uses Redis) using the `<UPPER_SNAKE_CASE>` placeholder convention, and mark each `<!-- TODO: confirm -->`. The actual values must be provided by the user from the prompt at run time (many adopting repos keep them in a gitignored local reference file), not stored in the doc. See the "Environment Scope" rule in [`${CLAUDE_PLUGIN_ROOT}/skills/topic-test/rules/topic-test-doc-writing.md`](rules/topic-test-doc-writing.md) for the full placeholder/never-guess policy.
+3. **Test Environment** — Prerequisites (infra, env vars, seed data) + setup/reset commands. Include both **Local** and **Staging** subsections when the service has a staging deployment — local for dev testing, staging for pre-prod validation. Staging entries must include the API endpoint URL, database/cache connection details, and any access requirements (VPN, headers). **Never write real connection information (URLs, hostnames, ports, credentials, DB connection strings) anywhere in the doc** — use placeholders (e.g. `<LOCAL_API_URL>`, `<STG_GATEWAY_URL>`, `<LOCAL_DB_HOST>`, plus e.g. `<LOCAL_REDIS_HOST>` if your stack uses Redis) using the `<UPPER_SNAKE_CASE>` placeholder convention, and mark each `<!-- TODO: confirm -->`. The actual values must be provided by the user from the prompt at run time (many adopting repos keep them in a gitignored local reference file), not stored in the doc. See the "Environment Scope" rule in [`${CLAUDE_PLUGIN_ROOT}/skills/topic-test/rules/topic-test-doc-writing.md`](rules/topic-test-doc-writing.md) — the file you Read in Mandatory reads #2 — for the full placeholder/never-guess policy.
 4. **Test Cases — Smoke & Sanity (required, run first)** — one `###` per case.
 5. **Test Cases — Negative Flow (required, run BEFORE and AFTER the fix)** — one `###` per case. The post-fix re-run confirms each case now returns the correct rejection instead of the original bug.
 6. **Test Cases — Positive Flow (required, run AFTER the fix)** — one `###` per case.
@@ -156,12 +168,12 @@ Fill every section with real findings from Steps 2–4:
 Do **not** overwrite. Make targeted edits:
 
 - **Add cases:** Append under the right category with the next available ID.
-- **Add an optional category on request:** If the doc doesn't yet have the requested category's section (Edge Cases / Error Scenarios / Regression / Performance), add it in the position shown in the [template](`${CLAUDE_PLUGIN_ROOT}/skills/topic-test/templates/test-doc.md`), plus its TOC entry and Testing Flow phase.
+- **Add an optional category on request:** If the doc doesn't yet have the requested category's section (Edge Cases / Error Scenarios / Regression / Performance), add it in the position shown in the [template](`${CLAUDE_PLUGIN_ROOT}/skills/topic-test/templates/test-doc.md`) — Mandatory reads #3; Read it again if you have not already — plus its TOC entry and Testing Flow phase.
 - **Update results/side effects/pass criteria:** Edit the relevant blocks within each test case.
 - **Add/remove sections:** Update the TOC to match.
 - **Resolve open questions:** Edit the per-case "Open questions" bullet — replace with `✅ Resolved — <answer>`.
 
-See [`${CLAUDE_PLUGIN_ROOT}/skills/topic-test/rules/topic-test-doc-writing.md`](rules/topic-test-doc-writing.md) for the Table of Contents and Last Updated date rules that apply to every edit.
+Per [`${CLAUDE_PLUGIN_ROOT}/skills/topic-test/rules/topic-test-doc-writing.md`](rules/topic-test-doc-writing.md) — the file you Read in Mandatory reads #2 — apply its Table of Contents and Last Updated date rules to every edit.
 
 ---
 

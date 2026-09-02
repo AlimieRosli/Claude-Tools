@@ -45,9 +45,18 @@ It is designed for the moment when a human starts a **new session** (or resumes 
 
 ---
 
+## Mandatory reads
+
+Read each of these files with the Read tool at the indicated point. Inline references in the steps below are reminders, not substitutes — if you have not actually Read the file, do it before proceeding. Do not execute any step from memory alone.
+
+1. BEFORE any step: [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/locate-topic.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/locate-topic.md) — required to resolve `<module>/<topic>` correctly; Step 1 depends on it.
+2. BEFORE Step 2: the topic docs at `docs/ref/<MODULE>/<TOPIC>/` — the main doc (`<PREFIX>.md`) is always required; the plan doc (`<PREFIX>_PLAN.md`) and test doc (`<PREFIX>_TEST.md`) whenever they exist. Steps 3–4 report from these docs; never report a status from a doc you have not Read in this run.
+
+---
+
 ## Step 1 — Locate the Topic
 
-Resolve the module and topic name per [Shared: Locating the Topic](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/locate-topic.md). The priority order is:
+Read [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/locate-topic.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/locate-topic.md) now (Mandatory reads #1) — required to resolve `<module>/<topic>` correctly. The priority order is:
 
 1. **User-provided arguments** — if the user named a topic in their prompt/message (e.g. "check the status of Cache-Tier-Optimization" or "topic-status <Module> Cache-Tier-Optimization"), use that. **Do NOT ignore the user's explicit text in favor of the active editor file.** The user's message takes priority over the editor fallback.
 2. **`$ARGUMENTS`** (Claude Code slash command) — if provided as `/topic-status <module> <topic>`, use exactly as provided.
@@ -64,7 +73,7 @@ If the user's message mentions a topic name but not the module name, search `doc
 
 ## Step 2 — Read the Topic Docs
 
-Read the docs that exist in the topic folder, in this order:
+Read the docs that exist in the topic folder, in this order (Mandatory reads #2 — Read them now with the Read tool; do not report from memory):
 
 1. **Main doc** (`<PREFIX>.md`) — always required. Extract: Classification, Recommended flow, Current State, Target State, Open Questions (and their status).
 2. **Plan doc** (`<PREFIX>_PLAN.md`) — if it exists. Extract: Progress Tracker (phase statuses), Deployment Status table, Open Questions (and their status), the current/next phase.

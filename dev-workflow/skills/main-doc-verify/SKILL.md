@@ -47,15 +47,24 @@ The deterministic structural rules (TOC sync, dangling doc links, secrets) may b
 
 ---
 
+## Mandatory reads
+
+Read each of these files with the Read tool at the indicated point. Inline references in the steps below are reminders, not substitutes — if you have not actually Read the file, do it before proceeding. Do not execute any step from memory alone.
+
+1. BEFORE any step: the **main doc** at `$ARGUMENTS` — the document under verification; every step below checks claims in it (Step 1 loads it).
+2. BEFORE Step 2 (and re-consult for Step 6): [${CLAUDE_PLUGIN_ROOT}/skills/topic-init/rules/topic-main-doc-writing.md](${CLAUDE_PLUGIN_ROOT}/skills/topic-init/rules/topic-main-doc-writing.md) — the writing rule whose requirements (§2 content, structural rules) Steps 2 and 6 verify against.
+
+---
+
 ## Step 1 — Load the Main Doc
 
-Read the full file at `$ARGUMENTS`. If the path doesn't exist, stop and report the error. Confirm it is a **main doc** (a `<PREFIX>.md`, not `_PLAN.md` / `_TEST.md`) — if not, stop and tell the user this node is main-doc only.
+Read the full file at `$ARGUMENTS` (Mandatory reads #1). If the path doesn't exist, stop and report the error. Confirm it is a **main doc** (a `<PREFIX>.md`, not `_PLAN.md` / `_TEST.md`) — if not, stop and tell the user this node is main-doc only.
 
 ---
 
 ## Step 2 — Verify Requirements (§2)
 
-Check the Requirements section against [`${CLAUDE_PLUGIN_ROOT}/skills/topic-init/rules/topic-main-doc-writing.md`](../topic-init/rules/topic-main-doc-writing.md) — do not restate the rule here:
+Read [`${CLAUDE_PLUGIN_ROOT}/skills/topic-init/rules/topic-main-doc-writing.md`](${CLAUDE_PLUGIN_ROOT}/skills/topic-init/rules/topic-main-doc-writing.md) now if you have not already (Mandatory reads #2), then check the Requirements section against it — do not restate the rule here:
 
 - **Source** is cited: an official document (SRS section, ticket ID, spec, meeting notes — with link/reference) OR `Direct request (prompt)`. Never blank, generic, or `<!-- TODO -->`.
 - **Type** is exactly one of `Feature`, `Bugfix`, or `Investigation`, matching what §2.1 and §4 describe.
@@ -104,7 +113,7 @@ This is the core accuracy check. For every file path, function name, endpoint, D
 
 ## Step 6 — Verify Structural Rules
 
-Check the main-doc-specific structural rules from [`${CLAUDE_PLUGIN_ROOT}/skills/topic-init/rules/topic-main-doc-writing.md`](../topic-init/rules/topic-main-doc-writing.md):
+Check the main-doc-specific structural rules from [`${CLAUDE_PLUGIN_ROOT}/skills/topic-init/rules/topic-main-doc-writing.md`](${CLAUDE_PLUGIN_ROOT}/skills/topic-init/rules/topic-main-doc-writing.md) — per the file you Read in Mandatory reads #2:
 
 - **No code blocks** — no implementation code, no existing function bodies, no config object literals. Behavior/structure in prose or tables only.
 - **No files-to-modify listed** — the main doc covers objectives and technical design only; specific file changes belong in the plan doc.

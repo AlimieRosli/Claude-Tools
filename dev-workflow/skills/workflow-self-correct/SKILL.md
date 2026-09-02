@@ -32,7 +32,7 @@ The workflow is modeled as a **state graph** — nodes (skills/agents/hooks) con
 
 **Key principle:** *A rule or fact lives in exactly ONE place. Everything else references it.*
 
-*Adapt paths/commands to your repository's actual layout and tooling.* The shared-rules convention referenced throughout this skill lives at `${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md`; the doc-ecosystem paths below (`docs/ref/<MODULE>/<TOPIC>/`, `.claude/docs/`, `AGENTS.md`, `CLAUDE.md`) apply if present in the adopting repo — check and adapt as needed.
+*Adapt paths/commands to your repository's actual layout and tooling.* The shared-rules convention referenced throughout this skill lives at `${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md` — Read that file now per Mandatory reads #1 before executing any step; the doc-ecosystem paths below (`docs/ref/<MODULE>/<TOPIC>/`, `.claude/docs/`, `AGENTS.md`, `CLAUDE.md`) apply if present in the adopting repo — check and adapt as needed.
 
 ---
 
@@ -51,6 +51,14 @@ The workflow is modeled as a **state graph** — nodes (skills/agents/hooks) con
 - You need to tighten a single doc's prose — use `doc-conciseness-review`.
 - You need to add or fix a hook — use `hook-init` / `hook-fix` (if present in the adopting repo).
 - It's a one-line tweak to a single rule file — edit it directly.
+
+---
+
+## Mandatory reads
+
+Read each of these files with the Read tool at the indicated point. Inline references in the steps below are reminders, not substitutes — if you have not actually Read the file, do it before proceeding. Do not execute any step from memory alone.
+
+1. BEFORE Step 2 (and before any Step 3 consolidation): [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md) — this is the canonical shared-rules location this skill consolidates universal rules INTO and audits AGAINST; you cannot classify a rule as "universal/misplaced" (Step 2) or write the shared-file reference (Step 3) without knowing what it already contains and how it is structured.
 
 ---
 
@@ -96,7 +104,7 @@ The rule of thumb: **specific node lists live in exactly ONE canonical place** (
 Grep the ecosystem for redundancy. The minimum audit:
 
 1. **Duplicate rule text** — grep the shared rules directory and each skill's `rules/` for the same distinctive phrase appearing in 2+ files. Example: `grep -rn "exactly ONE doc" ${CLAUDE_PLUGIN_ROOT}/skills/**/rules/` (and the adopting repo's own skills tree, if it has one).
-2. **Universal rule in a doc-specific file** — for each rule in a skill's `rules/` file, ask: does it apply to all topic docs? If yes, it belongs in the shared conventions file (`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md`).
+2. **Universal rule in a doc-specific file** — for each rule in a skill's `rules/` file, ask: does it apply to all topic docs? If yes, it belongs in the shared conventions file (`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md`) — the file you Read in Mandatory reads #1; judge "universal" against what it already contains, not from memory.
 3. **Duplicate OQs** — for a given topic folder, compare the Open Questions tables across `<PREFIX>.md`, `<PREFIX>_PLAN.md`, `<PREFIX>_TEST.md`. The same question should appear in only one.
 4. **Redundant template content** — read each skill's `templates/*.md` and check for repeated blocks or content that duplicates a rule already stated in the skill's `rules/` file.
 5. **Hard-coded node counts/names** — grep the workflow docs for specific node counts ("three", "3-doc", "the N skills") and specific node enumerations in prose. Flag any that should be generic (see Step 1, "New node registration").
@@ -109,7 +117,7 @@ Record every finding with its file path and the exact duplicated text.
 
 Apply the fix per the classification:
 
-- **Universal rule** → move the canonical text into the shared conventions file (`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md` — the shared file already loaded by the topic rule files). In each doc-specific rule file, replace the duplicated text with a one-line reference: `The "<rule>" rule is in the shared conventions — see ${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md.` Keep only the doc-specific application detail in the doc-specific file.
+- **Universal rule** → move the canonical text into the shared conventions file (`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md` — the shared file already loaded by the topic rule files; Read it now per Mandatory reads #1 before editing, so the move lands in the right section without duplicating what is already there). In each doc-specific rule file, replace the duplicated text with a one-line reference: `The "<rule>" rule is in the shared conventions — see ${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md.` Keep only the doc-specific application detail in the doc-specific file.
 - **Duplicate OQ** → keep the question in the doc where it was raised (main/plan/test). In the other docs, replace the duplicated row with a reference line (e.g. `All open questions for this topic were raised and resolved in the [Main Doc §7 Open Questions](./<TOPIC_UPPER>.md#7-open-questions) — they are not duplicated here.`). When referencing a question elsewhere, write `main doc OQ N` / `plan doc OQ N`.
 - **Redundant template** → remove the repeated block; if it restates a rule, replace with a reference to the rule file.
 - **New node registration** → update the canonical references (skills table + dependency diagram in the workflow guide; the command/agent registries in `AGENTS.md`/`CLAUDE.md` if present). Replace any hard-coded node counts/names in prose with generic references (see Step 1, "New node registration").

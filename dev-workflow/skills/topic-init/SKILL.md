@@ -50,13 +50,28 @@ Use this skill whenever you start a new feature, task, investigation, or fix in 
 
 ---
 
+## Mandatory reads
+
+Read each of these files with the Read tool at the indicated point. Inline references in the steps below are reminders, not substitutes — if you have not actually Read the file, do it before proceeding. Do not execute any step from memory alone.
+
+1. BEFORE Step 1 (classification): [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-classification.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-classification.md) — the single source of truth for the 7 cases, the classification questions, and the flow mapping; Step 1.1 depends on it.
+2. BEFORE Step 1.2 (name resolution): [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/locate-topic.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/locate-topic.md) — the single source of truth for the name-resolution priority order and the path-derivation table; Step 1.2 depends on it.
+3. BEFORE writing the doc (Step 3.1): [${CLAUDE_PLUGIN_ROOT}/skills/topic-init/templates/main-doc.md](${CLAUDE_PLUGIN_ROOT}/skills/topic-init/templates/main-doc.md) — the doc skeleton; every section heading must come from it.
+4. BEFORE writing the doc (Step 3.1): [${CLAUDE_PLUGIN_ROOT}/skills/topic-init/rules/topic-main-doc-writing.md](${CLAUDE_PLUGIN_ROOT}/skills/topic-init/rules/topic-main-doc-writing.md) — the writing rules enforced on the main doc; Steps 3.1 and 3.2 depend on it.
+5. BEFORE running the Step 5 checkpoint: [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md) — the single source of truth for the gate behavior, summary table format, and presentation rules; Step 5 depends on it.
+6. BEFORE delivering the Step 8 reminders: [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md) — the exact text of the per-prompt and per-session discipline rules; Step 8 depends on it.
+7. CONDITIONAL — if the user asks for plan/test doc stubs (Step 6): Read [${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/templates/plan-doc.md](${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/templates/plan-doc.md) before copying it, and [${CLAUDE_PLUGIN_ROOT}/skills/topic-test/templates/test-doc.md](${CLAUDE_PLUGIN_ROOT}/skills/topic-test/templates/test-doc.md) before copying it.
+8. CONDITIONAL — before running another skill (Step 4 `main-doc-verify` if the user agrees; Step 7 `doc-conciseness-review` if the user agrees): Read its SKILL.md — [${CLAUDE_PLUGIN_ROOT}/skills/main-doc-verify/SKILL.md](${CLAUDE_PLUGIN_ROOT}/skills/main-doc-verify/SKILL.md) and [${CLAUDE_PLUGIN_ROOT}/skills/doc-conciseness-review/SKILL.md](${CLAUDE_PLUGIN_ROOT}/skills/doc-conciseness-review/SKILL.md) — before executing it, instead of running from memory.
+
+---
+
 ## Step 1 — Classify, Resolve Module & Topic Name
 
 This step has two parts, run in order: **classify the topic** (determine which case applies and which downstream skills are needed), then **resolve the module and topic name** (derive the doc paths).
 
 ### 1.1 — Classify the topic
 
-Before writing any doc, classify the topic to determine the right workflow depth. Follow [Shared: Topic Classification](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-classification.md) — that file is the single source of truth for the 7 cases, the classification questions, and the flow mapping.
+Before writing any doc, classify the topic to determine the right workflow depth. Read [Shared: Topic Classification](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-classification.md) now (Mandatory reads #1) and follow it — that file is the single source of truth for the 7 cases, the classification questions, and the flow mapping.
 
 Ask the classification questions from the rule file **in order**. Stop at the first one that gives a definitive answer.
 
@@ -77,7 +92,7 @@ Report the classification to the user and proceed to 1.2.
 
 ### 1.2 — Resolve the module and topic name
 
-Resolve the module and topic names, and derive the doc paths, per [Shared: Locating the Topic](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/locate-topic.md) — that file is the single source of truth for the name-resolution priority order (`$ARGUMENTS` → task file → ask user) and the path-derivation table.
+Read [Shared: Locating the Topic](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/locate-topic.md) now (Mandatory reads #2), then resolve the module and topic names and derive the doc paths per it — that file is the single source of truth for the name-resolution priority order (`$ARGUMENTS` → task file → ask user) and the path-derivation table.
 
 `topic-init` has no existence gate (it creates the folder and main doc).
 
@@ -112,13 +127,13 @@ Minimum before writing:
 
 ### 3.1 — First-time write
 
-Use the [main doc template](${CLAUDE_PLUGIN_ROOT}/skills/topic-init/templates/main-doc.md). Fill every section with real findings from Step 2.
+Read the [main doc template](${CLAUDE_PLUGIN_ROOT}/skills/topic-init/templates/main-doc.md) now (Mandatory reads #3) and use it. Fill every section with real findings from Step 2.
 
-The **Requirements section (§2)** is mandatory and blocking — every topic must cite where its requirement came from (an official doc/SRS/ticket, or a direct prompt request) and state its type (Feature / Bugfix / Investigation). If this cannot be determined, stop and ask the user before writing further. See [`rules/topic-main-doc-writing.md`](${CLAUDE_PLUGIN_ROOT}/skills/topic-init/rules/topic-main-doc-writing.md) for full enforcement details.
+The **Requirements section (§2)** is mandatory and blocking — every topic must cite where its requirement came from (an official doc/SRS/ticket, or a direct prompt request) and state its type (Feature / Bugfix / Investigation). If this cannot be determined, stop and ask the user before writing further. Read [`rules/topic-main-doc-writing.md`](${CLAUDE_PLUGIN_ROOT}/skills/topic-init/rules/topic-main-doc-writing.md) now (Mandatory reads #4) for full enforcement details.
 
-The **§5.5 Non-Functional Requirements** subsection is required for `Feature` type — see [`rules/topic-main-doc-writing.md`](${CLAUDE_PLUGIN_ROOT}/skills/topic-init/rules/topic-main-doc-writing.md) ("Non-Functional Requirements").
+The **§5.5 Non-Functional Requirements** subsection is required for `Feature` type — per [`rules/topic-main-doc-writing.md`](${CLAUDE_PLUGIN_ROOT}/skills/topic-init/rules/topic-main-doc-writing.md) ("Non-Functional Requirements" section of the file you Read in Mandatory reads #4).
 
-This is the **only** doc created by default. Follow the writing rules in [`rules/topic-main-doc-writing.md`](${CLAUDE_PLUGIN_ROOT}/skills/topic-init/rules/topic-main-doc-writing.md) — do not restate those rules here.
+This is the **only** doc created by default. Follow the writing rules in [`rules/topic-main-doc-writing.md`](${CLAUDE_PLUGIN_ROOT}/skills/topic-init/rules/topic-main-doc-writing.md) — the file you Read in Mandatory reads #4; do not restate those rules here.
 
 Rule-following here is LLM-enforced (best-effort). If the adopting repo has deterministic gates (e.g. a hook watcher in its `.claude/hooks/` — check before relying on them), those are the deterministic backstop — they do not check the Requirements section itself, but they can catch TOC drift in the doc mechanically, regardless of which editor/agent made the edit.
 
@@ -142,7 +157,7 @@ Ask the user:
 
 > *"The main doc is written. Would you like to run the **main-doc verifier** (`/main-doc-verify <path>`) now to check it for correctness, reliability, and accuracy against the current codebase before the human review checkpoint?"*
 
-- **If the user agrees:** run the [`main-doc-verify` skill](${CLAUDE_PLUGIN_ROOT}/skills/main-doc-verify/SKILL.md) against the main doc path. It verifies Requirements §2, external claims (pricing/quota/SLA) sourcing, no invented metrics, accuracy vs current code, and structural rules — then presents its own blocking human review checkpoint.
+- **If the user agrees:** run the [`main-doc-verify` skill](${CLAUDE_PLUGIN_ROOT}/skills/main-doc-verify/SKILL.md) against the main doc path — Read [${CLAUDE_PLUGIN_ROOT}/skills/main-doc-verify/SKILL.md](${CLAUDE_PLUGIN_ROOT}/skills/main-doc-verify/SKILL.md) first (Mandatory reads #8); do not run it from memory. It verifies Requirements §2, external claims (pricing/quota/SLA) sourcing, no invented metrics, accuracy vs current code, and structural rules — then presents its own blocking human review checkpoint.
 - **If the user declines:** proceed directly to the human review checkpoint (Step 5). The verifier is optional; the checkpoint is not.
 
 > **Why this exists:** the main doc is the foundation the plan and test docs build on. Verifying it **before** the human checkpoint catches accuracy/sourcing issues early, so the human reviews a verified document rather than a best-effort one. But it is a heavier, codebase-reading pass — so it is offered, not forced.

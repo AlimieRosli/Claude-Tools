@@ -25,9 +25,17 @@ disable-model-invocation: true
 
 ---
 
+## Mandatory reads
+
+This skill references no plugin rule/template files — it is self-contained. The one mandatory read is the target doc itself, bound below. Read it with the Read tool at the indicated point; inline references in the steps below are reminders, not substitutes. Do not execute any step from memory alone.
+
+1. BEFORE any step: the target doc at `$ARGUMENTS` — the full file must be Read before Step 2 extracts facts from it. Never summarize or rewrite a doc you have not actually Read in this run.
+
+---
+
 ## Step 1 — Load the Doc
 
-Read the full file at `$ARGUMENTS`. If the path doesn't exist, stop and report the error.
+Read the full file at `$ARGUMENTS` now (Mandatory reads #1). If the path doesn't exist, stop and report the error.
 
 ---
 

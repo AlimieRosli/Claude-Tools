@@ -53,17 +53,29 @@ The deterministic structural rules (TOC sync, open-questions gate, dangling doc 
 
 ---
 
+## Mandatory reads
+
+Read each of these files with the Read tool at the indicated point. Inline references in the steps below are reminders, not substitutes — if you have not actually Read the file, do it before proceeding. Do not execute any step from memory alone.
+
+1. BEFORE any step: the **plan doc** at `$ARGUMENTS` — the document under verification; every step below checks claims in it (Step 1 loads it).
+2. BEFORE any step: the topic's **main doc** (`<PREFIX>.md` in the same folder as the plan doc) — Steps 2 and 6 verify the plan against it (requirement coverage, target-state delivery, NFR coverage). If it does not exist, stop (Step 1 handles this).
+3. BEFORE Step 2: [${CLAUDE_PLUGIN_ROOT}/skills/plan-doc-verify/rules/plan-doc-verify.md](${CLAUDE_PLUGIN_ROOT}/skills/plan-doc-verify/rules/plan-doc-verify.md) — the verification rule defining the requirement-coverage and delivery checks Step 2 performs.
+4. BEFORE Step 3: [${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/rules/topic-plan-doc-writing.md](${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/rules/topic-plan-doc-writing.md) — the plan-writing rule containing the Reuse requirement Step 3 enforces.
+5. BEFORE Step 7, **if bundled** (otherwise skip — Step 7 adapts to the repo's own strategy doc): [${CLAUDE_PLUGIN_ROOT}/docs/TOPIC_WORKFLOW_GUIDE.md](${CLAUDE_PLUGIN_ROOT}/docs/TOPIC_WORKFLOW_GUIDE.md) — the "Branch & Commit Strategy" section Step 7 checks the plan's branch/commit sections against.
+
+---
+
 ## Step 1 — Load the Plan Doc
 
-Read the full file at `$ARGUMENTS`. If the path doesn't exist, stop and report the error. Confirm it is a **plan doc** (a `<PREFIX>_PLAN.md`, not `<PREFIX>.md` / `_TEST.md`) — if not, stop and tell the user this node is plan-doc only.
+Read the full file at `$ARGUMENTS` (Mandatory reads #1). If the path doesn't exist, stop and report the error. Confirm it is a **plan doc** (a `<PREFIX>_PLAN.md`, not `<PREFIX>.md` / `_TEST.md`) — if not, stop and tell the user this node is plan-doc only.
 
-Then read the topic's **main doc** (`<PREFIX>.md` in the same folder) in full — the plan doc must be consistent with it, and several checks (requirement coverage, NFR coverage, target-state delivery) read from the main doc. If the main doc does not exist, stop and tell the user to run `topic-init` first.
+Then read the topic's **main doc** (`<PREFIX>.md` in the same folder) in full (Mandatory reads #2) — the plan doc must be consistent with it, and several checks (requirement coverage, NFR coverage, target-state delivery) read from the main doc. If the main doc does not exist, stop and tell the user to run `topic-init` first.
 
 ---
 
 ## Step 2 — Verify Requirements Met & Valid Delivery
 
-Check that the plan actually delivers what the main doc requires, with full traceability. Follow [`${CLAUDE_PLUGIN_ROOT}/skills/plan-doc-verify/rules/plan-doc-verify.md`](${CLAUDE_PLUGIN_ROOT}/skills/plan-doc-verify/rules/plan-doc-verify.md) — do not restate the rule here:
+Read [`${CLAUDE_PLUGIN_ROOT}/skills/plan-doc-verify/rules/plan-doc-verify.md`](${CLAUDE_PLUGIN_ROOT}/skills/plan-doc-verify/rules/plan-doc-verify.md) now if you have not already (Mandatory reads #3), then check that the plan actually delivers what the main doc (Mandatory reads #2) requires, with full traceability — do not restate the rule here:
 
 - **Requirement Coverage table** exists and **every** §2.1 requirement item from the main doc maps to ≥1 phase AND ≥1 test case ID. A requirement with no phase is an implementation gap; a requirement with no test case is a verification gap.
 - **Target-state delivery** — the phases *collectively* deliver the main doc's Target State (§3), not just a subset. No required outcome is silently dropped between main→plan.
@@ -75,7 +87,7 @@ Check that the plan actually delivers what the main doc requires, with full trac
 
 ## Step 3 — Verify Coding Standards Conformance
 
-Check that the planned changes conform to the coding conventions in the adopting repo's guidance (e.g. `AGENTS.md` "Coding conventions" / "Working in this repo" sections, or its `CLAUDE.md` equivalent, if present — adapt as needed) and the Reuse rule in [`${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/rules/topic-plan-doc-writing.md`](${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/rules/topic-plan-doc-writing.md):
+Read the adopting repo's guidance now (e.g. its `AGENTS.md` "Coding conventions" / "Working in this repo" sections, or its `CLAUDE.md` equivalent, if present — adapt as needed) and [`${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/rules/topic-plan-doc-writing.md`](${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/rules/topic-plan-doc-writing.md) now if you have not already (Mandatory reads #4), then check that the planned changes conform to those coding conventions and the Reuse rule in that file:
 
 - **Feature layering** — new routes follow the repo's established layering pattern (e.g. in an Express.js app, the feature triple `endpoint → controller → service`); no layer skipping (e.g. a route handler doing DB calls directly).
 - **Error handling** — each touched file's error-handling pattern is respected (e.g. an inline-response pattern vs a structured error-response helper + error constants). Every `catch` logs via the repo's logger before responding; every error response is preceded by `return`.
@@ -125,7 +137,7 @@ This is the core accuracy check, mirroring `main-doc-verify` Step 5 but applied 
 
 ## Step 7 — Verify Branch & Commit Hygiene
 
-Check the Branch & Commits and Deployment Status sections against the adopting repo's branch & commit strategy (see `${CLAUDE_PLUGIN_ROOT}/docs/TOPIC_WORKFLOW_GUIDE.md` → "Branch & Commit Strategy", if bundled — otherwise the repo's own strategy doc, if present — adapt as needed) and the `topic-plan` rules:
+Read [`${CLAUDE_PLUGIN_ROOT}/docs/TOPIC_WORKFLOW_GUIDE.md`](${CLAUDE_PLUGIN_ROOT}/docs/TOPIC_WORKFLOW_GUIDE.md) → "Branch & Commit Strategy" now if bundled (Mandatory reads #5) — otherwise read the repo's own strategy doc, if present (adapt as needed) — then check the Branch & Commits and Deployment Status sections against that strategy and the `topic-plan` rules:
 
 - **Commit messages** are in **Conventional Commits** format (`feat(scope):`, `fix(scope):`, etc.), matching the repo style. No commit hashes recorded (messages only).
 - **Hotfix marker** — `[HOTFIX]` is appended to the commit subject **only** if the topic is a genuine hotfix. Not present on normal feature/fix commits.
