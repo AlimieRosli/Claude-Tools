@@ -1,0 +1,14 @@
+# Shared: Topic Doc Writing Conventions
+
+Universal writing rules for every topic doc in the adopting repo — main doc (`topic-init`), plan doc (`topic-plan`), and test doc (`topic-test`). This is a shared reference file, not a skill itself — it has no `SKILL.md` and is only loaded when linked from a skill's own writing-rules file.
+
+- **Table of Contents** — must have a Table of Contents immediately after the frontmatter block (status / last updated) and before the first `##` section. List every top-level section (`##`) and any `###` subsections that add navigational value. Update the TOC whenever sections are added, removed, or renamed.
+- **Last Updated** — always update the `Last Updated` date at the top of the doc whenever making any edit — first-time write or any later update.
+- **File paths** — all file paths must be workspace-relative and verified to exist in the target repo.
+- **Never guess** — never guess technical details not found in the codebase (or not yet confirmed by the user) — use `<!-- TODO: confirm -->` instead of inventing an answer.
+- **Cross-linking** — cross-link only to docs within the same topic folder (`docs/ref/<MODULE>/<TOPIC>/`). Do not link to other topic folders, cross-project docs, or unrelated external references.
+- **Open questions live in exactly ONE doc — the doc where they were raised.** Do not duplicate an open question across the main, plan, and test docs. If a question is raised while writing the main doc, it stays in the main doc only; if raised while writing the plan doc, it stays in the plan doc only; if raised while writing the test doc, it stays in the test doc only. When a question was raised in another doc, reference it instead of re-listing it (e.g. `main doc OQ N` / `plan doc OQ N`). Each doc's Open Questions section lists only the questions raised while writing that doc.
+- **Per-prompt discipline** — within a single session, send **one prompt at a time** (prompt 1 by 1). Do not chain multiple unrelated requests into a single mega-prompt. Each prompt should have one clear objective. Wait for the result before sending the next prompt. This prevents context dilution and drift (see the adopting repo's AI-assisted development principles doc, § Context Management & Hygiene, if present — e.g. `AI_ASSISTED_DEVELOPMENT_PRINCIPLES.md` §1).
+- **Per-session discipline** — when a workflow skill completes (e.g. `topic-init` finishes, `topic-plan` finishes, `topic-test` finishes), the AI **must proactively remind the human** to start a **fresh session** for the next skill or phase. The reminder is mandatory at every skill's final Confirm step. The human decides whether to change session — but the AI must always say it. This is the primary mechanism for achieving Context Management & Hygiene.
+
+*Adapt paths/commands to your repository's actual layout and tooling.*

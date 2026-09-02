@@ -1,0 +1,15 @@
+{
+  "name": "claude-tools",
+  "owner": {
+    "name": "ALimie"
+  },
+  "description": "Personal Claude Code tooling: reusable AI-assisted development workflow skills",
+  "plugins": [
+    {
+      "name": "dev-workflow",
+      "source": "./dev-workflow",
+      "description": "AI-assisted development workflow: topic docs (init/plan/test/status), doc verification, conciseness review, workflow self-correction, and the 19 AI-assisted development principles",
+      "author": { "name": "ALimie" }
+    }
+  ]
+}

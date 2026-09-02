@@ -1,0 +1,7 @@
+{
+  "name": "dev-workflow",
+  "displayName": "Dev Workflow",
+  "description": "Reusable AI-assisted development workflow: topic documentation skills (topic-init / topic-plan / topic-test / topic-status), doc verification gates, doc conciseness review, workflow self-correction, plus the 19 AI-assisted development principles as reference docs. Repo-agnostic — adopting repos follow the docs/ref/<MODULE>/<TOPIC>/ convention and adapt path/command examples to their own layout.",
+  "author": { "name": "Alimie" },
+  "keywords": ["workflow", "documentation", "topic-docs", "ai-development"]
+}
