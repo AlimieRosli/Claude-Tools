@@ -5,8 +5,10 @@ description: "Update the dev-workflow plugin from its marketplace to the latest 
 Run this exact command via the Bash tool and show me the output:
 
 ```
-claude plugin update dev-workflow
+claude plugin update dev-workflow@claude-tools
 ```
+
+Use the fully qualified `plugin@marketplace` name — the bare name is rejected ("Plugin not found").
 
 If it fails, report the error. If it succeeds:
 

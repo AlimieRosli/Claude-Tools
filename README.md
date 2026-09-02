@@ -26,7 +26,7 @@ Private-repo note: cloning uses your normal git credentials. Background auto-upd
 No `version` field is declared in `plugin.json` or the marketplace entry — plugin updates are commit-SHA based. Third-party marketplaces have no auto-update in current builds, so after pushing changes, re-pin the install:
 
 ```text
-claude plugin update dev-workflow
+claude plugin update dev-workflow@claude-tools
 ```
 
 …then start a fresh chat session. Or, from inside any Claude Code chat, the plugin ships its own updater command:
