@@ -21,7 +21,7 @@ Repo-agnostic by design: the adopting repo follows the `docs/ref/<MODULE>/<TOPIC
 
 > Note the `@claude-tools` — that is the marketplace's `name` field inside `.claude-plugin/marketplace.json` (lowercase, kebab-case), **not** the repo name `Claude-Tools`.
 
-Private-repo note: cloning uses your normal git credentials. Background auto-update disables credential helpers — if private auto-update fails, use a read-only token via a git `insteadOf` rewrite.
+The repo is public — installing needs no credentials or special access.
 
 ## Update flow
 
