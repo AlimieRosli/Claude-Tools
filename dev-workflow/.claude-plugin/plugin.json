@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "dev-workflow",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "displayName": "Dev Workflow",
   "description": "Reusable AI-assisted development workflow: topic documentation skills (topic-init / topic-plan / topic-test / topic-status), doc verification gates, doc conciseness review, workflow self-correction, repo adoption onboarding (workflow-adopt), plus the 19 AI-assisted development principles as reference docs. Repo-agnostic — adopting repos follow the docs/ref/<MODULE>/<TOPIC>/ convention and adapt path/command examples to their own layout.",
   "author": { "name": "Alimie Rosli" },
