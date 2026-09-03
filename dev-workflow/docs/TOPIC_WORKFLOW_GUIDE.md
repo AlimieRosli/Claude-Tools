@@ -82,6 +82,7 @@ The workflow has **two equivalent drivers** — they are the *same nodes* expres
 | `main-doc-verify` | `/main-doc-verify <path>` | (verifies the main doc) | Verify | Verifies the main doc for correctness, reliability, and accuracy vs current code — requirements cited, external claims sourced, no invented metrics, structural rules. Optional, encouraged before the human review checkpoint |
 | `plan-doc-verify` | `/plan-doc-verify <path>` | (verifies the plan doc) | Verify | Verifies the plan doc for correctness, completeness, and soundness vs current code — requirements fully covered & traceable, coding-standards conformance (feature layering, error handling, logging, reuse/anti-spaghetti), design-level security/OWASP, accuracy vs code, rollback, NFR coverage, phasing sanity, branch & commit hygiene. Optional, encouraged before the human review checkpoint |
 | `workflow-self-correct` | `/workflow-self-correct <target>` | (edits skills/rules/templates/docs) | Meta — the workflow itself | Detects and fixes redundancy/duplication across the topic-doc ecosystem; consolidates universal rules into `_shared/rules/`; replaces duplicated content with references |
+| `workflow-adopt` | `/workflow-adopt [--remove]` | (edits the adopting repo's `AGENTS.md`/`CLAUDE.md` — one managed block) | Meta — repo onboarding | Applies the adopting-repo AGENTS.md snippet to a repo: scaffolds when absent, merges/re-syncs a managed anchor block when present, surfaces conflicts, and removes the block cleanly on opt-out |
 
 ### Dependencies Between Skills
 
@@ -494,7 +495,7 @@ stg ──→ prd   ← cherry-pick ONLY feat:/fix: (code) commits from developm
 
 `feature/init-claude` covers the **adopting repo root**: `CLAUDE.md` + `.claude/`. AI-instruction files living outside the repo root (e.g. organization-level Copilot instructions) are **out of scope** for this strategy.
 
-A new team adopting this workflow copies the reusable half of their `AGENTS.md` (plugin invocation names, reference rules, repo-adaptation table) from the **[Adopting-Repo AGENTS.md Snippet](../skills/_shared/templates/adopting-repo-agents-snippet.md)** template — the repo-specific half (commands, architecture, conventions) must be written by the team.
+A new team adopting this workflow copies the reusable half of their `AGENTS.md` (plugin invocation names, reference rules, repo-adaptation table) from the **[Adopting-Repo AGENTS.md Snippet](../skills/_shared/templates/adopting-repo-agents-snippet.md)** template — the repo-specific half (commands, architecture, conventions) must be written by the team. The `workflow-adopt` skill automates the application: run `/workflow-adopt` in the target repo to scaffold (`AGENTS.md`/`CLAUDE.md` absent), insert or re-sync a managed anchor block (already present), or strip it with `/workflow-adopt --remove` (opt-out). It surfaces conflicts with existing AI-instructions and never overwrites non-managed content.
 
 ### AI enforcement boundary
 

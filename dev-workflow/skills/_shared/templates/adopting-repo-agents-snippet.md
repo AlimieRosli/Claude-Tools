@@ -1,6 +1,6 @@
 # Template: Adopting-Repo AGENTS.md Snippet
 
-> **How to use this template:** copy the snippet below into the adopting repo's `AGENTS.md` (the repo's single source of truth for AI-assisted development), then resolve every `<UPPER_SNAKE_CASE>` placeholder and delete every `<!-- ... -->` guidance comment. Do **not** commit this template itself to the adopting repo — only the resolved snippet. If the adopting repo splits `CLAUDE.md`/`AGENTS.md` (CLAUDE.md imports AGENTS.md via `@AGENTS.md`), this snippet goes in `AGENTS.md`; keep Claude Code–specific notes in `CLAUDE.md`.
+> **How to use this template:** run `/dev-workflow:workflow-adopt` from the adopting repo — it applies this template for you (scaffolding, merging, conflict detection, and clean removal are automated). Manual application: copy the snippet below into the adopting repo's `AGENTS.md` (the repo's single source of truth for AI-assisted development), then resolve every `<UPPER_SNAKE_CASE>` placeholder and delete every `<!-- ... -->` guidance comment. Do **not** commit this template itself to the adopting repo — only the resolved snippet. If the adopting repo splits `CLAUDE.md`/`AGENTS.md` (CLAUDE.md imports AGENTS.md via `@AGENTS.md`), this snippet goes in `AGENTS.md`; keep Claude Code–specific notes in `CLAUDE.md`.
 >
 > **What this snippet is:** the reusable half of an adopting repo's AI-instructions — how the repo references the `dev-workflow` plugin. The repo-specific half (what the repo is, build commands, architecture, coding conventions) cannot be templated and must be written by the team.
 
@@ -19,6 +19,7 @@ This repo uses the **`dev-workflow` plugin** (Claude Code) for AI-assisted devel
 - `/dev-workflow:main-doc-verify` · `/dev-workflow:plan-doc-verify` — verification passes for main/plan docs
 - `/dev-workflow:doc-conciseness-review <path-to-doc.md>` — second-pass doc tightening
 - `/dev-workflow:workflow-self-correct <target>` — de-duplicate the workflow docs
+- `/dev-workflow:workflow-adopt [--remove]` — apply this snippet to the repo (merge/scaffold/sync), or remove the managed section on opt-out
 - `/dev-workflow:self-update` — re-pin the plugin install after its marketplace repo is updated
 
 **Reference rules (strict):**

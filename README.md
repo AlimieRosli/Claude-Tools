@@ -5,7 +5,7 @@ Personal Claude Code plugin marketplace — reusable AI-assisted development wor
 ## Contents
 
 - [`dev-workflow`](dev-workflow/)
-  - Topic documentation skills: `topic-init`, `topic-plan`, `topic-test`, `topic-status`, `main-doc-verify`, `plan-doc-verify`, `doc-conciseness-review`, `workflow-self-correct`
+  - Topic documentation skills: `topic-init`, `topic-plan`, `topic-test`, `topic-status`, `main-doc-verify`, `plan-doc-verify`, `doc-conciseness-review`, `workflow-self-correct`, `workflow-adopt`
   - Shared rules + doc templates
   - The `self-update` skill
   - 19 AI-Assisted Development Principles + Topic Workflow Guide reference docs
