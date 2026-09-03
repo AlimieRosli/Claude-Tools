@@ -494,6 +494,8 @@ stg ──→ prd   ← cherry-pick ONLY feat:/fix: (code) commits from developm
 
 `feature/init-claude` covers the **adopting repo root**: `CLAUDE.md` + `.claude/`. AI-instruction files living outside the repo root (e.g. organization-level Copilot instructions) are **out of scope** for this strategy.
 
+A new team adopting this workflow copies the reusable half of their `AGENTS.md` (plugin invocation names, reference rules, repo-adaptation table) from the **[Adopting-Repo AGENTS.md Snippet](../skills/_shared/templates/adopting-repo-agents-snippet.md)** template — the repo-specific half (commands, architecture, conventions) must be written by the team.
+
 ### AI enforcement boundary
 
 The AI **suggests** branch names and commit messages (in `topic-plan` Step 4), but the **human performs** all `git` operations (branch creation, rebase, commit, cherry-pick, merge). No gate enforces this — it is a human SOP. The AI should not run `git branch`/`git log` to verify or auto-detect these, consistent with the existing `topic-plan` rule.
