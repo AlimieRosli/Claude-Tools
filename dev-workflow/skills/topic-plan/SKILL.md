@@ -56,10 +56,11 @@ Read each of these files with the Read tool at the indicated point. Inline refer
 
 1. BEFORE Step 1: [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/locate-topic.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/locate-topic.md) — required to resolve `<module>/<topic>` and derive the doc paths correctly (Step 1 depends on it).
 2. BEFORE Step 3 (and again at Step 5): [${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/rules/topic-plan-doc-writing.md](${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/rules/topic-plan-doc-writing.md) — the plan-doc writing rules ("Reuse Existing Code", Documentation Update Phase, Requirement Coverage, Open Questions, Table of Contents & Last Updated rules). Steps 3, 5, 5.1, and 5.2 all depend on it.
-3. BEFORE Step 5.1 (first-time write): [${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/templates/plan-doc.md](${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/templates/plan-doc.md) — the doc skeleton; every section heading must come from it.
-4. BEFORE Step 5.3 (only if the user agrees to run the verifier): [${CLAUDE_PLUGIN_ROOT}/skills/plan-doc-verify/SKILL.md](${CLAUDE_PLUGIN_ROOT}/skills/plan-doc-verify/SKILL.md) — the verifier skill's procedure must be read before it is run.
-5. BEFORE Step 5.5: [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md) — the single source of truth for the gate behavior, summary table format, and presentation rules of the blocking checkpoint.
-6. BEFORE Step 7: [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md) — the per-prompt and per-session reminder texts this skill must deliver verbatim.
+3. BEFORE Step 3 (any env/deploy value is needed): [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/sensitive-file-scope.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/sensitive-file-scope.md) — never read sensitive files (stack-dependent: env/config files, profile files, keys, credentials); env/deploy values come from the adopting repo's placeholder reference doc (e.g. `docs/PLACEHOLDER_REFERENCE.md`).
+4. BEFORE Step 5.1 (first-time write): [${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/templates/plan-doc.md](${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/templates/plan-doc.md) — the doc skeleton; every section heading must come from it.
+5. BEFORE Step 5.3 (only if the user agrees to run the verifier): [${CLAUDE_PLUGIN_ROOT}/skills/plan-doc-verify/SKILL.md](${CLAUDE_PLUGIN_ROOT}/skills/plan-doc-verify/SKILL.md) — the verifier skill's procedure must be read before it is run.
+6. BEFORE Step 5.5: [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md) — the single source of truth for the gate behavior, summary table format, and presentation rules of the blocking checkpoint.
+7. BEFORE Step 7: [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md) — the per-prompt and per-session reminder texts this skill must deliver verbatim.
 
 ---
 
@@ -153,7 +154,7 @@ Read [`${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/rules/topic-plan-doc-writing.md`]
 
 ### 5.1 — First-time write (filling the stub or creating fresh)
 
-If the plan doc does not exist yet, or is still the empty stub (from `topic-init`, if one was created), Read the [plan doc template](${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/templates/plan-doc.md) now (Mandatory reads #3), then replace/create the plan doc entirely using it.
+If the plan doc does not exist yet, or is still the empty stub (from `topic-init`, if one was created), Read the [plan doc template](${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/templates/plan-doc.md) now (Mandatory reads #4), then replace/create the plan doc entirely using it.
 
 Fill every section with real findings from Steps 2–4 (Table of Contents rules are in [`${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/rules/topic-plan-doc-writing.md`](${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/rules/topic-plan-doc-writing.md)):
 
@@ -216,7 +217,7 @@ Ask the user:
 
 > *"The plan doc is written. Would you like to run the **plan-doc verifier** (`/plan-doc-verify <path>`) now to check it for correctness, completeness, and soundness against the current codebase and coding conventions before the human review checkpoint?"*
 
-- **If the user agrees:** Read the [`plan-doc-verify` skill](${CLAUDE_PLUGIN_ROOT}/skills/plan-doc-verify/SKILL.md) now (Mandatory reads #4) and run it against the plan doc path. It verifies requirements coverage & traceability, coding-standards conformance (layering, error handling, logging, reuse/anti-spaghetti), design-level security/OWASP, accuracy vs current code, rollback, NFR coverage, phasing sanity, and branch & commit hygiene — then presents its own blocking human review checkpoint.
+- **If the user agrees:** Read the [`plan-doc-verify` skill](${CLAUDE_PLUGIN_ROOT}/skills/plan-doc-verify/SKILL.md) now (Mandatory reads #5) and run it against the plan doc path. It verifies requirements coverage & traceability, coding-standards conformance (layering, error handling, logging, reuse/anti-spaghetti), design-level security/OWASP, accuracy vs current code, rollback, NFR coverage, phasing sanity, and branch & commit hygiene — then presents its own blocking human review checkpoint.
 - **If the user declines:** proceed directly to the human review checkpoint (Step 5.5). The verifier is optional; the checkpoint is not.
 
 > **Why this exists:** the plan doc is the blueprint the implementation and test doc build on. Verifying it **before** the human checkpoint catches coverage gaps, standards violations, security concerns, and accuracy errors early, so the human reviews a verified plan rather than a best-effort one. But it is a heavier, codebase-reading pass — so it is offered, not forced. It mirrors the `main-doc-verify` slot in `topic-init` Step 4.
@@ -227,7 +228,7 @@ Ask the user:
 
 After the plan doc is written (Step 5) and verified (Step 5.3, if run) and before the confirm step, the AI **must run a blocking human review checkpoint**. This enforces human ownership of the implementation plan before the AI proceeds — the human must read, understand, and explicitly approve the key judgment items.
 
-Read [Shared: Human Review Checkpoint](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md) now (Mandatory reads #5) and follow it — that file is the single source of truth for the gate behavior, the summary table format, and the presentation rules. Use the **plan-doc summary table** (7 rows: Requirement Coverage, Phases & Steps, File Changes, Reuse, Risks & Rollback, Branch & Deploy, Open Items) from that rule file.
+Read [Shared: Human Review Checkpoint](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md) now (Mandatory reads #6) and follow it — that file is the single source of truth for the gate behavior, the summary table format, and the presentation rules. Use the **plan-doc summary table** (7 rows: Requirement Coverage, Phases & Steps, File Changes, Reuse, Risks & Rollback, Branch & Deploy, Open Items) from that rule file.
 
 **In summary (see the rule file for full detail):**
 
@@ -258,7 +259,7 @@ After writing or updating the plan doc, report:
 
 > **Note:** This step is **mandatory** — the AI must always deliver this reminder at the end of `topic-plan`. It is non-blocking (the human decides), but the AI must always say it. This enforces Context Management & Hygiene (Principle 1) and Model Selection & Tiering (Principle 11) in the adopting repo's AI-assisted development principles (if present — e.g. a `AI_ASSISTED_DEVELOPMENT_PRINCIPLES.md` doc; adapt as needed).
 
-After completing all work for this skill, the AI **must** deliver the **per-prompt** and **per-session** reminders as defined in [`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md`](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md) ("Per-prompt discipline" and "Per-session discipline" rules). Do not restate them here — Read that file now (Mandatory reads #6) and deliver the reminders as written, substituting `topic-plan` for the skill name.
+After completing all work for this skill, the AI **must** deliver the **per-prompt** and **per-session** reminders as defined in [`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md`](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md) ("Per-prompt discipline" and "Per-session discipline" rules). Do not restate them here — Read that file now (Mandatory reads #7) and deliver the reminders as written, substituting `topic-plan` for the skill name.
 
 ### Model selection reminder
 

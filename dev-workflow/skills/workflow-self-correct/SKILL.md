@@ -58,7 +58,8 @@ The workflow is modeled as a **state graph** — nodes (skills/agents/hooks) con
 
 Read each of these files with the Read tool at the indicated point. Inline references in the steps below are reminders, not substitutes — if you have not actually Read the file, do it before proceeding. Do not execute any step from memory alone.
 
-1. BEFORE Step 2 (and before any Step 3 consolidation): [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md) — this is the canonical shared-rules location this skill consolidates universal rules INTO and audits AGAINST; you cannot classify a rule as "universal/misplaced" (Step 2) or write the shared-file reference (Step 3) without knowing what it already contains and how it is structured.
+1. BEFORE Step 1: [${CLAUDE_PLUGIN_ROOT}/skills/workflow-self-correct/rules/workflow-self-correct.md](${CLAUDE_PLUGIN_ROOT}/skills/workflow-self-correct/rules/workflow-self-correct.md) — the canonical audit checklist, consolidation rules, and new-node registration detail; Steps 1–4 defer to it instead of restating it.
+2. BEFORE Step 2 (and before any Step 3 consolidation): [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md) — this is the canonical shared-rules location this skill consolidates universal rules INTO and audits AGAINST; you cannot classify a rule as "universal/misplaced" (Step 2) or write the shared-file reference (Step 3) without knowing what it already contains and how it is structured.
 
 ---
 
@@ -87,27 +88,13 @@ When a new node is added, this skill is responsible for updating **every related
 - The workflow governance/master checklist doc (if one exists and enumerates nodes) — the graph-engine and self-correction sections.
 - The new node's own skill/agent/rule files (created by the node's own init, e.g. `topic-init` for a topic skill).
 
-**Keep counts and names generic.** When updating these docs, prefer **general descriptions** over specific node counts or names, so future nodes require no doc edits:
-
-- **Do NOT write** "the three topic skills" or "the 3-doc flow" — write "the topic skills" or "the topic-doc flow".
-- **Do NOT enumerate** every node in prose where a general reference suffices — write "the topic workflow nodes" and let the skills table / diagram carry the specifics.
-- **Do NOT hard-code** a node count anywhere — the count changes as nodes are added.
-- **DO** add the new node to the **skills table** and **dependency diagram** in the workflow guide — those are the canonical, specific lists that must stay accurate.
-- **DO** add the new node to the **skill/agent registries** (e.g. the `AGENTS.md` ownership section and any `CLAUDE.md` skills list) — those are the canonical command/agent registries.
-
-The rule of thumb: **specific node lists live in exactly ONE canonical place** (the skills table + diagram + command/agent registries). Everywhere else, reference the workflow generically so a new node needs only the canonical lists updated, not every doc.
+**Keep counts and names generic** — when updating these docs, prefer general descriptions over specific node counts or names, so future nodes require no doc edits. The canonical do/don't list and the "one canonical place" rule are in the rules file you Read in Mandatory reads #1 ("Keep counts and names generic" section) — follow it; do not restate it here.
 
 ---
 
 ## Step 2 — Audit for Duplication
 
-Grep the ecosystem for redundancy. The minimum audit:
-
-1. **Duplicate rule text** — grep the shared rules directory and each skill's `rules/` for the same distinctive phrase appearing in 2+ files. Example: `grep -rn "exactly ONE doc" ${CLAUDE_PLUGIN_ROOT}/skills/**/rules/` (and the adopting repo's own skills tree, if it has one).
-2. **Universal rule in a doc-specific file** — for each rule in a skill's `rules/` file, ask: does it apply to all topic docs? If yes, it belongs in the shared conventions file (`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md`) — the file you Read in Mandatory reads #1; judge "universal" against what it already contains, not from memory.
-3. **Duplicate OQs** — for a given topic folder, compare the Open Questions tables across `<PREFIX>.md`, `<PREFIX>_PLAN.md`, `<PREFIX>_TEST.md`. The same question should appear in only one.
-4. **Redundant template content** — read each skill's `templates/*.md` and check for repeated blocks or content that duplicates a rule already stated in the skill's `rules/` file.
-5. **Hard-coded node counts/names** — grep the workflow docs for specific node counts ("three", "3-doc", "the N skills") and specific node enumerations in prose. Flag any that should be generic (see Step 1, "New node registration").
+Grep the ecosystem for redundancy. Run the **Audit Checklist** from the rules file you Read in Mandatory reads #1 (it is the single source of truth for what this audit covers — currently 6 items including checkpoint-rule drift) — do not restate it here. Example grep: `grep -rn "exactly ONE doc" ${CLAUDE_PLUGIN_ROOT}/skills/**/rules/` (and the adopting repo's own skills tree, if it has one). Judge "universal rule" (audit item 2) against the shared conventions file you Read in Mandatory reads #2, not from memory.
 
 Record every finding with its file path and the exact duplicated text.
 

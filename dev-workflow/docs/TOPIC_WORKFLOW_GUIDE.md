@@ -1,7 +1,7 @@
 # Topic Workflow Guide — Dynamic Flow Selection
 
 **Status:** Active
-**Last Updated:** 2026-09-03 (added Checkpoint Brevity + plain-language rules)
+**Last Updated:** 2026-09-03 (added Sensitive File Scope rule)
 
 > *Adapt paths/commands to your repository's actual layout and tooling. Topic docs follow the `docs/ref/<MODULE>/<TOPIC>/` convention described below — keep that convention, but adapt directory names, commands, and environment details to the adopting repo.*
 
@@ -143,6 +143,7 @@ flowchart TD
 | Regression gate | REG cases required when shared code paths are touched | Deterministic gate if present (e.g. `check-regression-gate.js` — check before relying on it); otherwise LLM-enforced |
 | TOC sync | Table of Contents must match section headings | Deterministic gate if present (e.g. `check-toc-sync.js` — check before relying on it); otherwise LLM-enforced |
 | Env scope | Never store real connection info in test doc — placeholders only (the `<UPPER_SNAKE_CASE>` placeholder convention, e.g. `<LOCAL_API_URL>`) | Deterministic gate if present (e.g. `check-env-scope.js` — check before relying on it); otherwise LLM-enforced |
+| Sensitive file scope | The AI never reads sensitive files — any file carrying real credentials/tokens/keys/connection info, in any stack (the per-stack file names are listed once in the rule) — for any reason, including "just checking a value" or running a test. Committed config structure without secrets is normal config, not sensitive. All placeholder/env values come from the adopting repo's placeholder reference doc (e.g. `docs/PLACEHOLDER_REFERENCE.md`); missing value → ask the human to add it, never hunt for it in sensitive files. Applies at codebase exploration, plan env/deploy sections, and test execution | `${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/sensitive-file-scope.md` (LLM-enforced); a deterministic Read-gate in `.claude/hooks/` may backstop it — check before relying on it |
 | Staging post-deploy verification | When the plan doc marks STG as Deployed, the test doc must include a `STG-` section with the staging-runnable cases and their post-deploy results | `topic-test` rule (LLM-enforced) — no deterministic gate in the plugin |
 | One skill per session | Prefer separate sessions for init → plan → test | Skill recommendation |
 | Per-prompt discipline | Within a session, send one prompt at a time — do not chain unrelated requests | `${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md` |
@@ -152,7 +153,7 @@ flowchart TD
 | No tests between phases | Complete ALL implementation phases before running any post-implementation tests (NEG post-fix, Positive, REG, and the full unit-test suite). The only tests before implementation are SMK and NEG pre-fix. Do not run tests between phases. The full-suite unit run (e.g. `npm test`) is a **single post-implementation gate that runs after ALL phases** — not a per-phase check — so it does not contradict this rule. | Adopting-repo `AGENTS.md` (if present) principle 4; `topic-plan` Step 6 rule |
 | Unit-test gate (recommended) | When a plan phase touches function-level logic in service/helper/util layers (e.g. `server/database/service/`, `server/helpers/`, `server/utils/`, or `server/service/` in an Express.js-style backend — *adapt to your repo*), run the full unit-test suite once (e.g. `npm test`), after ALL implementation phases and before the NEG post-fix pass. Infrastructure-free (mocked dependencies — no DB/cache/server). Recommended, not gating. Skip for pure endpoint/doc/config-only changes. | `topic-test` rule (LLM-enforced) — no deterministic gate in the plugin |
 | Session entry point | Run `topic-status` at the start of every new session to recover your place without reading multiple docs | `topic-status` skill (read-only) |
-| Checkpoint brevity | Human review checkpoint tables are a decision surface, not a report — one line per Detail cell (~15–20 words), noun phrases, ≤150-word total budget, plain language, no prose around the table; Minor topics present only blocking rows | `${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md` Brevity Rules (LLM-enforced) |
+| Checkpoint brevity | Checkpoint tables are a decision surface, not a report — one line per Detail cell, noun phrases, plain language, row-scope by classification; the specific caps and budget are defined once in the rule | `${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md` Brevity Rules (LLM-enforced) |
 | Plain-language docs | Open Questions and human-facing prose: 1–2 sentences per OQ row, one question per row, no inflated verbs, plain-words parenthetical for unavoidable technical terms | `${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md` plain-language rule (LLM-enforced) |
 | Readability verify | `main-doc-verify` flags OQ rows over ~25 words, undefined jargon, and full sentences in checkpoint-style table cells | `main-doc-verify` checklist §6 (LLM-enforced) |
 
@@ -295,6 +296,8 @@ Recommend running this whenever you're actively editing topic docs — it catche
 | `locate-topic.md` | `${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/` | All topic skills — name resolution priority order & path derivation |
 | `topic-path-derivation.md` | `${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/` | All topic skills — `<MODULE>`, `<TOPIC>`, `<PREFIX>` derivation |
 | `topic-doc-writing-conventions.md` | `${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/` | All topic skills — TOC, Last Updated, file paths, never guess, cross-linking |
+| `human-review-checkpoint.md` | `${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/` | `topic-init`, `topic-plan`, `topic-test`, verify nodes — blocking checkpoint gate, summary tables, Brevity Rules |
+| `sensitive-file-scope.md` | `${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/` | `topic-init` (exploration), `topic-plan` (env/deploy), `topic-test` (test runs) — never read sensitive files (stack-dependent list in the rule); values from the placeholder reference doc |
 
 ### Per-Skill Rules
 

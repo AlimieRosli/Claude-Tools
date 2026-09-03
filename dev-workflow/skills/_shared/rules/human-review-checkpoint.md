@@ -39,7 +39,7 @@ The AI presents a structured summary table in the conversation. The rows are the
 | 4 | **Impact** | Affected endpoints/routes, sibling topics, other users of the changed code | Confirm: any impact the AI missed? |
 | 5 | **Cost / Billing** | External API pricing implications, sourced (or "N/A") | Confirm: is the cost analysis accurate? |
 | 6 | **Security** | Attack surface, input handling, secrets, auth implications (or "N/A") | Confirm: any security concern? |
-| 7 | **Reusable Components** | Existing code/functions to leverage vs. new code required | Confirm: any reusable component the AI missed? |
+| 7 | **Reusable Components** | Existing code/functions to reuse vs. new code required | Confirm: any reusable component the AI missed? |
 | 8 | **Open Questions** | List of unresolved items from §7 (status: Open) | Action: resolve, defer, or convert to a decision |
 | 9 | **Decisions & Constraints** | Key architectural choices from §6 | Confirm: do you agree with these decisions? |
 | 10 | **Accuracy Check** | Any `<!-- TODO -->` or `<!-- TODO: confirm -->` markers in the doc | Action: provide the missing info, or confirm AI should proceed without it |
@@ -82,7 +82,7 @@ The checkpoint is a **decision surface, not a report**. The human must be able t
 2. **Noun phrases only** — no full sentences in any cell. Strip articles and filler ("the", "is", "which").
 3. **Word budget for the whole table** — ≤150 words total across all Detail cells (all classifications). If a row cannot fit in budget, that signals the topic is too big for one checkpoint — decompose the topic rather than padding the table.
 4. **No prose around the table** — at most one short sentence before the table and the standard closing ask after. No narration of what the human is about to read.
-5. **Plain language** — write each cell the way you'd say it to a colleague. No inflated verbs ("leverage", "facilitate", "orchestrate" → "use", "do", "run"). Any unavoidable technical term gets a short plain-words parenthetical. Undefined jargon is a defect, not a shortcut.
+5. **Plain language** — write each cell the way you'd say it to a colleague. No inflated verbs — the canonical examples and replacements are in the [Shared: Topic Doc Writing Conventions](`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md`) plain-language rule. Any unavoidable technical term gets a short plain-words parenthetical. Undefined jargon is a defect, not a shortcut.
 6. **Row-scope by classification** — Minor topics present only the rows whose Human Action is blocking for the decision (typically Topic & Classification, What Changes, Open Questions). Standard/complex topics present all rows. The checkpoint itself always runs — only the row count scales.
 7. **One concern per row** — if a Detail cell needs "and" to list two separate things, they are two rows (or one belongs in the doc).
 

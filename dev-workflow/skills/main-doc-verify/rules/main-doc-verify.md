@@ -50,7 +50,7 @@ For each check, the verifier must produce **PASS / FAIL** with concrete evidence
 The doc is written for a human reader, not an LLM. Flag as FAIL (with the offending row quoted):
 
 - **Open Questions rows over ~25 words** — an OQ is 1–2 sentences phrased as a question you'd ask a colleague; one question per row (an "and" joining two asks is two rows).
-- **Undefined jargon** — inflated verbs ("leverage", "facilitate", "orchestrate") or technical terms with no plain-words parenthetical, per the [Shared: Topic Doc Writing Conventions](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md) plain-language rule.
+- **Undefined jargon** — inflated verbs (examples in the shared rule) or technical terms with no plain-words parenthetical, per the [Shared: Topic Doc Writing Conventions](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md) plain-language rule.
 - **Full sentences in checkpoint-style tables** — cells should be references + noun phrases, not narrated prose (references, not explanations — the plain-language rule of the shared conventions).
 
 ### 7. Deterministic Hooks (reference, don't re-run)

@@ -4,7 +4,7 @@ Used by `topic-init` (Step 1) to classify the topic before writing the main doc,
 
 ## Purpose
 
-Not every piece of work needs the full 3-doc flow. This rule forces a deliberate classification step **before** any doc is written, so:
+Not every piece of work needs the full topic-doc flow. This rule forces a deliberate classification step **before** any doc is written, so:
 
 1. The AI model and the user are explicitly aware of which case applies.
 2. The recommended flow (which skills to use, which to skip) is recorded in the main doc frontmatter.
@@ -67,7 +67,7 @@ Examples: cache/Redis key schema changes, env vars, database collection/table st
 
 ### Q7 — Default: This is a new feature or non-trivial bug fix.
 
-- If the work is **adding new functionality** → Case: **New feature (heavy)**. Flow: Full 3-doc flow.
+- If the work is **adding new functionality** → Case: **New feature (heavy)**. Flow: Full topic-doc flow.
 - If the work is **fixing incorrect behavior** → Case: **Bug fix (non-trivial)**. Flow: `topic-init` + `topic-test` (NEG before/after). `topic-plan` if multi-file/phase.
 
 ## Recording the Classification

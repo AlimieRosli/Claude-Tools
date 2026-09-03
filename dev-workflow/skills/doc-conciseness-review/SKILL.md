@@ -19,7 +19,7 @@ disable-model-invocation: true
 
 ## Overview
 
-`/topic-init`, `/topic-plan`, and `/topic-test` write thorough docs, but thoroughness drifts into padding. This is the layer-2 pass: it tightens an already-written doc's prose without deleting any fact, path, link, number, or TODO marker. Run it manually right after any of the three topic skills.
+`/topic-init`, `/topic-plan`, and `/topic-test` write thorough docs, but thoroughness drifts into padding. This is the layer-2 pass: it tightens an already-written doc's prose without deleting any fact, path, link, number, or TODO marker. Run it manually right after any topic skill.
 
 *Adapt paths/commands to your repository's actual layout and tooling — this skill operates on any doc under the adopting repo's topic-doc tree (e.g. `docs/ref/<MODULE>/<TOPIC>/` if that convention is present).*
 
@@ -52,7 +52,7 @@ Edit the doc in place:
 - Delete filler ("As we can see...", "It's worth noting that...")
 - Shorten multi-sentence intros to one sentence
 - Prefer a table row over a paragraph where a table already exists
-- Enforce the shared plain-language rule: rewrite inflated verbs ("leverage", "facilitate", "orchestrate" → "use", "do", "run"), add a plain-words parenthetical after unavoidable technical terms, and split any Open Questions row over ~25 words or containing two questions joined by "and"
+- Enforce the shared plain-language rule (see [Shared: Topic Doc Writing Conventions](`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md`)): rewrite inflated verbs, add a plain-words parenthetical after unavoidable technical terms, and split any Open Questions row over ~25 words or containing two questions joined by "and"
 
 Never remove code blocks, tables, links, or TODO markers. Never add claims or numbers that weren't already there. In particular, never weaken citation discipline: every externally-sourced factual claim (pricing, quota, rate limit, SLA) keeps its source + URL + date-checked citation, and every `[UNVERIFIED — needs source]` marker survives the pass untouched.
 
