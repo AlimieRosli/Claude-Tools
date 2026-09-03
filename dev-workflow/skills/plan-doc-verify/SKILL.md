@@ -163,7 +163,7 @@ If the doc was just written and the hook watcher hasn't run yet, note that these
 
 ## Step 9 — Human Review Checkpoint (Blocking)
 
-After verification and before reporting, run a **blocking human review checkpoint**. Present a findings table: for each check (Steps 2–7), state **PASS / FAIL** with concrete evidence (file paths, line numbers, the exact claim and its source, the specific convention violated). Wait for the human to explicitly approve or raise corrections.
+After verification and before reporting, run a **blocking human review checkpoint**. Present a findings table: for each check (Steps 2–7), state **PASS / FAIL** with concrete evidence (file paths, line numbers, the exact claim and its source, the specific convention violated) — one line per cell, noun phrases, plain language, per the [Shared: Human Review Checkpoint](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md) Brevity Rules. Wait for the human to explicitly approve or raise corrections.
 
 If the human raises concerns, apply the fixes to the plan doc, then re-present only the affected rows and wait for approval again.
 

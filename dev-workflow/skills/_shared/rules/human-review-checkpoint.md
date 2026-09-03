@@ -68,11 +68,23 @@ The AI presents a structured summary table in the conversation. The rows are the
 
 ## Presentation Rules
 
-- The AI **must present the full table** (not a shortened version) as a markdown table in the conversation.
+- The AI **must present the full table** (not a shortened version) as a markdown table in the conversation — subject to the Brevity Rules below and the row-scope rule (Minor topics).
 - The AI **must not present the table inside a code block** — it must be rendered as a proper markdown table.
-- The AI **must include concrete details** in the "Detail" column (file paths, line numbers, actual values) — not generic placeholders.
+- The AI **must include concrete details** in the "Detail" column — *concrete but minimal*: file paths, line numbers, actual values count as concrete; explanations do not fit in a table cell. Use references (`main doc §4`, `src/api/auth.ts:42`) plus a short noun phrase, not generic placeholders and not full sentences.
 - The AI **must number each row** so the human can reference items by number in their response.
 - The AI **must end with an explicit ask**: "Please review each item above. Respond with corrections, answers to open questions, or 'approved' to proceed."
+
+## Brevity Rules
+
+The checkpoint is a **decision surface, not a report**. The human must be able to read the whole table in under a minute. Completeness lives in the doc; the table only distills it. The AI applies these rules to every checkpoint presentation:
+
+1. **One line per Detail cell** — hard cap ~15–20 words per cell. A Detail cell is a pointer (`src/api/auth.ts:42 — refresh token not validated`), never an explanation of the mechanism. If a point needs a sentence to explain, it belongs in the doc with a reference here.
+2. **Noun phrases only** — no full sentences in any cell. Strip articles and filler ("the", "is", "which").
+3. **Word budget for the whole table** — ≤150 words total across all Detail cells (all classifications). If a row cannot fit in budget, that signals the topic is too big for one checkpoint — decompose the topic rather than padding the table.
+4. **No prose around the table** — at most one short sentence before the table and the standard closing ask after. No narration of what the human is about to read.
+5. **Plain language** — write each cell the way you'd say it to a colleague. No inflated verbs ("leverage", "facilitate", "orchestrate" → "use", "do", "run"). Any unavoidable technical term gets a short plain-words parenthetical. Undefined jargon is a defect, not a shortcut.
+6. **Row-scope by classification** — Minor topics present only the rows whose Human Action is blocking for the decision (typically Topic & Classification, What Changes, Open Questions). Standard/complex topics present all rows. The checkpoint itself always runs — only the row count scales.
+7. **One concern per row** — if a Detail cell needs "and" to list two separate things, they are two rows (or one belongs in the doc).
 
 ## What This Is Not
 

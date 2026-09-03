@@ -1,7 +1,7 @@
 # Topic Workflow Guide — Dynamic Flow Selection
 
 **Status:** Active
-**Last Updated:** 2026-08-20 (added Plan Doc Verify node)
+**Last Updated:** 2026-09-03 (added Checkpoint Brevity + plain-language rules)
 
 > *Adapt paths/commands to your repository's actual layout and tooling. Topic docs follow the `docs/ref/<MODULE>/<TOPIC>/` convention described below — keep that convention, but adapt directory names, commands, and environment details to the adopting repo.*
 
@@ -152,6 +152,9 @@ flowchart TD
 | No tests between phases | Complete ALL implementation phases before running any post-implementation tests (NEG post-fix, Positive, REG, and the full unit-test suite). The only tests before implementation are SMK and NEG pre-fix. Do not run tests between phases. The full-suite unit run (e.g. `npm test`) is a **single post-implementation gate that runs after ALL phases** — not a per-phase check — so it does not contradict this rule. | Adopting-repo `AGENTS.md` (if present) principle 4; `topic-plan` Step 6 rule |
 | Unit-test gate (recommended) | When a plan phase touches function-level logic in service/helper/util layers (e.g. `server/database/service/`, `server/helpers/`, `server/utils/`, or `server/service/` in an Express.js-style backend — *adapt to your repo*), run the full unit-test suite once (e.g. `npm test`), after ALL implementation phases and before the NEG post-fix pass. Infrastructure-free (mocked dependencies — no DB/cache/server). Recommended, not gating. Skip for pure endpoint/doc/config-only changes. | `topic-test` rule (LLM-enforced) — no deterministic gate in the plugin |
 | Session entry point | Run `topic-status` at the start of every new session to recover your place without reading multiple docs | `topic-status` skill (read-only) |
+| Checkpoint brevity | Human review checkpoint tables are a decision surface, not a report — one line per Detail cell (~15–20 words), noun phrases, ≤150-word total budget, plain language, no prose around the table; Minor topics present only blocking rows | `${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md` Brevity Rules (LLM-enforced) |
+| Plain-language docs | Open Questions and human-facing prose: 1–2 sentences per OQ row, one question per row, no inflated verbs, plain-words parenthetical for unavoidable technical terms | `${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md` plain-language rule (LLM-enforced) |
+| Readability verify | `main-doc-verify` flags OQ rows over ~25 words, undefined jargon, and full sentences in checkpoint-style table cells | `main-doc-verify` checklist §6 (LLM-enforced) |
 
 ---
 
@@ -377,7 +380,7 @@ Each skill has its own template. Templates are only used on first-time write —
 
 ## Conciseness Review
 
-After writing or updating any topic doc, the `doc-conciseness-review` skill can tighten the prose. `topic-init` always asks whether to run it after creating the main doc. Use it whenever a doc feels wordy or has grown through multiple edits.
+After writing or updating any topic doc, the `doc-conciseness-review` skill can tighten the prose. `topic-init` always asks whether to run it after creating the main doc. Use it whenever a doc feels wordy or has grown through multiple edits. It also enforces the shared plain-language rule: rewriting inflated verbs, adding plain-words parentheticals after technical terms, and splitting Open Questions rows over ~25 words or with two questions joined by "and".
 
 - **Command:** `/doc-conciseness-review <path-to-doc.md>`
 - **Skill file:** `${CLAUDE_PLUGIN_ROOT}/skills/doc-conciseness-review/SKILL.md`

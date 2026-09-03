@@ -45,7 +45,15 @@ For each check, the verifier must produce **PASS / FAIL** with concrete evidence
 - **§5.5 Non-Functional Requirements** present — required for `Feature`; `N/A — no NFR impact` (with reason) for Bugfix; `N/A — investigation only` (with reason) for Investigation.
 - **Open Questions table** uses `| # | Question | Status |` only (no Owner column); status starts `Open`, resolved rows are `✅ Resolved — <answer>`.
 
-### 6. Deterministic Hooks (reference, don't re-run)
+### 6. Readability for the Human
+
+The doc is written for a human reader, not an LLM. Flag as FAIL (with the offending row quoted):
+
+- **Open Questions rows over ~25 words** — an OQ is 1–2 sentences phrased as a question you'd ask a colleague; one question per row (an "and" joining two asks is two rows).
+- **Undefined jargon** — inflated verbs ("leverage", "facilitate", "orchestrate") or technical terms with no plain-words parenthetical, per the [Shared: Topic Doc Writing Conventions](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md) plain-language rule.
+- **Full sentences in checkpoint-style tables** — cells should be references + noun phrases, not narrated prose (references, not explanations — the plain-language rule of the shared conventions).
+
+### 7. Deterministic Hooks (reference, don't re-run)
 
 The following **may be enforced mechanically by gates in the adopting repo's `.claude/hooks/`** — check whether they exist before relying on them. The verifier confirms they apply but does not duplicate their logic; if the repo has no such hooks, run these checks manually as part of this verification:
 
@@ -55,7 +63,7 @@ The following **may be enforced mechanically by gates in the adopting repo's `.c
 
 ## Human Review Checkpoint
 
-After verification and before reporting, the verifier **must** run a blocking human review checkpoint: present a PASS/FAIL findings table with concrete evidence, and wait for explicit human approval before proceeding. If the human raises concerns, apply the fixes and re-present only the affected rows.
+After verification and before reporting, the verifier **must** run a blocking human review checkpoint: present a PASS/FAIL findings table with concrete evidence, and wait for explicit human approval before proceeding. The table follows the [Shared: Human Review Checkpoint](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md) Brevity Rules (one line per cell, noun phrases, word budget, plain language, no prose around the table). If the human raises concerns, apply the fixes and re-present only the affected rows.
 
 ## Constraints
 

@@ -86,7 +86,7 @@ The following may be enforced mechanically by gates in the adopting repo's `.cla
 
 ## Human Review Checkpoint
 
-After verification and before reporting, the verifier **must** run a blocking human review checkpoint: present a PASS/FAIL findings table with concrete evidence, and wait for explicit human approval before proceeding. If the human raises concerns, apply the fixes and re-present only the affected rows.
+After verification and before reporting, the verifier **must** run a blocking human review checkpoint: present a PASS/FAIL findings table with concrete evidence, and wait for explicit human approval before proceeding. The table follows the [Shared: Human Review Checkpoint](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md) Brevity Rules (one line per cell, noun phrases, word budget, plain language, no prose around the table). If the human raises concerns, apply the fixes and re-present only the affected rows.
 
 ## Constraints
 

@@ -36,6 +36,7 @@ Before editing, grep the ecosystem for duplication:
 3. **Duplicate OQs** — the same question in main + plan + test docs.
 4. **Redundant template content** — a template repeating a rule or itself.
 5. **Hard-coded node counts/names** — specific node counts ("three", "3-doc", "the N skills") or node enumerations in prose that should be generic.
+6. **Checkpoint rule drift** — every doc/skill describing a human review checkpoint must *reference* the [Shared: Human Review Checkpoint](`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md`) Brevity Rules (one line per cell, noun phrases, word budget, plain language, row-scope by classification), not restate or contradict them. Also flag any doc's own Open Questions / table rows that violate the shared plain-language rule — the workflow's docs are the first demo of its own rules.
 
 ## Consolidation Rules
 
