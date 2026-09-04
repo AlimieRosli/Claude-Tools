@@ -3,7 +3,7 @@
 > **Service / Module:** the target repo / `<Module Name>`
 > **Topic Folder:** `docs/ref/<module-folder>/<topic-folder>`
 > **Classification:** <!-- case name from topic-classification.md — e.g. "New feature (heavy)", "Bug fix (non-trivial)", "Investigation & code check", etc. -->
-> **Recommended flow:** <!-- skills to use — e.g. "topic-init + topic-plan + topic-test", "topic-init + topic-test (NEG)", "topic-init only", etc. -->
+> **Recommended flow:** <!-- skills to use — e.g. "topic-init + topic-plan + topic-test + topic-implement", "topic-init + topic-test (NEG)", "topic-init only", etc. -->
 > **Status:** Draft
 > **Last Updated:** <!-- date -->
 

@@ -1,6 +1,6 @@
 # Shared: Sensitive File Scope
 
-Used by `topic-init` (Step 2 codebase exploration), `topic-plan` (env/deploy sections), and `topic-test` (test execution) — anywhere the AI might be tempted to read environment or secret files. This is a shared reference file, not a skill itself — it is loaded when linked from a skill's own SKILL.md.
+Used by `topic-init` (Step 2 codebase exploration), `topic-plan` (env/deploy sections), `topic-implement` (implementation), and `topic-test` (test execution) — anywhere the AI might be tempted to read environment or secret files. This is a shared reference file, not a skill itself — it is loaded when linked from a skill's own SKILL.md.
 
 ## Purpose
 

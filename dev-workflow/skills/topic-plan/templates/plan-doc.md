@@ -77,7 +77,7 @@
 | 4 | Documentation Update | ☐ Not Started |
 | 5 | Testing & Validation | ☐ Not Started |
 
-> **Execution tip:** Implement one phase per prompt, within the same session, so context from earlier phases carries over. Avoid asking for all phases in a single prompt (harder to review and course-correct) and avoid splitting a single phase across different sessions (loses context on what's already been done).
+> **Execution tip:** implementation is executed by the [`topic-implement` skill](${CLAUDE_PLUGIN_ROOT}/skills/topic-implement/SKILL.md) — its execution rules ([`${CLAUDE_PLUGIN_ROOT}/skills/topic-implement/rules/topic-implementation-execution.md`](${CLAUDE_PLUGIN_ROOT}/skills/topic-implement/rules/topic-implementation-execution.md)) carry the per-phase-per-prompt session rule and the progress-sync obligation (tracker ✅ after every phase, `Last Updated` updated).
 
 ---
 

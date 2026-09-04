@@ -203,7 +203,7 @@ If the plan doc already has content, do **not** overwrite it. Make targeted edit
 
 - **Adding commits:** Append new rows to the Commits table as the user specifies them (Step 4.3).
 - **Updating deployment status:** Edit the Deployment Status table rows.
-- **Updating phase progress:** Edit the Progress Tracker table and the corresponding phase's heading status. **After each implementation phase is completed, mark it ✅ before starting the next phase** — this is what `topic-status` reads to determine where the topic is. If the Progress Tracker is stale, `topic-status` will report incorrect status. The AI or the human can update it — but it must be updated after every phase completion.
+- **Updating phase progress:** edit the Progress Tracker table when the user reports progress or when updating the plan directly. **During execution, `topic-implement` owns the per-phase sync** — after every implementation phase it marks the tracker ✅ before starting the next phase and updates `Last Updated`. See [`${CLAUDE_PLUGIN_ROOT}/skills/topic-implement/rules/topic-implementation-execution.md`](${CLAUDE_PLUGIN_ROOT}/skills/topic-implement/rules/topic-implementation-execution.md) ("Progress Sync After Every Phase"). `topic-status` reads the tracker to determine where the topic is — a stale tracker reports an incorrect status.
 - **Adding/revising phases:** Insert new phase sections in order; update the Progress Tracker to match.
 - **Adding risks:** Append rows to the Risks table.
 
@@ -251,7 +251,7 @@ After writing or updating the plan doc, report:
 - The phases defined and their current status.
 - Any open questions still unresolved (Status `Open`) — these must be resolved before execution or test doc creation.
 - Any `<!-- TODO -->` items (gaps not found in the codebase, or details the user still needs to confirm/specify).
-- What to run next (typically: the test doc skill, or start implementation from **Phase 0** — the first phase in the plan). Per-phase-per-prompt is a **recommendation, not a mandate**: the AI should assess the plan's complexity and recommend the appropriate approach — for complex multi-phase plans, suggest one phase per prompt; for simple plans, multiple phases per prompt may be fine. The human decides the granularity. **Complete ALL implementation phases before running any tests** — do not run tests between phases. The only tests that run before implementation are Smoke & Sanity and NEG pre-fix (for bug fixes). Once implementation starts, all phases must be completed first, then run NEG post-fix → Positive → REG tests.
+- What to run next: `/topic-test` to write the test doc, then — once the test doc exists and its pre-implementation runs (Smoke & Sanity, NEG pre-fix for bug fixes) are recorded — `/topic-implement` to execute the plan's phases. **Implementation is owned by `topic-implement`**: it starts from **Phase 0**, executes the phases per its execution rules ([`${CLAUDE_PLUGIN_ROOT}/skills/topic-implement/rules/topic-implementation-execution.md`](${CLAUDE_PLUGIN_ROOT}/skills/topic-implement/rules/topic-implementation-execution.md) — session & granularity, no-tests-between-phases, unit-test timing, reuse binding), and keeps the plan doc's Progress Tracker updated after every phase. `topic-plan` writes and maintains the plan doc; it does not execute it.
 
 ---
 
@@ -263,4 +263,4 @@ After completing all work for this skill, the AI **must** deliver the **per-prom
 
 ### Model selection reminder
 
-> *"**Model selection:** For the next step — `topic-test` (test doc writing, moderate complexity) — and for implementation (coding tasks), use the model recommended for that task tier in the adopting repo's model recommendation table (e.g. `AI_ASSISTED_DEVELOPMENT_PRINCIPLES.md` §11, if present). If the implementation involves complex multi-file logic, escalate to a heavier reasoning tier. Keep the model sticky within a session; change tiers only when the task genuinely requires it."*
+> *"**Model selection:** For the next step — `topic-test` (test doc writing, moderate complexity) — use the model recommended for that task tier in the adopting repo's model recommendation table (e.g. `AI_ASSISTED_DEVELOPMENT_PRINCIPLES.md` §11, if present). For implementation, `topic-implement` executes the plan — use the coding-task tier, escalating to a heavier reasoning tier for complex multi-file logic. Keep the model sticky within a session; change tiers only when the task genuinely requires it."*

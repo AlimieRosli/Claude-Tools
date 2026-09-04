@@ -40,6 +40,7 @@ It is designed for the moment when a human starts a **new session** (or resumes 
 
 **Do NOT use this skill when:**
 - You need to write or update a topic doc — use `topic-init` / `topic-plan` / `topic-test`.
+- You need to start or continue implementation — use `topic-implement`.
 - No topic docs exist yet — use `topic-init` first.
 - You need to verify a main doc — use `main-doc-verify`.
 
@@ -94,9 +95,9 @@ Based on the docs read in Step 2, determine where the topic is in the workflow. 
 | Main + plan exist, plan has unresolved Open Questions | Before execution — OQ gate | Resolve open questions in the plan doc, then proceed |
 | Main + plan exist, all OQs resolved, no test doc | Before test doc | Run `topic-test` to create the test doc |
 | Main + plan + test doc exist, no tests run yet | Before implementation — **testing first** | Run **Smoke & Sanity** first, then **NEG pre-fix** (for bug fixes — captures the bug before any code change). Do NOT start implementation until NEG pre-fix is recorded. |
-| Test doc: SMK passed, NEG pre-fix done, no phases started | After NEG pre-fix, before implementation | Start implementation from **Phase 0** (see plan doc). NEG pre-fix is already recorded — the bug is captured. |
-| Plan Progress Tracker: some phases ☐, current phase 🔄 | Mid-implementation | Continue the current in-progress phase. **Do NOT run tests between phases** — complete ALL implementation phases first, then run NEG post-fix → Positive → REG. |
-| Plan Progress Tracker: some phases ✅, some ☐, none 🔄 | Between phases | Start the next ☐ phase. **Do NOT run tests** — all phases must be completed first. |
+| Test doc: SMK passed, NEG pre-fix done, no phases started | After NEG pre-fix, before implementation | Run `/topic-implement` — it starts from **Phase 0** (see plan doc). NEG pre-fix is already recorded — the bug is captured. |
+| Plan Progress Tracker: some phases ☐, current phase 🔄 | Mid-implementation | Continue with `/topic-implement` — resume the current in-progress phase. **Do NOT run tests between phases** — complete ALL implementation phases first, then run NEG post-fix → Positive → REG. |
+| Plan Progress Tracker: some phases ✅, some ☐, none 🔄 | Between phases | Run `/topic-implement` for the next ☐ phase. **Do NOT run tests** — all phases must be completed first. |
 | Plan Progress Tracker: all phases ✅, NEG post-fix not yet run | After ALL implementation, before NEG post-fix | Run **NEG post-fix** (confirm the fix resolved the bug without breaking the rejection path), then run Positive tests |
 | Test doc: all tests passed (SMK + NEG + POS), Deployment Status: Working Branch only | After testing, before deploy | Deploy: Working Branch → DEV → STG |
 | Deployment Status: STG Deployed, test doc has no STG- results | After STG deploy, before STG verification | Run STG- cases against staging (via the staging API gateway, e.g. a public gateway hostname or a designated gateway path such as `/cr` in some setups) |
@@ -149,7 +150,7 @@ Present a concise status report:
 - **Keep the report under ~20 lines** — this is a status check, not a doc read. The human should be able to read it in a few seconds.
 - **Do NOT restate phase content** — the plan doc already describes what each phase does. The status report says "Start implementation from Phase 0" and points to the plan doc for details. Do NOT list code changes, function names, or implementation steps.
 - **Do NOT restate test flow order** — the test doc already describes the execution flow. The status report says "Run tests per test doc flow" and points to the test doc.
-- **Do NOT suggest running `topic-plan` to start implementation** — `topic-plan` is for writing/updating the plan doc, not for starting code changes. Implementation starts directly from the plan's Phase 0.
+- **Suggest `/topic-implement` for implementation** — `topic-plan` writes and updates the plan doc, it never executes it; `topic-implement` is the implementation executor and starts from the plan's Phase 0.
 - **Do NOT explain infrastructure details** — notes about dev-server start/kill-port scripts, database connection strings, etc. belong in the plan doc's Prerequisites section, not the status report.
 - **Always name the specific model** — never say "use the default model" or "use the current agent". Always state the model name and provider priority from the §11 table of the adopting repo's principles doc (if present — adapt as needed).
 
@@ -163,9 +164,9 @@ Present a concise status report:
 - **Keep the report under ~20 lines** — this is a status check, not a full doc read. Summarize; don't dump entire docs.
 - **Tables must be valid markdown** — use pipe characters and separator rows. Never render table content as plain text.
 - **Do NOT restate phase content, code changes, or test flow order** — point to the plan/test docs instead.
-- **Do NOT suggest `topic-plan` for starting implementation** — `topic-plan` writes the plan doc; implementation starts directly from the plan's Phase 0.
+- **Suggest `/topic-implement` for implementation** — `topic-plan` writes the plan doc; `topic-implement` executes it from the plan's Phase 0.
 - **Always name the specific model** — never say "use the default model" or "use the current agent". State the model name + provider priority from §11 of the adopting repo's principles doc (if present — adapt as needed).
-- **NEG-before-fix is mandatory for bug fixes** — never recommend starting implementation before NEG pre-fix tests are recorded. The correct order is: SMK → NEG pre-fix → implement → NEG post-fix → Positive. If the test doc exists but NEG pre-fix has no result, the next step is "run NEG pre-fix", NOT "start implementation".
-- **No tests between implementation phases** — when implementation is in progress (phases ☐ or 🔄), the next step is always "continue/next phase", never "run tests". All implementation phases must be completed before running post-implementation tests (NEG post-fix, Positive, REG).
+- **NEG-before-fix is mandatory for bug fixes** — never recommend starting implementation before NEG pre-fix tests are recorded. The correct order is: SMK → NEG pre-fix → `/topic-implement` → NEG post-fix → Positive. If the test doc exists but NEG pre-fix has no result, the next step is "run NEG pre-fix", NOT "start implementation".
+- **No tests between implementation phases** — when implementation is in progress (phases ☐ or 🔄), the next step is always "continue/next phase via `/topic-implement`", never "run tests". All implementation phases must be completed before running post-implementation tests (NEG post-fix, Positive, REG).
 - **Deterministic doc gates may exist in the adopting repo's `.claude/hooks/`** — check before relying on them; do not assume gates are present in every adopting repo.
 - If the topic folder doesn't exist or has no main doc, stop and tell the user — do not proceed.

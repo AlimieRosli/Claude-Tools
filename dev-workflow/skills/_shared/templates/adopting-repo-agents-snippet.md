@@ -15,7 +15,7 @@ This repo uses the **`dev-workflow` plugin** (Claude Code) for AI-assisted devel
 **Invocation** — skills are invoked as namespaced commands:
 
 - `/dev-workflow:topic-init <Module> <Topic>` — classify the work, then scaffold `docs/ref/<MODULE>/<TOPIC>/` with the main doc (plan/test docs only on request or via their skills)
-- `/dev-workflow:topic-plan` · `/dev-workflow:topic-test` · `/dev-workflow:topic-status` — plan doc, test doc, and progress status
+- `/dev-workflow:topic-plan` · `/dev-workflow:topic-test` · `/dev-workflow:topic-implement` · `/dev-workflow:topic-status` — plan doc, test doc, plan execution (phase by phase), and progress status
 - `/dev-workflow:main-doc-verify` · `/dev-workflow:plan-doc-verify` — verification passes for main/plan docs
 - `/dev-workflow:doc-conciseness-review <path-to-doc.md>` — second-pass doc tightening
 - `/dev-workflow:workflow-self-correct <target>` — de-duplicate the workflow docs

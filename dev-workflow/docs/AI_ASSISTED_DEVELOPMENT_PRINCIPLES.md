@@ -1,7 +1,7 @@
 # AI-Assisted Development Principles
 
 **Status:** Active
-**Last Updated:** 2026-08-21
+**Last Updated:** 2026-09-04
 
 > *Adapt paths/commands to your repository's actual layout and tooling. This document is written repo-agnostically; the adopting repo's own instructions files (`AGENTS.md`/`CLAUDE.md`, if present) are its ground truth for codebase-specific patterns.*
 
@@ -69,7 +69,7 @@ Each principle states **why it is needed** (the root failure mode that justifies
 - Keep the working context **small and focused** — one logical task per session where possible.
 - Re-read authoritative files (`AGENTS.md`, `CLAUDE.md` — if present in the adopting repo, adapt as needed — and topic docs) rather than relying on stale in-context copies.
 - **Per-prompt discipline** — within a single session, send **one prompt at a time** (prompt 1 by 1). Do not chain multiple unrelated requests into a single mega-prompt. Each prompt should have one clear objective. Wait for the result before sending the next prompt.
-- **Per-session discipline** — when the AI completes a workflow skill (`topic-init`, `topic-plan`, `topic-test`, or any phase of implementation), it **must proactively remind the human** to either: (a) start a **fresh session** for the next skill/phase, or (b) at minimum acknowledge that continuing in the same session risks context dilution. This reminder is **mandatory at the end of every skill's Confirm step** — see the enforcement rows below.
+- **Per-session discipline** — when the AI completes a workflow skill (`topic-init`, `topic-plan`, `topic-implement`, `topic-test`, or any phase of implementation), it **must proactively remind the human** to either: (a) start a **fresh session** for the next skill/phase, or (b) at minimum acknowledge that continuing in the same session risks context dilution. This reminder is **mandatory at the end of every skill's Confirm step** — see the enforcement rows below.
 
 **Anti-pattern:** A single mega-prompt that chains 10 unrelated tasks and drifts off the original requirement. Also: the AI completing a skill and silently moving to the next without reminding the human to consider a session change.
 
@@ -78,7 +78,7 @@ Each principle states **why it is needed** (the root failure mode that justifies
 | Enforcer | What it does |
 |----------|-------------|
 | `${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md` | "Never guess" rule — never guess technical details not found in the codebase; use `<!-- TODO: confirm -->` instead of inventing an answer. Also: **per-prompt and per-session discipline** rule — one prompt at a time, remind the human to change session between skills. |
-| One skill per session recommendation | `topic-init`, `topic-plan`, `topic-test` each recommend running in separate sessions to avoid context dilution. |
+| One skill per session recommendation | `topic-init`, `topic-plan`, `topic-implement`, `topic-test` each recommend running in separate sessions to avoid context dilution. |
 | `topic-init` Confirm step | **Mandatory post-task reminder** — the AI must tell the human to start a new session for `topic-plan` / `topic-test`, and remind them to select the right model (see item 11). |
 | `topic-plan` Confirm step | **Mandatory post-task reminder** — the AI must tell the human to start a new session for `topic-test` or implementation, and remind them to select the right model. |
 | `topic-test` Confirm step | **Mandatory post-task reminder** — the AI must tell the human to start a new session for test execution or the next workflow step, and remind them to select the right model. |
@@ -131,6 +131,7 @@ Each principle states **why it is needed** (the root failure mode that justifies
 | Open-questions gate (if present) | A deterministic gate may exist in the adopting repo's `.claude/hooks/` — e.g. one that mechanically blocks test doc creation if the plan doc has unresolved open questions. Check before relying on it. |
 | `topic-test` Post-run update | After tests are run, each test case gets a `**Result:**` line (✅ PASS / ❌ FAIL); the plan doc's Progress Tracker is updated. |
 | `topic-plan` Progress Tracker | Each phase has a status (☐ Not Started / 🔄 In Progress / ✅ Complete) — visual confirmation that all phases are done. |
+| `topic-implement` execution | Executes the plan's phases per its execution rules and keeps the Progress Tracker in sync after every phase — the tracker is only trustworthy because the executor updates it immediately. |
 | `topic-plan` "Done When" per phase | Each phase has a verifiable outcome, not a vague "it works". |
 
 ---
@@ -214,7 +215,7 @@ Each principle states **why it is needed** (the root failure mode that justifies
 
 **Anti-pattern:** Jumping straight to code with no plan and no way to verify "done".
 
-**Enforcement:** `topic-plan` (phases, progress tracker, "Done When", rollback per phase, Risks table) — **Skill**.
+**Enforcement:** `topic-plan` (phases, progress tracker, "Done When", rollback per phase, Risks table) — **Skill**; `topic-implement` (executes the phases and updates the tracker after every phase) — **Skill**.
 
 ---
 
@@ -478,4 +479,4 @@ Each principle states **why it is needed** (the root failure mode that justifies
 | Hooks Reference | `.claude/hooks/README.md` (if present in the adopting repo — adapt as needed) | Every `check-*.js` gate, shared core pattern, watchers |
 | `AGENTS.md` | Repo root (if present in the adopting repo) | Single source of truth for AI-assisted development |
 | `CLAUDE.md` | Repo root (if present in the adopting repo) | Auto-loaded project instructions |
-| Topic skills | `${CLAUDE_PLUGIN_ROOT}/skills/topic-*/SKILL.md` | init / plan / test / hook-fix / hook-init skills |
+| Topic skills | `${CLAUDE_PLUGIN_ROOT}/skills/topic-*/SKILL.md` | init / plan / implement / test / hook-fix / hook-init skills |

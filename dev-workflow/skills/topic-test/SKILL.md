@@ -208,7 +208,7 @@ After **any test run is complete**, update the test doc immediately — do not b
 | **Pass criteria checklist** | After each test case | Check off each item that passed; leave unchecked items that failed |
 | **Run log** | After every run | Append a dated entry (case IDs run, pass/fail counts, environment) — never edit or delete prior entries |
 | **"How to run" commands** | After first run and whenever gaps found | Fix any incorrect commands, missing prerequisites, or steps that differ from real execution |
-| **Plan doc Progress Tracker** | After test milestones | Update the plan doc's Progress Tracker to reflect test progress: mark the "Testing & Validation" phase (usually the last phase) `🔄 In Progress` when testing starts, `✅ Complete` when all tests pass. Also update the plan doc's `Last Updated` date. This is the same obligation as during implementation — see the adopting repo's contributor guide (e.g. `AGENTS.md` / `CLAUDE.md`, if present — adapt as needed). |
+| **Plan doc Progress Tracker** | After test milestones | Update the plan doc's Progress Tracker to reflect test progress: mark the "Testing & Validation" phase (usually the last phase) `🔄 In Progress` when testing starts, `✅ Complete` when all tests pass. Also update the plan doc's `Last Updated` date. During implementation this same sync is owned by `topic-implement` — see [`${CLAUDE_PLUGIN_ROOT}/skills/topic-implement/rules/topic-implementation-execution.md`](${CLAUDE_PLUGIN_ROOT}/skills/topic-implement/rules/topic-implementation-execution.md) ("Progress Sync After Every Phase"). |
 
 ---
 
@@ -221,7 +221,7 @@ Report:
 - Test case count by category (Smoke & Sanity / Negative / Positive — always; plus Edge / Error / Regression / Performance only if included).
 - Any `<!-- TODO -->` items.
 - Testing flow summary.
-- What to run next (execute the flow — Smoke & Sanity first — or update plan doc Testing & Validation phase status).
+- What to run next (execute the flow — Smoke & Sanity first — or update plan doc Testing & Validation phase status). Once the pre-implementation runs are recorded (SMK + NEG pre-fix for bug fixes), `/topic-implement` executes the plan's implementation phases — it returns to the test doc for the post-implementation gates (full unit suite → NEG post-fix → Positive → conditional categories) and records results per this skill's Step 6.
 
 ---
 

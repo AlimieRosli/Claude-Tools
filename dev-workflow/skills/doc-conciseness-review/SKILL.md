@@ -1,5 +1,5 @@
 ---
-description: "Second-pass conciseness reviewer for topic docs in the adopting repo. Tightens prose without dropping any fact, link, TODO, or number. USE FOR: running right after /topic-init, /topic-plan, or /topic-test. INVOKE WITH: /doc-conciseness-review <path-to-doc.md>"
+description: "Second-pass conciseness reviewer for topic docs in the adopting repo. Tightens prose without dropping any fact, link, TODO, or number. USE FOR: running right after any topic skill (topic-init, topic-plan, topic-implement, topic-test). INVOKE WITH: /doc-conciseness-review <path-to-doc.md>"
 argument-hint: "<path-to-doc.md>"
 disable-model-invocation: true
 ---
@@ -19,7 +19,7 @@ disable-model-invocation: true
 
 ## Overview
 
-`/topic-init`, `/topic-plan`, and `/topic-test` write thorough docs, but thoroughness drifts into padding. This is the layer-2 pass: it tightens an already-written doc's prose without deleting any fact, path, link, number, or TODO marker. Run it manually right after any topic skill.
+The topic skills (`/topic-init`, `/topic-plan`, `/topic-implement`, `/topic-test`) write thorough docs and keep them updated, but thoroughness drifts into padding. This is the layer-2 pass: it tightens an already-written doc's prose without deleting any fact, path, link, number, or TODO marker. Run it manually right after any topic skill.
 
 *Adapt paths/commands to your repository's actual layout and tooling — this skill operates on any doc under the adopting repo's topic-doc tree (e.g. `docs/ref/<MODULE>/<TOPIC>/` if that convention is present).*
 

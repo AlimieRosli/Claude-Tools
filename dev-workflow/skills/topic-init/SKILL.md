@@ -192,7 +192,7 @@ Do **not** create the plan doc or test doc unless the user explicitly asks for o
 
 Otherwise, these are created later — in full, not as empty stubs — by the `topic-plan` and `topic-test` skills respectively.
 
-> **Remark:** It is recommended to run `topic-plan` and `topic-test` each in their own **separate session/prompt**, after this init is done and reviewed — not chained into the same prompt as init or as each other. This applies more generally too: prefer one skill/action per session where practical, since each additional chained action dilutes context and increases the chance of drift or missed details.
+> **Remark:** It is recommended to run `topic-plan`, `topic-test`, and `topic-implement` each in their own **separate session/prompt**, after this init is done and reviewed — not chained into the same prompt as init or as each other. This applies more generally too: prefer one skill/action per session where practical, since each additional chained action dilutes context and increases the chance of drift or missed details.
 
 ---
 

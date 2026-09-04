@@ -175,7 +175,7 @@ Report:
 - **PASS / FAIL** per check (Steps 2–7), with file:line evidence.
 - Any `<!-- TODO: confirm -->` items or unverified claims found.
 - Any corrections applied to the doc.
-- What to run next: the human review checkpoint in `topic-plan` (Step 5.5, if not already done), or `topic-test` to write the test doc, or start implementation from Phase 0.
+- What to run next: the human review checkpoint in `topic-plan` (Step 5.5, if not already done), or `topic-test` to write the test doc, then `/topic-implement` to execute the plan's phases from Phase 0.
 
 ---
 

@@ -1,6 +1,6 @@
 # Shared: Topic Doc Path Derivation
 
-Used by `topic-init`, `topic-plan`, and `topic-test` to derive doc paths once the module and topic names are resolved. This is a shared reference file, not a skill itself — it has no `SKILL.md` and is only loaded when linked from a skill's own rules file.
+Used by `topic-init`, `topic-plan`, `topic-implement`, and `topic-test` to derive doc paths once the module and topic names are resolved. This is a shared reference file, not a skill itself — it has no `SKILL.md` and is only loaded when linked from a skill's own rules file.
 
 | Variable | How to derive | Example |
 |----------|--------------|---------|

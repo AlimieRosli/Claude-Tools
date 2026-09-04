@@ -1,7 +1,7 @@
 # Topic Workflow Guide — Dynamic Flow Selection
 
 **Status:** Active
-**Last Updated:** 2026-09-03 (added Sensitive File Scope rule)
+**Last Updated:** 2026-09-04 (added the topic-implement node)
 
 > *Adapt paths/commands to your repository's actual layout and tooling. Topic docs follow the `docs/ref/<MODULE>/<TOPIC>/` convention described below — keep that convention, but adapt directory names, commands, and environment details to the adopting repo.*
 
@@ -29,7 +29,7 @@
 
 ## Overview
 
-This guide explains how to **dynamically select the right depth** of the topic documentation workflow based on the nature, risk, and complexity of the work. The topic skills (`topic-init`, `topic-plan`, `topic-test`, and any verification/meta nodes) are a **toolkit, not a rigid mandate** — they scale up and down depending on what you're doing.
+This guide explains how to **dynamically select the right depth** of the topic documentation workflow based on the nature, risk, and complexity of the work. The topic skills (`topic-init`, `topic-plan`, `topic-implement`, `topic-test`, and any verification/meta nodes) are a **toolkit, not a rigid mandate** — they scale up and down depending on what you're doing.
 
 The skills themselves are designed so that **every piece of work** — feature, bugfix, investigation, minor change — is called a "topic" and follows the same general pattern. But applying the full topic-doc flow with all gates to a one-line config fix is over-engineering. This guide helps you decide **which parts to use and which to skip**.
 
@@ -78,6 +78,7 @@ The workflow has **two equivalent drivers** — they are the *same nodes* expres
 | `topic-init` | `/topic-init <module> <topic>` | Main doc (`<PREFIX>.md`) | What & Why | Records current state, target state, technical details, requirements, open questions |
 | `topic-plan` | `/topic-plan <module> <topic>` | Plan doc (`<PREFIX>_PLAN.md`) | How | Phases, steps, branch/commits, deployment status, progress tracker, risks, rollback |
 | `topic-test` | `/topic-test <module> <topic>` | Test doc (`<PREFIX>_TEST.md`) | How to Verify | Test environment, test cases (SMK/NEG/TC + optional), execution flow, pass criteria |
+| `topic-implement` | `/topic-implement <module> <topic>` | (none — executes the plan doc) | Doing | Executes the plan phase by phase: pre-implementation SMK / NEG pre-fix gate, per-phase execution with Progress Tracker ✅ after every phase, post-implementation test gates (full unit suite → NEG post-fix → POS → conditional categories), cleanup & doc sync |
 | `topic-status` | `/topic-status <module> <topic>` | (none — read-only) | Where are we | Reads the topic docs and reports the workflow position + next step. Use at the start of a new session to recover your place without reading multiple docs |
 | `main-doc-verify` | `/main-doc-verify <path>` | (verifies the main doc) | Verify | Verifies the main doc for correctness, reliability, and accuracy vs current code — requirements cited, external claims sourced, no invented metrics, structural rules. Optional, encouraged before the human review checkpoint |
 | `plan-doc-verify` | `/plan-doc-verify <path>` | (verifies the plan doc) | Verify | Verifies the plan doc for correctness, completeness, and soundness vs current code — requirements fully covered & traceable, coding-standards conformance (feature layering, error handling, logging, reuse/anti-spaghetti), design-level security/OWASP, accuracy vs code, rollback, NFR coverage, phasing sanity, branch & commit hygiene. Optional, encouraged before the human review checkpoint |
@@ -92,6 +93,12 @@ topic-status  ←  (run at any point to check where you are)
      ↓
 topic-init  →  [main-doc-verify]  →  topic-plan  →  [plan-doc-verify]  →  topic-test
  (main doc)     (optional verify)     (plan doc)     (optional verify)      (test doc)
+                                                                           │
+                                                                           ↓
+                                                                    topic-implement
+                                                                (executes the plan:
+                                                        SMK/NEG pre-fix → Phase 0 →
+                                                        all phases → test gates → cleanup)
      │                                  ↑
      └──────────────────────────────────┘
            test-only mode
@@ -99,6 +106,7 @@ topic-init  →  [main-doc-verify]  →  topic-plan  →  [plan-doc-verify]  →
 ```
 
 - `topic-plan` **requires** the main doc to exist (created by `topic-init`).
+- `topic-implement` **requires** the main doc and plan doc to exist (created by `topic-init` / `topic-plan`), all plan open questions `✅ Resolved`, and — when the plan has a Testing & Validation phase — the test doc to exist (created by `topic-test`). It produces no doc of its own; it executes the plan and keeps the plan doc's Progress Tracker updated after every phase.
 - `topic-test` **requires** the main doc to exist. The plan doc is **required when code changes are planned**, but **optional in test-only mode** (testing an existing feature with no code changes — e.g. audit, regression validation, baseline characterization).
 - `main-doc-verify` is **optional** — `topic-init` Step 4 encourages running it before the human review checkpoint, but it never blocks. It verifies the main doc for correctness, reliability, and accuracy vs current code.
 - `plan-doc-verify` is **optional** — `topic-plan` Step 5.3 encourages running it before the human review checkpoint, but it never blocks. It verifies the plan doc for correctness, completeness, and soundness vs current code (requirements coverage, coding standards, design-level security/OWASP, accuracy, rollback, NFR coverage, phasing, branch & commit hygiene).
@@ -123,8 +131,8 @@ flowchart TD
     D --> E["3. /topic-test<br/>Read main + plan → Explore → Write Test Doc<br/>(SMK, NEG, TC, optional categories)"]
     E --> F["4. Run Smoke & Sanity<br/>(baseline health check)"]
     F --> G["5. Run NEG tests BEFORE fix<br/>(capture the bug/original behavior)"]
-    G --> H["6. Implement code changes — ALL phases<br/>(start from Phase 0 — per-phase-per-prompt<br/>is a complexity-based recommendation,<br/>not a mandate; human decides granularity.<br/>Do NOT run tests between phases —<br/>complete ALL phases first)"]
-    H --> H2["6b. Update Progress Tracker<br/>(mark completed phase ✅ before<br/>starting the next phase)"]
+    G --> H["6. /topic-implement — execute the plan<br/>pre-implementation gate (SMK + NEG pre-fix)<br/>then Phase 0 → Phase N — per-phase-per-prompt<br/>is a complexity-based recommendation,<br/>not a mandate; human decides granularity.<br/>Do NOT run tests between phases —<br/>complete ALL phases first"]
+    H --> H2["6b. Progress Tracker sync — topic-implement<br/>marks each phase ✅ in the plan doc<br/>immediately after its Done When is verified<br/>(before starting the next phase)"]
     H2 --> H3["6c. Run full unit-test suite (UNIT)<br/>— recommended, after ALL phases,<br/>before NEG post-fix. Infrastructure-free<br/>(mocked dependencies — no DB/cache/server).<br/>Do NOT run between phases."]
     H3 --> I["7. Re-run NEG tests AFTER fix<br/>(confirm correct rejection)"]
     I --> J["8. Run Positive tests<br/>(confirm happy paths)"]
@@ -147,10 +155,10 @@ flowchart TD
 | Staging post-deploy verification | When the plan doc marks STG as Deployed, the test doc must include a `STG-` section with the staging-runnable cases and their post-deploy results | `topic-test` rule (LLM-enforced) — no deterministic gate in the plugin |
 | One skill per session | Prefer separate sessions for init → plan → test | Skill recommendation |
 | Per-prompt discipline | Within a session, send one prompt at a time — do not chain unrelated requests | `${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md` |
-| Post-task session reminder | Every topic skill's final step must remind the human to start a fresh session for the next skill/phase | Mandatory in `topic-init`, `topic-plan`, `topic-test` Confirm steps |
-| Post-task model reminder | Every topic skill's final step must remind the human to select the right model for the next task | Mandatory in `topic-init`, `topic-plan`, `topic-test` Confirm steps — see model table in `AI_ASSISTED_DEVELOPMENT_PRINCIPLES.md` §11 |
-| Progress Tracker sync | After completing each implementation phase, mark it ✅ in the plan doc's Progress Tracker before starting the next phase — so `topic-status` reads accurate data | `topic-plan` Step 5.2 rule (LLM-enforced) — no deterministic gate in the plugin |
-| No tests between phases | Complete ALL implementation phases before running any post-implementation tests (NEG post-fix, Positive, REG, and the full unit-test suite). The only tests before implementation are SMK and NEG pre-fix. Do not run tests between phases. The full-suite unit run (e.g. `npm test`) is a **single post-implementation gate that runs after ALL phases** — not a per-phase check — so it does not contradict this rule. | Adopting-repo `AGENTS.md` (if present) principle 4; `topic-plan` Step 6 rule |
+| Post-task session reminder | Every topic skill's final step must remind the human to start a fresh session for the next skill/phase | Mandatory in `topic-init`, `topic-plan`, `topic-implement`, `topic-test` Confirm steps |
+| Post-task model reminder | Every topic skill's final step must remind the human to select the right model for the next task | Mandatory in `topic-init`, `topic-plan`, `topic-implement`, `topic-test` Confirm steps — see model table in `AI_ASSISTED_DEVELOPMENT_PRINCIPLES.md` §11 |
+| Progress Tracker sync | After completing each implementation phase, mark it ✅ in the plan doc's Progress Tracker before starting the next phase — so `topic-status` reads accurate data | `${CLAUDE_PLUGIN_ROOT}/skills/topic-implement/rules/topic-implementation-execution.md` ("Progress Sync After Every Phase") (LLM-enforced) — no deterministic gate in the plugin |
+| No tests between phases | Complete ALL implementation phases before running any post-implementation tests (NEG post-fix, Positive, REG, and the full unit-test suite). The only tests before implementation are SMK and NEG pre-fix. Do not run tests between phases. The full-suite unit run (e.g. `npm test`) is a **single post-implementation gate that runs after ALL phases** — not a per-phase check — so it does not contradict this rule. | `${CLAUDE_PLUGIN_ROOT}/skills/topic-implement/rules/topic-implementation-execution.md` ("No Tests Between Phases"); adopting-repo `AGENTS.md` (if present) principle 4 |
 | Unit-test gate (recommended) | When a plan phase touches function-level logic in service/helper/util layers (e.g. `server/database/service/`, `server/helpers/`, `server/utils/`, or `server/service/` in an Express.js-style backend — *adapt to your repo*), run the full unit-test suite once (e.g. `npm test`), after ALL implementation phases and before the NEG post-fix pass. Infrastructure-free (mocked dependencies — no DB/cache/server). Recommended, not gating. Skip for pure endpoint/doc/config-only changes. | `topic-test` rule (LLM-enforced) — no deterministic gate in the plugin |
 | Session entry point | Run `topic-status` at the start of every new session to recover your place without reading multiple docs | `topic-status` skill (read-only) |
 | Checkpoint brevity | Checkpoint tables are a decision surface, not a report — one line per Detail cell, noun phrases, plain language, row-scope by classification; the specific caps and budget are defined once in the rule | `${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md` Brevity Rules (LLM-enforced) |
@@ -297,7 +305,7 @@ Recommend running this whenever you're actively editing topic docs — it catche
 | `topic-path-derivation.md` | `${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/` | All topic skills — `<MODULE>`, `<TOPIC>`, `<PREFIX>` derivation |
 | `topic-doc-writing-conventions.md` | `${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/` | All topic skills — TOC, Last Updated, file paths, never guess, cross-linking |
 | `human-review-checkpoint.md` | `${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/` | `topic-init`, `topic-plan`, `topic-test`, verify nodes — blocking checkpoint gate, summary tables, Brevity Rules |
-| `sensitive-file-scope.md` | `${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/` | `topic-init` (exploration), `topic-plan` (env/deploy), `topic-test` (test runs) — never read sensitive files (stack-dependent list in the rule); values from the placeholder reference doc |
+| `sensitive-file-scope.md` | `${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/` | `topic-init` (exploration), `topic-plan` (env/deploy), `topic-implement` (implementation), `topic-test` (test runs) — never read sensitive files (stack-dependent list in the rule); values from the placeholder reference doc |
 
 ### Per-Skill Rules
 
@@ -306,23 +314,26 @@ Recommend running this whenever you're actively editing topic docs — it catche
 | `topic-init` | `${CLAUDE_PLUGIN_ROOT}/skills/topic-init/rules/topic-main-doc-writing.md` | Requirements section mandatory & blocking; §5.5 NFR required for Features; TOC rules; update on edit |
 | `topic-plan` | `${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/rules/topic-plan-doc-writing.md` | Reuse existing code (grep before specifying new); Open Questions required section; Requirement Coverage required table; TOC + Last Updated on every edit |
 | `topic-test` | `${CLAUDE_PLUGIN_ROOT}/skills/topic-test/rules/topic-test-doc-writing.md` | Required/optional category gating; NEG-before-fix rule; env placeholder policy; post-test-run updates; regression conditional requirement |
+| `topic-implement` | `${CLAUDE_PLUGIN_ROOT}/skills/topic-implement/rules/topic-implementation-execution.md` | Plan-order execution; progress sync after every phase; no tests between phases; unit-test implementation timing; Reuse field binding; bounded repair on plan/codebase divergence; related-doc sync; final cleanup sweep |
 
 ---
 
 ## Decision Matrix
 
-| | `topic-init` (main doc) | `topic-plan` (plan doc) | `topic-test` (test doc) | SMK | NEG before | NEG after | TC | UNIT | REG | EC/ERR/PERF | STG post-deploy |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| **New feature (heavy)** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ if logic touched | ✅ if shared | Optional | ✅ Required |
-| **Bug fix (non-trivial)** | ✅ | ⚠️ if multi-file | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ if logic touched | ✅ if shared | Optional | ✅ Required |
-| **Minor change** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Investigation** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Refactor** | ✅ | ⚠️ if complex | ✅ | ✅ | ❌ | ❌ | ❌ | ⚠️ if logic touched | ✅ | Optional | ⚠️ Optional |
-| **Config/infra change** | ✅ | ⚠️ if complex | ✅ | ✅ | ✅ | ✅ | ⚠️ | ⚠️ if logic touched | ✅ if shared | Optional | ✅ Required (SMK) |
-| **Hotfix (incident)** | Retroactive | ❌ | ✅ | ✅ | N/A | ✅ | ✅ | ⚠️ if logic touched | ✅ if shared | Optional | ✅ Required (REG) |
-| **Test-only (existing feature audit)** | ✅ | ❌ | ✅ | ✅ | N/A | N/A | ✅ | ❌ | ✅ if shared | Optional | ⚠️ Optional |
+| | `topic-init` (main doc) | `topic-plan` (plan doc) | `topic-test` (test doc) | `topic-implement` (execution) | SMK | NEG before | NEG after | TC | UNIT | REG | EC/ERR/PERF | STG post-deploy |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| **New feature (heavy)** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ if logic touched | ✅ if shared | Optional | ✅ Required |
+| **Bug fix (non-trivial)** | ✅ | ⚠️ if multi-file | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ if logic touched | ✅ if shared | Optional | ✅ Required |
+| **Minor change** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Investigation** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Refactor** | ✅ | ⚠️ if complex | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ | ⚠️ if logic touched | ✅ | Optional | ⚠️ Optional |
+| **Config/infra change** | ✅ | ⚠️ if complex | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ | ⚠️ if logic touched | ✅ if shared | Optional | ✅ Required (SMK) |
+| **Hotfix (incident)** | Retroactive | ❌ | ✅ | N/A — fix already made | ✅ | N/A | ✅ | ✅ | ⚠️ if logic touched | ✅ if shared | Optional | ✅ Required (REG) |
+| **Test-only (existing feature audit)** | ✅ | ❌ | ✅ | ❌ | ✅ | N/A | N/A | ✅ | ❌ | ✅ if shared | Optional | ⚠️ Optional |
 
 Legend: ✅ = Required | ⚠️ = Conditional | ❌ = Skip
+
+**`topic-implement` column note:** the Implement column covers *executing the plan's phases* — it applies when the topic has a plan doc with code/config phases. It requires the plan's open questions all `✅ Resolved` and (when the plan has a Testing & Validation phase) the test doc to exist. It produces no doc of its own; its execution rules live in `${CLAUDE_PLUGIN_ROOT}/skills/topic-implement/rules/topic-implementation-execution.md`.
 
 **`UNIT` column note:** ⚠️ means **recommended** (not required/gating) — generate `UNIT-###` cases when a plan phase touches function-level logic in service/helper/util layers (e.g. `server/database/service/`, `server/helpers/`, `server/utils/`, or `server/service/` in an Express.js-style backend — *adapt to your repo*); skip for pure endpoint/doc/config-only changes. The full unit-test suite (e.g. `npm test`) runs **after ALL implementation phases** and **before the NEG post-fix pass** (see the execution flow and `${CLAUDE_PLUGIN_ROOT}/skills/topic-test/rules/topic-test-doc-writing.md`). This is LLM-enforced — no deterministic gate in the plugin.
 
@@ -330,7 +341,7 @@ Legend: ✅ = Required | ⚠️ = Conditional | ❌ = Skip
 
 ## Templates Reference
 
-Each skill has its own template. Templates are only used on first-time write — updates are always targeted edits, never wholesale rewrites.
+Each skill has its own template. Templates are only used on first-time write — updates are always targeted edits, never wholesale rewrites. `topic-implement` is the one topic skill with **no template** — it produces no doc of its own; the plan doc is its instruction source and progress record.
 
 | Template | Location | When Used |
 |----------|----------|-----------|

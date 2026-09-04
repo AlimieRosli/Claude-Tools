@@ -836,7 +836,7 @@ Phase 1 — Negative Flow pre-fix pass (required, run BEFORE implementing the fi
   4. NEG-002 → Confirm invalid type case currently reproduces the bug or shows the feature is missing
   5. NEG-003 → Confirm auth failure case currently reproduces the bug or shows the feature is missing
 
-  --- Implement ALL implementation phases here (DO NOT run tests between phases) ---
+  --- `/topic-implement` executes ALL implementation phases here (plan doc is the source of truth; DO NOT run tests between phases — see ${CLAUDE_PLUGIN_ROOT}/skills/topic-implement/rules/topic-implementation-execution.md) ---
 
 Phase 1.5 — Unit Tests (recommended, run after ALL implementation phases, full test suite, before NEG post-fix)
   6. UNIT-001 → Confirm function-level logic with mocked data access (happy path / error branch / mocking seam)

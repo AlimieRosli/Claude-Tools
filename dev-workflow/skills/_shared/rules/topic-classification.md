@@ -15,13 +15,13 @@ Not every piece of work needs the full topic-doc flow. This rule forces a delibe
 
 | Case | Definition | Default Flow |
 |------|-----------|--------------|
-| **New feature (heavy)** | Adding new functionality — new endpoint, new module, new external integration, or significant enhancement to existing behavior. Multi-file, multi-phase, or multi-session expected. | Full: `topic-init` + `topic-plan` + `topic-test` (all required categories) |
-| **Bug fix (non-trivial)** | Fixing incorrect behavior that is NOT a one-liner. Spans multiple files, has side effects, or requires understanding of existing flow to fix correctly. | `topic-init` + `topic-test` (NEG before/after). `topic-plan` if multi-file/phase. |
+| **New feature (heavy)** | Adding new functionality — new endpoint, new module, new external integration, or significant enhancement to existing behavior. Multi-file, multi-phase, or multi-session expected. | Full: `topic-init` + `topic-plan` + `topic-test` + `topic-implement` (all required categories) |
+| **Bug fix (non-trivial)** | Fixing incorrect behavior that is NOT a one-liner. Spans multiple files, has side effects, or requires understanding of existing flow to fix correctly. | `topic-init` + `topic-test` (NEG before/after). `topic-plan` if multi-file/phase. `topic-implement` executes the fix. |
 | **Minor change** | One-liner: config value, label text, typo, log level, single constant. No logic change, no side effects, single file. | **Skip all skills.** Make the change, run a quick manual check. |
 | **Investigation & code check** | Exploring how something works, diagnosing a reported issue, evaluating a library, checking for regressions — no code changes planned (yet). | `topic-init` only (main doc). Plan/test docs only if investigation leads to a code change. |
-| **Refactor (no behavior change)** | Restructuring code without changing external behavior — extracting functions, renaming, splitting files, improving readability. | `topic-init` + `topic-test` (REG cases). `topic-plan` if complex. |
-| **Config/infra change with risk** | Changing cache key schema, adding/removing env vars, changing database collection/table structure, modifying middleware order. Not a code logic change but affects runtime behavior. | `topic-init` + `topic-test` (SMK + NEG). `topic-plan` if complex. |
-| **Hotfix (production incident)** | Production is broken — fix first, document after. | Fix first → `topic-init` retroactively → `topic-test` for regression. Skip `topic-plan`. |
+| **Refactor (no behavior change)** | Restructuring code without changing external behavior — extracting functions, renaming, splitting files, improving readability. | `topic-init` + `topic-test` (REG cases). `topic-plan` if complex. `topic-implement` executes the refactor. |
+| **Config/infra change with risk** | Changing cache key schema, adding/removing env vars, changing database collection/table structure, modifying middleware order. Not a code logic change but affects runtime behavior. | `topic-init` + `topic-test` (SMK + NEG). `topic-plan` if complex. `topic-implement` executes the change. |
+| **Hotfix (production incident)** | Production is broken — fix first, document after. | Fix first → `topic-init` retroactively → `topic-test` for regression. Skip `topic-plan`. (`topic-implement` is N/A — the fix is already made.) |
 
 ## Classification Questions
 

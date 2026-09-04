@@ -1,6 +1,6 @@
 # Shared: Human Review Checkpoint
 
-Used by `topic-init` (Step 5), `topic-plan` (Step 5.5), and `topic-test` (Step 5.5) as a **blocking gate** between doc creation and the skill's confirm/next-steps phase. This is a shared reference file, not a skill itself — it is loaded when linked from a skill's own SKILL.md.
+Used by `topic-init` (Step 5), `topic-plan` (Step 5.5), `topic-test` (Step 5.5), and `topic-implement` (Step 4, implementation start) as a **blocking gate** before the next phase of work. This is a shared reference file, not a skill itself — it is loaded when linked from a skill's own SKILL.md.
 
 ## Purpose
 
@@ -15,6 +15,7 @@ This is not a code review or doc review — it is an **understanding check**. Th
 | `topic-init` | Step 4 (optional main-doc verify) | Step 6 (optional stubs) / Step 7 (confirm) |
 | `topic-plan` | Step 5.3 (optional plan-doc verify) | Step 6 (confirm) |
 | `topic-test` | Step 5 (test doc written) | Step 6 (post-run update) / Step 7 (confirm) |
+| `topic-implement` | Step 3 (pre-implementation SMK / NEG pre-fix recorded) | Step 5 (phase execution) |
 
 ## Behavior — Blocking Gate
 
@@ -65,6 +66,16 @@ The AI presents a structured summary table in the conversation. The rows are the
 | 3 | **Environment** | Test environment setup (local/staging/production) | Confirm: does this match your test environment? |
 | 4 | **Side-Effect Checks** | What else is verified beyond the primary change | Confirm: any side effect the AI missed? |
 | 5 | **Pass Criteria** | Measurable success criteria per test case | Confirm: are the criteria clear and correct? |
+
+### For topic-implement (implementation-start checkpoint)
+
+| # | Item | Detail | Human Action |
+|---|------|--------|--------------|
+| 1 | **Current Position** | Progress Tracker state — which phases ✅/🔄/☐ (plan doc) | Confirm: resume point correct? |
+| 2 | **Pre-Impl Tests** | SMK result; NEG pre-fix recorded (or exemption marker) | Confirm: gate satisfied? |
+| 3 | **Next Phase & Granularity** | Next ☐/🔄 phase name; recommended prompts-per-phase | Confirm: start here, this granularity? |
+| 4 | **Unit-Test Plan** | Phases naming colocated test files (written in-phase, run post-implementation) | Confirm: any phase missing unit coverage? |
+| 5 | **Risks & Blockers** | Open plan risks / TODOs affecting execution | Action: resolve or accept |
 
 ## Presentation Rules
 

@@ -10,7 +10,7 @@
       "name": "dev-workflow",
       "displayName": "Dev Workflow",
       "source": "./dev-workflow",
-      "description": "AI-assisted development workflow: topic docs (init/plan/test/status), doc verification, conciseness review, workflow self-correction, repo adoption onboarding, and the 19 AI-assisted development principles",
+      "description": "AI-assisted development workflow: topic docs (init/plan/implement/test/status), doc verification, conciseness review, workflow self-correction, repo adoption onboarding, and the 19 AI-assisted development principles",
       "author": { "name": "Alimie Rosli" },
       "homepage": "https://github.com/AlimieRosli/Claude-Tools",
       "repository": "https://github.com/AlimieRosli/Claude-Tools",
