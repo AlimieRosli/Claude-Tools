@@ -151,7 +151,7 @@ h1.hero-title .thin{font-weight:500;color:var(--txt2)}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 44px rgba(99,102,241,.55)}
 .btn-ghost{border:1px solid var(--line2);color:var(--txt2);background:var(--surface)}
 .btn-ghost:hover{color:#fff;border-color:rgba(139,92,246,.5);background:rgba(139,92,246,.09);transform:translateY(-2px)}
-.hero-stats{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:56px}
+.hero-stats{display:grid;grid-template-columns:repeat(7,1fr);gap:12px;margin-top:56px}
 .hstat{padding:20px 18px;border-radius:var(--r-md);border:1px solid var(--line);background:var(--surface);
   position:relative;overflow:hidden;cursor:pointer;transition:.25s}
 .hstat:hover{transform:translateY(-4px);border-color:var(--line2);box-shadow:var(--shadow-2)}
@@ -462,7 +462,7 @@ section{padding:70px 0 24px}
 
 <header id="topbar">
   <button id="railToggle" title="Menu">☰</button>
-  <div class="brand"><div class="logo">🧭</div><div>dev-workflow<small>plugin explorer · v3</small></div></div>
+  <div class="brand"><div class="logo">🧭</div><div>dev-workflow<small>plugin explorer · v4</small></div></div>
   <div class="spacer"></div>
   <span class="sync-badge" id="syncBadge"><span class="dot"></span><span id="syncDate">synced</span></span>
   <button class="searchbtn" id="searchBtn">🔍 <span class="sb-label">Search everything…</span><kbd>Ctrl K</kbd></button>
@@ -479,6 +479,7 @@ section{padding:70px 0 24px}
   <div class="navsec">Assets</div>
   <div class="navitem" data-goto="skills"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m8 6-6 6 6 6M16 6l6 6-6 6"/></svg>Skills<span class="railcount" id="c-skills"></span></div>
   <div class="navitem" data-goto="rules"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg>Rules<span class="railcount" id="c-rules"></span></div>
+  <div class="navitem" data-goto="hooks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>Hook Gates<span class="railcount" id="c-hooks"></span></div>
   <div class="navitem" data-goto="templates"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="7" rx="1.5"/><path d="M3 14h8v7H3zM14 14h7v7h-7z"/></svg>Templates<span class="railcount" id="c-tpl"></span></div>
   <div class="navitem" data-goto="docs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg>Reference Docs<span class="railcount">2</span></div>
   <div class="navitem" data-goto="files"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>File Explorer<span class="railcount" id="c-files"></span></div>
@@ -495,7 +496,7 @@ section{padding:70px 0 24px}
     <div class="hero-wrap rv in">
       <div class="hero-pill"><span class="pdot"></span>CLAUDE CODE PLUGIN · MARKETPLACE <span class="mono" style="color:#9ff3e6">@claude-tools</span></div>
       <h1 class="hero-title"><span class="grad-text">dev-workflow</span><br><span class="thin">see the whole machine.</span></h1>
-      <p class="hero-sub">A reusable AI-assisted development workflow for Claude Code. Every piece of work is a <b>topic</b> — documented, planned, tested, and deployed through a <b>state graph of nodes</b>: skills, rules, templates and gates that scale with risk. This explorer renders every file, rule and transition of the plugin as one interactive map.</p>
+      <p class="hero-sub">A reusable AI-assisted development workflow for Claude Code. Every piece of work is a <b>topic</b> — documented, planned, tested, and deployed through a <b>state graph of nodes</b>: skills, rules, templates and deterministic gates that scale with risk. This explorer renders every file, rule and transition of the plugin as one interactive map.</p>
       <div class="hero-cta">
         <button class="btn btn-primary" data-goto="workflow">Explore the workflow →</button>
         <button class="btn btn-ghost" data-goto="skills">Browse 11 skills</button>
@@ -595,11 +596,37 @@ section{padding:70px 0 24px}
   <section id="rules">
     <div class="sec-head rv">
       <div class="sec-eyebrow">On-demand detail · rules files</div>
-      <h2 class="sec-title">The <span class="grad-text">rulebook</span> — 14 rules</h2>
-      <p class="sec-sub">Rules carry the <b>detail</b> so skills stay lean — the skill follows them, one fact lives in exactly one place. 7 shared rules power every topic skill; 7 are per-skill specialties.</p>
+      <h2 class="sec-title">The <span class="grad-text">rulebook</span> — 15 rules</h2>
+      <p class="sec-sub">Rules carry the <b>detail</b> so skills stay lean — the skill follows them, one fact lives in exactly one place. 8 shared rules power every topic skill; 7 are per-skill specialties.</p>
     </div>
     <div class="filter-row rv" id="ruleFilters"></div>
     <div class="grid3" id="ruleGrid"></div>
+  </section>
+
+  <!-- ============ HOOK GATES ============ -->
+  <section id="hooks">
+    <div class="sec-head rv">
+      <div class="sec-eyebrow">Deterministic enforcement · hooks/</div>
+      <h2 class="sec-title">Hook <span class="grad-text">gates</span> — rules the machine enforces</h2>
+      <p class="sec-sub">Rules are LLM-enforced; <b>hook gates</b> are the mechanical backstop — deterministic checks that run on every Write/Edit, on save, and in a filesystem watcher. The <b>toc-sync pilot</b> now ships inside the plugin; the remaining six gates migrate after pilot validation. Repos opt in via <span class="mono" style="font-size:12px">.claude/hooks.config.json</span> — non-adopted projects stay untouched.</p>
+    </div>
+    <div class="glass rv" style="padding:16px 20px;margin-bottom:18px">
+      <div style="font-size:11px;letter-spacing:1.4px;color:var(--txt3);font-weight:700;margin-bottom:10px">HOW A GATE RUNS — TWO SURFACES, ONE REGISTRY</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:12px">
+        <span class="mini-chip hi2">Claude Code · hooks.json (PostToolUse Write|Edit)</span><span style="color:var(--txt3)">→</span>
+        <span class="mini-chip">adapters/claude-code.js</span><span style="color:var(--txt3)">→</span>
+        <span class="mini-chip">registry.js</span><span style="color:var(--txt3)">→</span>
+        <span class="mini-chip">cores/&lt;gate&gt;-core.js</span><span style="color:var(--txt3)">→</span>
+        <span class="mini-chip hi">.claude/hooks/reports/latest.json</span>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:12px;margin-top:8px">
+        <span class="mini-chip hi2">Human edits · VS Code task → ~/.claude/tools/run-dev-workflow-hook.js (watch · check)</span><span style="color:var(--txt3)">→</span>
+        <span class="mini-chip">same registry · same gates</span>
+      </div>
+    </div>
+    <div class="filter-row rv" id="hookFilters"></div>
+    <div class="grid3" id="hookGrid"></div>
+    <p class="rv" style="margin-top:14px;font-size:12.5px;color:var(--txt3)">Also on the registry: a <b>helper-reuse</b> validation (registry load-time) and a <b>README auto-sync</b> transform. Next up: PreToolUse secret-scan blocker, a <span class="mono">precommit</span> shim subcommand, then the remaining gates migrate once the pilot is validated.</p>
   </section>
 
   <!-- ============ TEMPLATES ============ -->
@@ -625,7 +652,7 @@ section{padding:70px 0 24px}
   <!-- ============ FILES ============ -->
   <section id="files">
     <div class="sec-head rv">
-      <div class="sec-eyebrow">Every file · 35 and counting</div>
+      <div class="sec-eyebrow">Every file · 51 and counting</div>
       <h2 class="sec-title">Plugin <span class="grad-text">anatomy</span> — file explorer</h2>
       <p class="sec-sub">The complete tree of <span class="mono" style="font-size:12px">Claude-Tools</span>. Click a file to see its role, its size, and what it connects to.</p>
     </div>
@@ -683,7 +710,7 @@ section{padding:70px 0 24px}
 <!-- search palette -->
 <div id="palette">
   <div class="pal-box">
-    <div class="pal-input"><span>🔍</span><input id="palInput" placeholder="Search skills, rules, templates, principles, files, FAQ…" autocomplete="off"></div>
+    <div class="pal-input"><span>🔍</span><input id="palInput" placeholder="Search skills, rules, hooks, templates, principles, files, FAQ…" autocomplete="off"></div>
     <div class="pal-list" id="palList"></div>
     <div class="pal-foot"><span><kbd>↑↓</kbd> navigate</span><span><kbd>↵</kbd> open</span><span><kbd>esc</kbd> close</span></div>
   </div>
@@ -692,11 +719,11 @@ section{padding:70px 0 24px}
 <div id="toast"></div>
 
 <script>
-/* ============ DATA — synced from plugin files 2026-09-04 ============
+/* ============ DATA — synced from plugin files 2026-09-05 ============
    HOW TO UPDATE THIS PAGE: when dev-workflow changes, refresh the arrays
-   below (SKILLS / RULES / TEMPLATES / PRINCIPLES / FILES / FAQ / MATRIX /
-   TREE / GRAPH / PRESETS) and bump SYNC_DATE. Everything else re-renders. */
-const SYNC_DATE='2026-09-04';
+   below (SKILLS / RULES / HOOKS / TEMPLATES / PRINCIPLES / FILES / FAQ /
+   MATRIX / TREE / GRAPH / PRESETS) and bump SYNC_DATE. Everything else re-renders. */
+const SYNC_DATE='2026-09-05';
 
 const SKILLS=[
 {id:'topic-status',name:'Topic Status',command:'/topic-status <module-name> <topic-name>',file:'skills/topic-status/SKILL.md',
@@ -716,7 +743,7 @@ const SKILLS=[
  description:'Classifies the topic, explores the codebase, and writes a full main doc from real findings before any code changes or investigation begin. Owns the main doc for its full lifecycle; plan and test docs are not created by default.',
  produces:'Main doc (<PREFIX>.md) in docs/ref/<MODULE>/<TOPIC>/',
  requires:['Nothing pre-existing \u2014 it creates the topic folder and main doc','Identifiable requirement source; else stop and ask user','Mandatory-read rule files at each step \u2014 never execute steps from memory'],
- steps:[{n:'1',title:'Step 1 \u2014 Classify, Resolve Module & Topic Name',detail:'Classify via 7 questions in order; resolve names, derive paths.'},{n:'2',title:'Step 2 \u2014 Explore the Codebase',detail:'Read/Glob/Grep topic files, key functions, API calls, TODOs; minimum one search, two files read fully.'},{n:'3',title:'Step 3 \u2014 Write or Update the Main Doc',detail:'First-time write from template or targeted updates; \u00a72 Requirements blocking; \u00a75.5 NFRs required for Feature.'},{n:'4',title:'Step 4 \u2014 Optional: Main Doc Verify',detail:'Encourage /main-doc-verify before checkpoint; optional, non-blocking.'},{n:'5',title:'Step 5 \u2014 Human Review Checkpoint (Blocking)',detail:'Present 10-row summary table; wait for explicit approval; fix concerns, re-present affected rows.'},{n:'6',title:'Step 6 \u2014 Optional: Plan and Test Doc Stubs',detail:'Copy plan/test templates as-is with placeholders only when user explicitly requests.'},{n:'7',title:'Step 7 \u2014 Confirm',detail:'Report created paths and TODO items; recommend hook watcher, /topic-plan, /topic-test, /doc-conciseness-review.'},{n:'8',title:'Step 8 \u2014 Mandatory Session & Model Reminder',detail:'Deliver per-prompt/per-session reminders verbatim plus model-selection guidance; mandatory, never skip.'}],
+ steps:[{n:'1',title:'Step 1 \u2014 Classify, Resolve Module & Topic Name',detail:'Classify via 7 questions in order; resolve names, derive paths.'},{n:'2',title:'Step 2 \u2014 Explore the Codebase',detail:'Read/Glob/Grep topic files, key functions, API calls, TODOs; minimum one search, two files read fully; one-off probes under .ai-tmp/, deleted when the step ends.'},{n:'3',title:'Step 3 \u2014 Write or Update the Main Doc',detail:'First-time write from template or targeted updates; \u00a72 Requirements blocking; \u00a75.5 NFRs required for Feature.'},{n:'4',title:'Step 4 \u2014 Optional: Main Doc Verify',detail:'Encourage /main-doc-verify before checkpoint; optional, non-blocking.'},{n:'5',title:'Step 5 \u2014 Human Review Checkpoint (Blocking)',detail:'Present 10-row summary table; wait for explicit approval; fix concerns, re-present affected rows.'},{n:'6',title:'Step 6 \u2014 Optional: Plan and Test Doc Stubs',detail:'Copy plan/test templates as-is with placeholders only when user explicitly requests.'},{n:'7',title:'Step 7 \u2014 Confirm',detail:'Report created paths and TODO items; recommend hook watcher, /topic-plan, /topic-test, /doc-conciseness-review.'},{n:'8',title:'Step 8 \u2014 Mandatory Session & Model Reminder',detail:'Deliver per-prompt/per-session reminders verbatim plus model-selection guidance; mandatory, never skip.'}],
  gates:['Step 1.1 classification: 7 questions asked in order, stop at first definitive answer','Minor change case stops immediately \u2014 classification itself is the output; no doc written','Requirements section (\u00a72) mandatory and blocking \u2014 no cited source is invalid; stop and ask user if source unknown','\u00a75.5 Non-Functional Requirements subsection required for Feature type','Step 5 Human Review Checkpoint (Blocking): 10-row table; never skip, even for simple topics','Step 7 Confirm blocked until Step 5 approved','Step 8 Session & Model Reminder mandatory \u2014 always delivered, non-blocking for the human'],
  confirm:'Report created file paths, TODO gaps, and next steps: hook watcher (TOC sync), /topic-plan, /topic-test, /doc-conciseness-review; always ask whether to run doc-conciseness-review now. Step 8 delivers per-prompt/per-session reminders verbatim plus model-selection guidance (heavier reasoning tier for topic-plan).',
  keyRules:['Requirements \u00a72 mandatory and blocking \u2014 do not write \u00a73+ until \u00a72 is complete','Source always cited: official doc or \u2018Direct request (prompt)\u2019; never blank or TODO','Type exactly one of Feature, Bugfix, Investigation','Unknown requirement source: stop and ask the user; never fabricate or infer','No files-to-modify list, no code blocks \u2014 code belongs in the plan doc','No unverified metric claims \u2014 qualitative High/Moderate/None unless measured','Third-party pricing/limits: always link the official pricing page','Open Questions table | # | Question | Status | only; resolved rows become \u2018\u2705 Resolved \u2014 <answer>\u2019','\u00a75.5 NFR table required for Feature; unknown targets \u2192 <!-- TODO: confirm --> + Open Question'],
@@ -727,7 +754,7 @@ const SKILLS=[
  description:'Writes the plan doc from scratch or fills the topic-init stub, then maintains it with new commits, deployment status, and phase progress. Single source of truth for how a topic is implemented: branch, commits, phased steps, rollback, risks, progress tracking.',
  produces:'Implementation plan doc (<PREFIX>_PLAN.md) \u2014 Branch & Deployment, Action Overview, Progress Tracker, Requirement Coverage, phases, Risks, Open Questions.',
  requires:['Main doc must already exist in docs/ref/<MODULE>/<TOPIC>/; else stop \u2014 run topic-init first','Mandatory reads: locate-topic, plan-doc rules, sensitive-file-scope, template, verifier, checkpoint, conventions'],
- steps:[{n:'1',title:'Step 1 \u2014 Locate the Topic',detail:'Resolve module/topic and doc paths; verify main doc exists, else stop.'},{n:'2',title:'Step 2 \u2014 Read the Main Doc',detail:'Extract target state\u2192phases, key files\u2192Current Code, open questions, dependencies.'},{n:'3',title:'Step 3 \u2014 Explore the Codebase',detail:'Find exact files, functions, config keys, call sites, existing tests, reuse candidates.'},{n:'4',title:'Step 4 \u2014 Branch, Commit Message & Deployment Status',detail:'Suggest branch + Conventional Commits message; record user-supplied deployment status; draft action overview.'},{n:'5',title:'Step 5 \u2014 Write or Update the Plan Doc',detail:'Fill template or targeted edits: Branch & Deployment, Action Overview, Progress Tracker, phases, Risks, Open Questions.'},{n:'5.5',title:'Step 5.5 \u2014 Human Review Checkpoint (Blocking)',detail:'Present 7-row plan-doc summary table; wait for explicit approval.'},{n:'6',title:'Step 6 \u2014 Confirm',detail:'Report path, branch/commits, phase statuses, unresolved open questions, TODOs; next steps.'},{n:'7',title:'Step 7 \u2014 Mandatory Session & Model Reminder',detail:'Deliver per-prompt/per-session reminders verbatim plus model-tier guidance.'}],
+ steps:[{n:'1',title:'Step 1 \u2014 Locate the Topic',detail:'Resolve module/topic and doc paths; verify main doc exists, else stop.'},{n:'2',title:'Step 2 \u2014 Read the Main Doc',detail:'Extract target state\u2192phases, key files\u2192Current Code, open questions, dependencies.'},{n:'3',title:'Step 3 \u2014 Explore the Codebase',detail:'Find exact files, functions, config keys, call sites, existing tests, reuse candidates; one-off probes under .ai-tmp/, deleted when the step ends.'},{n:'4',title:'Step 4 \u2014 Branch, Commit Message & Deployment Status',detail:'Suggest branch + Conventional Commits message; record user-supplied deployment status; draft action overview.'},{n:'5',title:'Step 5 \u2014 Write or Update the Plan Doc',detail:'Fill template or targeted edits: Branch & Deployment, Action Overview, Progress Tracker, phases, Risks, Open Questions.'},{n:'5.5',title:'Step 5.5 \u2014 Human Review Checkpoint (Blocking)',detail:'Present 7-row plan-doc summary table; wait for explicit approval.'},{n:'6',title:'Step 6 \u2014 Confirm',detail:'Report path, branch/commits, phase statuses, unresolved open questions, TODOs; next steps.'},{n:'7',title:'Step 7 \u2014 Mandatory Session & Model Reminder',detail:'Deliver per-prompt/per-session reminders verbatim plus model-tier guidance.'}],
  gates:['Step 1 existence gate: main doc must exist \u2014 else stop, run topic-init first','Step 5.5 Human Review Checkpoint (Blocking): 7-row table, never skip','Open Questions gate: all \u2705 Resolved before execution or test doc creation; hook-enforced where installed','Requirement Coverage gate: every \u00a72.1 item maps to \u22651 phase AND \u22651 test case ID','Documentation Update phase mandatory when code changes touch reference docs; blank Doc Impact fails verification','Testing gate (enforced in execution by topic-implement): complete ALL implementation phases before running tests','Progress Tracker updated after every phase completion by topic-implement \u2014 topic-status reads it'],
  confirm:'Report file path, branch and commit message(s), action overview, phases and statuses, unresolved Open Questions (must resolve before execution/test doc), and TODO items; next steps are topic-test (test doc), then \u2014 once pre-implementation runs are recorded \u2014 /topic-implement to execute the phases (one phase per prompt recommended, human decides granularity, all phases complete before tests). Step 7 mandates per-prompt/per-session reminders plus model-tier guidance.',
  keyRules:['No commit hashes \u2014 Conventional Commits messages only; [HOTFIX] only for genuine hotfixes','Never auto-detect branch/commits via git \u2014 suggest, let user confirm','Plan doc owns how/when/where; references main doc for what/why','Action Overview required; text only, never emoji; recommended PR description','Reuse field required Phase 1+: grep shared-helper dirs before adding new functions','Phase blocks: Goal, Current Code, Reuse, Steps, Done When, Rollback','Requirement Coverage: every \u00a72.1 item \u2192 \u22651 phase and \u22651 test case ID','Open Questions: plan-specific only; all \u2705 Resolved before execution; open-questions-gate hook','Documentation Update: fixed penultimate phase; blank Doc Impact is a verification failure'],
@@ -741,7 +768,7 @@ const SKILLS=[
  steps:[{n:'1',title:'Step 1 \u2014 Locate the Topic',detail:'Verify main doc exists (else stop); plan doc required unless test-only mode.'},{n:'2',title:'Step 2 \u2014 Read the Main & Plan Docs',detail:'Extract target state, side effects, errors, phases, rollback, test targets.'},{n:'3',title:'Step 3 \u2014 Explore the Codebase',detail:'Minimum: 1 grep, 2 source files, 1 existing test; reuse running local service.'},{n:'4',title:'Step 4 \u2014 Identify Test Paths',detail:'Enumerate cases across categories using required/optional gating.'},{n:'5',title:'Step 5 \u2014 Write or Update the Test Doc',detail:'First-time write from template or targeted edits; TOC + Last Updated rules.'},{n:'5.5',title:'Step 5.5 \u2014 Human Review Checkpoint (Blocking)',detail:'Stop, present 5-row summary table, wait for explicit approval; never skip.'},{n:'6',title:'Step 6 \u2014 Post-Run Documentation Update',detail:'After every run: status, result lines, checklists, append run log.'},{n:'7',title:'Step 7 \u2014 Confirm',detail:'Report path, case counts by category, TODO items, testing flow, what to run next.'},{n:'8',title:'Step 8 \u2014 Mandatory Session & Model Reminder',detail:'Per-prompt/per-session reminders plus model selection guidance; always stated.'}],
  gates:['Step 5.5 Human Review Checkpoint \u2014 blocking; explicit approval before any test execution','Existence gate: main doc required; plan doc required when code changes planned','neg-flow-gate: NEG pre-fix must run before implementation; both result lines mandatory','Smoke & Sanity must pass before continuing to Negative Flow','env-scope: tests run on exactly two environments \u2014 Local and Staging only','regression-gate: REG required when plan touches shared code paths','STG section required when deployed to STG and classification requires it'],
  confirm:'Report path, case counts by category, TODO items, testing flow summary, what to run next (Smoke & Sanity first). Step 5.5 approval is a prerequisite. Step 8 delivers the per-prompt/per-session reminders verbatim plus model guidance: fast/cheap tier for test execution, fast tier for implementation, heavier reasoning for complex multi-file logic.',
- keyRules:['Required categories SMK/NEG/TC every time; Smoke & Sanity always runs first','NEG runs twice \u2014 pre-fix confirms bug exists, post-fix confirms correct rejection; both result lines mandatory','EC/ERR optional \u2014 only on explicit request; omit section entirely, no empty placeholders','REG conditionally required when plan touches shared code paths (files used by 2+ modules)','STG conditionally required when STG-deployed and classification is heavy/non-trivial fix/config-infra/hotfix','UNIT recommended: mocked, in-process; full suite after ALL implementation phases, before NEG post-fix; never between phases','Exactly two environments \u2014 Local and Staging only; exemptions need a stated reason marker','Never read sensitive files; env values from the repo placeholder reference doc, never guessed','<UPPER_SNAKE_CASE> placeholders with <!-- TODO: confirm -->; never real connection info in the doc','Staging is read-only \u2014 no CLI access; human performs manual management-UI checks','Reuse already-running local service \u2014 never start duplicate dev-server','Update doc immediately after every run; run log append-only'],
+ keyRules:['Required categories SMK/NEG/TC every time; Smoke & Sanity always runs first','NEG runs twice \u2014 pre-fix confirms bug exists, post-fix confirms correct rejection; both result lines mandatory','EC/ERR optional \u2014 only on explicit request; omit section entirely, no empty placeholders','REG conditionally required when plan touches shared code paths (files used by 2+ modules)','STG conditionally required when STG-deployed and classification is heavy/non-trivial fix/config-infra/hotfix','UNIT recommended: mocked, in-process; full suite after ALL implementation phases, before NEG post-fix; never between phases','Exactly two environments \u2014 Local and Staging only; exemptions need a stated reason marker','Never read sensitive files; env values from the repo placeholder reference doc, never guessed','<UPPER_SNAKE_CASE> placeholders with <!-- TODO: confirm -->; never real connection info in the doc','Staging is read-only \u2014 no CLI access; human performs manual management-UI checks','Reuse already-running local service \u2014 never start duplicate dev-server','Disposable test data (payloads, fixtures, probe captures) under repo-root .ai-tmp/ \u2014 deleted when the run finishes','Update doc immediately after every run; run log append-only'],
  testCategories:[{code:'SMK',name:'Smoke & Sanity',required:'required',note:'Runs first; must pass before Negative Flow'},{code:'NEG',name:'Negative Flow',required:'required',note:'Runs before AND after fix; two result lines'},{code:'TC',name:'Positive Flow',required:'required',note:'Runs after the fix; happy-path cases'},{code:'UNIT',name:'Unit Tests',required:'conditional',note:'Recommended when plan touches function-level logic; full suite'},{code:'EC',name:'Edge Cases',required:'optional',note:'Only if user explicitly requests'},{code:'ERR',name:'Error Scenarios',required:'optional',note:'Only on explicit request; failure-injection coverage'},{code:'REG',name:'Regression',required:'conditional',note:'Required when plan touches shared code paths'},{code:'STG',name:'Staging Post-Deploy Verification',required:'conditional',note:'Required when STG-deployed and heavy/non-trivial/hotfix'},{code:'PERF',name:'Performance',required:'conditional',note:'Required when Performance NFR target set; else optional'}],
  quotes:['"Both runs are required \u2014 a test doc with only a pre-fix run is incomplete." \u2014 rules: Authoring & Structure','"Stop. Do not proceed to Step 6 or Step 7" \u2014 SKILL.md: Step 5.5 \u2014 Human Review Checkpoint (Blocking)','"Tests run on exactly two environments \u2014 Local and Staging only." \u2014 rules: Environment Scope']},
 
@@ -750,10 +777,10 @@ const SKILLS=[
  description:'Executes a topic\u2019s plan doc phase by phase \u2014 from the pre-implementation Smoke & Sanity / NEG pre-fix gate through every implementation phase (plan-doc Progress Tracker updated \u2705 after each) to the post-implementation test gates and final cleanup. Produces no doc of its own: the plan doc is its instruction source and its progress record.',
  produces:'none (executes the plan doc)',
  requires:['Main doc AND plan doc exist in docs/ref/<MODULE>/<TOPIC>/ \u2014 else stop, run topic-init / topic-plan','All plan Open Questions \u2705 Resolved \u2014 else stop (the plan\u2019s open-questions gate)','Test doc exists when the plan has a Testing & Validation phase \u2014 else run topic-test first'],
- steps:[{n:'1',title:'Step 1 \u2014 Locate the Topic',detail:'Resolve module/topic and paths; main + plan docs required, test doc required when the plan has a Testing phase.'},{n:'2',title:'Step 2 \u2014 Read the Topic Docs & Find the Current Position',detail:'Read main/plan/test docs in full; open-questions gate; resume point from the Progress Tracker + test result lines.'},{n:'3',title:'Step 3 \u2014 Pre-Implementation Test Gate (SMK & NEG pre-fix)',detail:'Smoke & Sanity must pass first, then NEG pre-fix for bug fixes; results recorded via topic-test, never a private format.'},{n:'4',title:'Step 4 \u2014 Human Review Checkpoint (Blocking)',detail:'Implementation-start table (5 rows: position, pre-impl tests, next phase & granularity, unit-test plan, risks); wait for explicit approval.'},{n:'5',title:'Step 5 \u2014 Execute the Phases',detail:'Plan order, Steps 1-by-1, Reuse field binding, unit-test files written in-phase; Done When verified before \u2705.'},{n:'5.3',title:'Step 5.3 \u2014 When Reality Diverges from the Plan',detail:'Bounded repair \u22643 attempts, re-verify each; then stop, record in the plan doc, tell the human \u2014 never silently improvise or expand scope.'},{n:'6',title:'Step 6 \u2014 Post-Implementation Test Gates',detail:'Full unit suite once \u2192 NEG post-fix \u2192 Positive \u2192 conditional REG/STG/PERF + requested EC/ERR, per the test doc\u2019s flow.'},{n:'7',title:'Step 7 \u2014 Cleanup & Final Doc Sync',detail:'Remove temp instrumentation; resolve TODOs; doc-sync sweep; plan Status per vocabulary \u2014 Complete only when fully deployed.'},{n:'8',title:'Step 8 \u2014 Confirm',detail:'Report phases completed, tracker state, test-gate results, docs updated, divergences recorded; next steps.'},{n:'9',title:'Step 9 \u2014 Mandatory Session & Model Reminder',detail:'Per-prompt/per-session reminders verbatim plus model-tier guidance; mandatory, never skip.'}],
- gates:['Existence gate: main doc + plan doc required \u2014 else stop; test doc required when the plan has a Testing phase','Open-questions gate: all plan OQs \u2705 Resolved before any Phase 1+ execution','Step 4 Human Review Checkpoint (Blocking): implementation-start table; never skipped \u2014 not even for resumes','Progress Tracker \u2705 + plan Last Updated after EVERY phase \u2014 never batched; topic-status reads it','No tests between implementation phases \u2014 only pre-implementation SMK + NEG pre-fix run earlier','Reuse field is binding \u2014 never write a duplicate of an existing helper','Bounded repair: \u22643 fix attempts per failure, re-verify each; then stop and record in the plan doc','Never run git commit / git push \u2014 the human owns all git operations; record commits only as reported'],
+ steps:[{n:'1',title:'Step 1 \u2014 Locate the Topic',detail:'Resolve module/topic and paths; main + plan docs required, test doc required when the plan has a Testing phase.'},{n:'2',title:'Step 2 \u2014 Read the Topic Docs & Find the Current Position',detail:'Read main/plan/test docs in full; open-questions gate; resume point from the Progress Tracker + test result lines.'},{n:'3',title:'Step 3 \u2014 Pre-Implementation Test Gate (SMK & NEG pre-fix)',detail:'Smoke & Sanity must pass first, then NEG pre-fix for bug fixes; results recorded via topic-test, never a private format.'},{n:'4',title:'Step 4 \u2014 Human Review Checkpoint (Blocking)',detail:'Implementation-start table (5 rows: position, pre-impl tests, next phase & granularity, unit-test plan, risks); wait for explicit approval.'},{n:'5',title:'Step 5 \u2014 Execute the Phases',detail:'Plan order, Steps 1-by-1, Reuse field binding, unit-test files written in-phase; scratch artifacts in .ai-tmp/, deleted as their purpose is served; Done When verified before \u2705.'},{n:'5.3',title:'Step 5.3 \u2014 When Reality Diverges from the Plan',detail:'Bounded repair \u22643 attempts, re-verify each; then stop, record in the plan doc, tell the human \u2014 never silently improvise or expand scope.'},{n:'6',title:'Step 6 \u2014 Post-Implementation Test Gates',detail:'Full unit suite once \u2192 NEG post-fix \u2192 Positive \u2192 conditional REG/STG/PERF + requested EC/ERR, per the test doc\u2019s flow.'},{n:'7',title:'Step 7 \u2014 Cleanup & Final Doc Sync',detail:'Remove temp instrumentation; delete .ai-tmp/ artifacts this topic created; resolve TODOs; doc-sync sweep; plan Status per vocabulary \u2014 Complete only when fully deployed.'},{n:'8',title:'Step 8 \u2014 Confirm',detail:'Report phases completed, tracker state, test-gate results, docs updated, divergences recorded; next steps.'},{n:'9',title:'Step 9 \u2014 Mandatory Session & Model Reminder',detail:'Per-prompt/per-session reminders verbatim plus model-tier guidance; mandatory, never skip.'}],
+ gates:['Existence gate: main doc + plan doc required \u2014 else stop; test doc required when the plan has a Testing phase','Open-questions gate: all plan OQs \u2705 Resolved before any Phase 1+ execution','Step 4 Human Review Checkpoint (Blocking): implementation-start table; never skipped \u2014 not even for resumes','Progress Tracker \u2705 + plan Last Updated after EVERY phase \u2014 never batched; topic-status reads it','No tests between implementation phases \u2014 only pre-implementation SMK + NEG pre-fix run earlier','Reuse field is binding \u2014 never write a duplicate of an existing helper','Bounded repair: \u22643 fix attempts per failure, re-verify each; then stop and record in the plan doc','Temporary artifacts: scratch scripts/generated files under repo-root .ai-tmp/ \u2014 deleted in the Final Cleanup Sweep, scoped to files this task created','Never run git commit / git push \u2014 the human owns all git operations; record commits only as reported'],
  confirm:'Report phases completed + tracker state, test gates + results, docs updated, divergences recorded, TODOs; next: deploy steps per the plan doc\u2019s Deployment Status table or /topic-status. Step 9 delivers per-prompt/per-session reminders verbatim plus model guidance: coding-task tier for implementation, heavier tier for complex multi-file logic.',
- keyRules:['The plan doc is the single source of truth for execution \u2014 never skip, reorder, or merge phases without approval + a plan-doc update','Follow each phase\u2019s Steps 1-by-1; verify Done When before marking complete; execute Rollback when a phase goes wrong','Progress sync after every phase: tracker \u2705, next \ud83d\udd04, plan Last Updated \u2014 before starting the next phase','One phase per prompt recommended (not a mandate); fresh session seeded from plan + test docs; human decides granularity','Unit-test files named by a phase are written in that phase \u2014 the suite runs once after ALL phases, before NEG post-fix','When reality diverges: \u22643 bounded repair attempts, then record in the plan doc \u2014 never silently improvise or expand scope','Related-doc sync: any action that changes what a doc says updates that doc in the same action (plan/test/main per their owning rules)','Cleanup sweep: remove temp instrumentation, resolve TODOs, doc-sync sweep, plan Status per vocabulary (Complete only when fully deployed)'],
+ keyRules:['The plan doc is the single source of truth for execution \u2014 never skip, reorder, or merge phases without approval + a plan-doc update','Follow each phase\u2019s Steps 1-by-1; verify Done When before marking complete; execute Rollback when a phase goes wrong','Progress sync after every phase: tracker \u2705, next \ud83d\udd04, plan Last Updated \u2014 before starting the next phase','One phase per prompt recommended (not a mandate); fresh session seeded from plan + test docs; human decides granularity','Unit-test files named by a phase are written in that phase \u2014 the suite runs once after ALL phases, before NEG post-fix','When reality diverges: \u22643 bounded repair attempts, then record in the plan doc \u2014 never silently improvise or expand scope','Related-doc sync: any action that changes what a doc says updates that doc in the same action (plan/test/main per their owning rules)','Cleanup sweep: remove temp instrumentation, delete .ai-tmp/ artifacts this topic created, resolve TODOs, doc-sync sweep, plan Status per vocabulary (Complete only when fully deployed)'],
  quotes:['"It creates no document of its own. The plan doc is both its instruction source and its progress record." \u2014 Overview','"Never batch progress updates to the end of the run \u2014 topic-status reads the Progress Tracker." \u2014 rules: Progress Sync After Every Phase','"Never silently improvise a different design, and never expand scope." \u2014 rules: When Reality Diverges from the Plan']},
 
 {id:'main-doc-verify',name:'Main Doc Verify',command:'/main-doc-verify <path-to-main-doc.md>',file:'skills/main-doc-verify/SKILL.md',optional:true,
@@ -802,12 +829,12 @@ const SKILLS=[
 
 {id:'workflow-adopt',name:'Workflow Adopt',command:'/workflow-adopt [--remove]',file:'skills/workflow-adopt/SKILL.md',optional:true,
  tagline:'Onboarding node \u2014 writes/merges the managed topic-workflow section into AGENTS.md; --remove undoes it.',
- description:'Onboards an adopting repo: writes or merges the standardized topic-workflow section into AGENTS.md as a managed anchor block (idempotent, re-runnable), scaffolding AGENTS.md/CLAUDE.md when absent. Surfaces conflicts with existing AI-instructions instead of overwriting them; --remove cleanly strips the managed section on opt-out.',
- produces:'AGENTS.md (and CLAUDE.md if scaffolded) containing the managed dev-workflow:begin/end block, resolved adaptation table, conflict resolutions',
- requires:['Canonical snippet template skills/_shared/templates/adopting-repo-agents-snippet.md \u2014 never write boilerplate from memory'],
- steps:[{n:'1',title:'Parse the Mode',detail:'Empty = adopt (Steps 2\u20137); --remove = strip managed section, skip Steps 3\u20134'},{n:'2',title:'Survey the Repo State',detail:'Check AGENTS.md markers, CLAUDE.md @AGENTS.md import, marketplace registration, repo layout signals'},{n:'3',title:'Resolve the Adaptation Table',detail:'Derive proposals from survey; unverified values stay <!-- TODO: confirm -->; human confirms every row'},{n:'4',title:'Detect Conflicts',detail:'Flag contradictions with existing AI-instructions; human decides; never silently insert'},{n:'5',title:'Apply the Changes',detail:'Adopt: wrap resolved snippet in dev-workflow:begin/end markers per repo state; remove: strip block inclusive'},{n:'6',title:'Human Review Checkpoint (Blocking)',detail:'Present writes, adaptation table, conflict resolutions; explicit approval before run complete'},{n:'7',title:'Report',detail:'Files touched, adaptation table, conflict resolutions, re-run guidance, TODOs, git reminder'}],
- checks:['Scaffold (no AGENTS.md): one-line repo header + managed block; CLAUDE.md with @AGENTS.md import','Merge (no markers): insert managed block at file end after a --- separator; touch nothing above','Sync (markers exist): replace the block between markers inclusive \u2014 re-running after plugin updates pulls boilerplate changes','Conflict detection: present both sides, human decides; record resolution','Remove (--remove): strip managed block inclusive of both markers; else report \u2018nothing to remove\u2019','CLAUDE.md without import: propose @AGENTS.md as a separate clearly-labeled edit','Marketplace: report (don\u2019t edit) whether claude-tools is registered for teammates'],
- gates:['Step 6 blocking human review checkpoint \u2014 explicit approval before the run is complete','Merge, never overwrite \u2014 only the block between anchor markers is managed','Never write on an unresolved conflict \u2014 stop and ask','Never guess a repo fact \u2014 unresolved values stay <!-- TODO: confirm -->','Never run git commit / git push \u2014 the human reviews and commits'],
+ description:'Onboards an adopting repo: writes or merges the standardized topic-workflow section into AGENTS.md as a managed anchor block (idempotent, re-runnable), scaffolding AGENTS.md/CLAUDE.md when absent. Also installs the .ai-tmp/ gitignore entry for the temporary-artifacts rule. Surfaces conflicts with existing AI-instructions instead of overwriting them; --remove cleanly strips the managed section on opt-out.',
+ produces:'AGENTS.md (and CLAUDE.md if scaffolded) containing the managed dev-workflow:begin/end block, resolved adaptation table, conflict resolutions, .gitignore temp-artifact entry',
+ requires:['Canonical snippet template skills/_shared/templates/adopting-repo-agents-snippet.md \u2014 never write boilerplate from memory','Temporary-artifacts rule \u2014 read before the .ai-tmp/ ignore-entry install'],
+ steps:[{n:'1',title:'Parse the Mode',detail:'Empty = adopt (Steps 2\u20137); --remove = strip managed section, skip Steps 3\u20134'},{n:'2',title:'Survey the Repo State',detail:'Check AGENTS.md markers, CLAUDE.md @AGENTS.md import, marketplace registration, repo layout signals, temp-artifact ignore state'},{n:'3',title:'Resolve the Adaptation Table',detail:'Derive proposals from survey; unverified values stay <!-- TODO: confirm -->; human confirms every row'},{n:'4',title:'Detect Conflicts',detail:'Flag contradictions with existing AI-instructions; human decides; never silently insert'},{n:'5',title:'Apply the Changes',detail:'Adopt: wrap resolved snippet in dev-workflow:begin/end markers per repo state; plus idempotent .gitignore .ai-tmp/ entry; remove: strip block inclusive'},{n:'6',title:'Human Review Checkpoint (Blocking)',detail:'Present writes, adaptation table, ignore-entry status, conflict resolutions; explicit approval before run complete'},{n:'7',title:'Report',detail:'Files touched, adaptation table, ignore-entry status, conflict resolutions, re-run guidance, TODOs, git reminder'}],
+ checks:['Scaffold (no AGENTS.md): one-line repo header + managed block; CLAUDE.md with @AGENTS.md import','Merge (no markers): insert managed block at file end after a --- separator; touch nothing above','Sync (markers exist): replace the block between markers inclusive \u2014 re-running after plugin updates pulls boilerplate changes','Conflict detection: present both sides, human decides; record resolution','Remove (--remove): strip managed block inclusive of both markers; else report \u2018nothing to remove\u2019','Temp-artifact entry: create .gitignore if absent / append .ai-tmp/ if missing / report already-ignored \u2014 idempotent','CLAUDE.md without import: propose @AGENTS.md as a separate clearly-labeled edit','Marketplace: report (don\u2019t edit) whether claude-tools is registered for teammates'],
+ gates:['Step 6 blocking human review checkpoint \u2014 explicit approval before the run is complete','Merge, never overwrite \u2014 only the block between anchor markers is managed (the .gitignore entry is the one unmanaged touch \u2014 append-only, idempotent)','Never write on an unresolved conflict \u2014 stop and ask','Never guess a repo fact \u2014 unresolved values stay <!-- TODO: confirm -->','Never run git commit / git push \u2014 the human reviews and commits'],
  confirm:'Wait for explicit human approval before the run is complete; re-run /dev-workflow:workflow-adopt after plugin updates (/dev-workflow:self-update + fresh session) to re-sync boilerplate.',
  quotes:['\u2018merge, never overwrite. The skill manages exactly one marked block\u2019 \u2014 Overview (Key principle)','\u2018Everything else in the file stays byte-identical.\u2019 \u2014 Step 5 (Remove path)']},
 
@@ -842,6 +869,9 @@ const RULES=[
 {id:'sensitive-file-scope',file:'skills/_shared/rules/sensitive-file-scope.md',name:'Sensitive File Scope',scope:'shared',usedBy:['topic-init','topic-plan','topic-implement','topic-test'],
  summary:'AI never reads sensitive files for any reason \u2014 no exceptions. All placeholder and env values come from the adopting repo\u2019s placeholder reference doc.',
  keyRules:['Sensitive = any file carrying real credentials, tokens, keys, or connection info \u2014 typically gitignored; never read, no \u2018just one value\u2019 exception.','Per-stack list: .env, *.pem, *.key, service-account JSON, user-secrets, *.pfx, ~/.aws, k8s Secrets\u2026','When unsure whether a file is sensitive, treat it as sensitive and ask the human.','Placeholder reference doc maps each <UPPER_SNAKE_CASE> placeholder to dummy value + real value\u2019s location.','Real value\u2019s location named only, never quoted; human sets real values; AI uses placeholders in docs and tests.','Value missing: ask human to add it, or mark <!-- TODO: confirm --> and list in Open Questions.','Applies: topic-init exploration, topic-plan env/deploy sections, topic-implement implementation, topic-test test execution.','LLM-enforced best-effort; adopting repo may add a deterministic Read-gate as backstop.']},
+{id:'temporary-artifacts',file:'skills/_shared/rules/temporary-artifacts.md',name:'Temporary Artifacts & Scratch Work',scope:'shared',usedBy:['topic-init','topic-plan','topic-implement','topic-test','workflow-adopt'],
+ summary:'All AI-created scratch scripts, generated data files, probe outputs, patches, and intermediate artifacts go under the repo-root .ai-tmp/ folder \u2014 gitignored, deleted at task end.',
+ keyRules:['One home: the repo-root .ai-tmp/ folder \u2014 created only when first needed; never scattered in source dirs or the OS temp dir.','Optionally nest per topic: .ai-tmp/<module>/<topic>/ to keep scratch work separated.','Delete after finish \u2014 what the task created is deleted at task end, including after failure where possible.','Scope deletion to files this task created \u2014 never wipe the whole folder blindly (other sessions may hold artifacts there).','Permanent files are not artifacts \u2014 real code, tests, docs, config go to their intended locations, never parked in .ai-tmp/.','No secrets in temp artifacts \u2014 placeholder/dummy values only, per the sensitive-file-scope rule.','Tests use the folder for disposable data: synthetic payloads, generated fixtures, captured probe responses.','Gitignore is the backstop: workflow-adopt installs the .ai-tmp/ entry into .gitignore on onboarding; a task that finds it missing creates it.','topic-implement\u2019s Final Cleanup Sweep owns the deletion pass; workflow-adopt owns the .gitignore entry.']},
 {id:'error-handling',file:'skills/_shared/rules/error-handling.md',name:'Error Handling Conventions',scope:'shared',usedBy:['topic-implement'],
  summary:'Error-handling conventions for all adopting-repo code (handlers, controllers, services, middleware), followed by AI and human developers alike: two patterns, log-before-respond, return-early.',
  keyRules:['Two coexisting patterns: A legacy inline res.status(...) calls; B structured sendErrorResponse helper with ERRORS constants.','Always match the file\u2019s existing pattern; never mix mid-file; neither import present \u2192 default Pattern A.','Catch-block rule: every catch logs the error before sending the response \u2014 silent 500s are the #1 debugging bottleneck.','Logger rule: use the repo logger (child logger factory), never console.log.','return every error response \u2014 never fall through (second response \u2192 headers-already-sent crash).','Guard clauses first in handler, before business logic; return early, no nested validation.','500 responses: send e.message || e only, never e.stack; the structured log captures the stack server-side.','Don\u2019t catch errors you can\u2019t handle \u2014 let them propagate to the framework\u2019s error middleware.','Pattern B: status-code constants; 5-digit errorCode (first 3 = HTTP status, last 2 sequential); ERR_ errorKey.','Migration A\u2192B only on explicit user request, entire file in one pass.']},
@@ -883,7 +913,7 @@ const TEMPLATES=[
  notes:'Case IDs: SMK-###, NEG-###, TC-###, UNIT-###, EC-###, ERR-###, REG-###, STG-###, PERF-###. Per-case fields: Scenario, Why Needed, Category, Precondition, Request, How to Run, Expected Positive, Expected Negative (anti-pattern), Expected Side Effects, Pass Criteria. NEG records both **Result (pre-fix):** and **Result (post-fix):**. Testing Flow: Phase 0 SMK \u2192 Phase 1 NEG pre \u2192 implement ALL phases \u2192 Phase 1.5 UNIT \u2192 Phase 2 POS \u2192 Phase 2b NEG post \u2192 Phase 3 EC \u2192 Phase 4 ERR \u2192 Phase 5 REG \u2192 Phase 5b STG \u2192 Phase 6 PERF \u2192 Phase 7 side-effects. Staging subsections prohibit CLI access; optional sections deleted entirely, never left empty.'},
 {id:'adopting-repo-agents-snippet',file:'skills/_shared/templates/adopting-repo-agents-snippet.md',name:'Adopting-Repo AGENTS.md Snippet',usedBy:'workflow-adopt',
  summary:'The reusable half of an adopting repo\u2019s AI-instructions: how the repo references the dev-workflow plugin in AGENTS.md.',
- sections:['Topic workflow (dev-workflow plugin) \u2014 plugin overview, ships no hooks or repo files','Invocation \u2014 namespaced /dev-workflow:* skill commands','Reference rules (strict) \u2014 reference by command name or doc title only','Classification before documentation \u2014 topic-init classifies; minor changes skip docs','Repo adaptations \u2014 table pinning doc root, naming, hooks','Local vs. plugin ownership \u2014 universal content belongs to plugin'],
+ sections:['Topic workflow (dev-workflow plugin) \u2014 plugin overview, ships no hooks or repo files','Invocation \u2014 namespaced /dev-workflow:* skill commands','Reference rules (strict) \u2014 reference by command name or doc title only','Temporary artifacts \u2014 AI scratch files under repo-root .ai-tmp/, deleted at task finish','Classification before documentation \u2014 topic-init classifies; minor changes skip docs','Repo adaptations \u2014 table pinning doc root, naming, hooks','Local vs. plugin ownership \u2014 universal content belongs to plugin'],
  notes:'Applied by workflow-adopt (scaffold, merge, remove managed section); commit only the resolved snippet \u2014 placeholders resolved, guidance comments deleted; the team writes the repo-specific half (purpose, build commands, architecture, conventions).'}
 ];
 
@@ -926,9 +956,52 @@ const DOCS=[
  quotes:['\u201cthe principles are not rigid rules \u2014 they scale to the risk and complexity of the work\u201d \u2014 Overview','\u201cone type alone is not enough\u201d \u2014 on skills vs agents vs hooks vs rules']}
 ];
 
+/* Deterministic hook gates. status: 'plugin' = ships in dev-workflow/hooks/
+   (toc-sync pilot, 2026-09-05) · 'repo' = still in the adopting repo's
+   .claude/hooks/ until the pilot is validated. `related` ids feed the
+   relations map + drawer chips. */
+const HOOKS=[
+{id:'toc-sync',name:'toc-sync',file:'dev-workflow/hooks/cores/toc-sync-core.js',status:'plugin',since:'2026-09-05',
+ scope:'PostToolUse · Write|Edit',watches:'docs/ref/*/**/*.md',
+ summary:'Keeps every topic doc’s Table of Contents in sync with its headings and bumps the Last Updated date. The pilot gate migrated from the ServerJP repo into the plugin — registered via hooks/hooks.json, gated per-repo by .claude/hooks.config.json, and no-ops in non-adopted projects.',
+ keyRules:['TOC lists every ## plus valuable ### — regenerated to match the body','TOC sits immediately after the frontmatter','Last Updated date bumped whenever content changes','Auto-fix on the native path: rewrites the TOC in place (runFixes)','No-ops unless the repo is adopted — .claude/hooks.config.json with gates["toc-sync"] true','Reports land in <project>/.claude/hooks/reports/latest.json'],
+ related:['rule:topic-doc-writing-conventions','skill:topic-init','skill:topic-plan','skill:topic-test']},
+{id:'neg-flow-gate',name:'neg-flow-gate',repoFile:'.claude/hooks/cores/neg-flow-gate-core.js',status:'repo',
+ scope:'PostToolUse · Write|Edit',watches:'*_TEST.md + codeGlobs files with an active plan',
+ summary:'Blocks implementation until the NEG pre-fix run is recorded. Fires on test-doc edits (both result lines mandatory) and — via the repo’s codeGlobs — on code-file edits when an active plan doc lists the file in a Current Code section.',
+ keyRules:['Every NEG case carries Result (pre-fix) AND Result (post-fix) — one line = incomplete doc','Code-file edits (server/**/*.js, config/, utils.js, index.js) check active plan docs referencing the file','Drives the topic-implement Step 3 pre-implementation gate mechanically'],
+ related:['rule:topic-test-doc-writing','skill:topic-test','skill:topic-implement']},
+{id:'env-scope',name:'env-scope',repoFile:'.claude/hooks/cores/env-scope-core.js',status:'repo',
+ scope:'PostToolUse · Write|Edit',watches:'*_TEST.md',
+ summary:'Test docs run on exactly two environments — Local and Staging. Flags any other environment name, CLI access to staging, and real connection values; every value must come from the repo’s placeholder reference doc.',
+ keyRules:['Exactly Local + Staging — exemptions need a stated-reason marker','Staging is read-only: no CLI/direct connections','<UPPER_SNAKE_CASE> placeholders only — never real credentials'],
+ related:['rule:topic-test-doc-writing','skill:topic-test']},
+{id:'open-questions-gate',name:'open-questions-gate',repoFile:'.claude/hooks/cores/open-questions-gate-core.js',status:'repo',
+ scope:'PostToolUse · Write|Edit',watches:'*_PLAN.md + *_TEST.md',
+ summary:'All Open Questions in a plan doc must be ✅ Resolved before any Phase 1+ execution or test-doc creation. Dispatches on file type — a plan check and a test check.',
+ keyRules:['Every OQ row ✅ Resolved before execution','Exemption marker <!-- open-questions-gate: exempt — reason --> needs a stated reason','Each OQ lives in exactly one doc — the others reference it'],
+ related:['rule:topic-plan-doc-writing','skill:topic-plan','skill:topic-implement']},
+{id:'regression-gate',name:'regression-gate',repoFile:'.claude/hooks/cores/regression-gate-core.js',status:'repo',
+ scope:'PostToolUse · Write|Edit',watches:'*_PLAN.md',
+ summary:'REG test cases are required when a plan touches shared code paths. Reads the plan’s Current Code files and flags paths under the repo’s sharedDirs (middleware, helpers, utils, config) that lack REG coverage.',
+ keyRules:['Shared path = files used by 2+ modules — sharedDirs come from .claude/hooks.config.json','REG cases required before the change proceeds','Pairs with the REG-### category in the test doc'],
+ related:['rule:topic-test-doc-writing','skill:topic-test']},
+{id:'secret-scan',name:'secret-scan',repoFile:'.claude/hooks/cores/secret-scan-core.js',status:'repo',
+ scope:'PostToolUse · Write|Edit (PreToolUse blocker planned)',watches:'docs/**/*.md',
+ summary:'Scans edited docs for real credentials, tokens, keys and connection strings — topic docs carry <UPPER_SNAKE_CASE> placeholders only. A PreToolUse blocker variant (hard-block the write) is planned for the plugin.',
+ keyRules:['Placeholders only in committed docs — real values live in the gitignored placeholder reference','Flags provider-specific patterns (Mongo URIs, connection strings, JWTs, keys)','Planned: PreToolUse blocker so the write is prevented, not just flagged'],
+ related:['rule:sensitive-file-scope','skill:plan-doc-verify']},
+{id:'doc-reference-gate',name:'doc-reference-gate',repoFile:'.claude/hooks/cores/doc-reference-gate-core.js',status:'repo',
+ scope:'PostToolUse · Write|Edit',watches:'docs/ref/*/**/*.md',
+ summary:'Verifies that file paths referenced in topic docs actually exist in the repo — no phantom paths from memory. References must resolve relative to the repo root.',
+ keyRules:['Every referenced path must exist — repo-relative, verified at write time','Catches hallucinated file references as the doc is written','Complements the verify skills’ accuracy checks'],
+ related:['rule:topic-doc-writing-conventions','skill:main-doc-verify']}
+];
+
 const FILES=[
 {path:'.claude-plugin/marketplace.json',size:'891 B',kind:'manifest',desc:'Marketplace manifest \u2014 name claude-tools, owner, and the dev-workflow plugin entry (display name, source, tags). The @claude-tools suffix in install commands comes from this file\u2019s name field.'},
 {path:'.claude/settings.local.json',size:'2 B',kind:'config',desc:'Local Claude settings (currently empty permissions object).'},
+{path:'.gitignore',size:'70 B',kind:'config',desc:'Root .gitignore \u2014 ignores .ai-tmp/ (the AI temporary-artifacts folder) per the temporary-artifacts shared rule. workflow-adopt installs the same entry in adopting repos.'},
 {path:'README.md',size:'2.4 KB',kind:'doc',desc:'Marketplace readme \u2014 install commands, update flow (commit-SHA based re-pin), development/testing instructions, origin & maintenance notes.'},
 {path:'dev-workflow/.claude-plugin/plugin.json',size:'894 B',kind:'manifest',desc:'Plugin manifest \u2014 name, displayName, description, author, keywords. Deliberately has no version field: updates are commit-SHA based.'},
 {path:'dev-workflow/docs/AI_ASSISTED_DEVELOPMENT_PRINCIPLES.md',size:'38.2 KB',kind:'doc',desc:'The 19 AI-assisted development principles in two categories (A: execution & harness control; B: production & governance) \u2014 the why behind every node.'},
@@ -957,11 +1030,26 @@ const FILES=[
 {path:'dev-workflow/skills/_shared/rules/topic-doc-writing-conventions.md',size:'4.1 KB',kind:'rule',desc:'Universal doc-writing rules \u2014 TOC, Last Updated, never-guess, plain language, one-OQ-one-doc, per-prompt/session discipline.'},
 {path:'dev-workflow/skills/_shared/rules/human-review-checkpoint.md',size:'9.5 KB',kind:'rule',desc:'The blocking human-approval gate \u2014 per-skill summary tables (10/7/5/5 rows) and the Brevity Rules.'},
 {path:'dev-workflow/skills/_shared/rules/sensitive-file-scope.md',size:'4.4 KB',kind:'rule',desc:'Never read sensitive files \u2014 stack-dependent list, placeholder reference doc rule, when it applies.'},
+{path:'dev-workflow/skills/_shared/rules/temporary-artifacts.md',size:'3.4 KB',kind:'rule',desc:'Temporary artifacts rule \u2014 AI scratch scripts/generated files go under the repo-root .ai-tmp/ folder (gitignored, installed by workflow-adopt), deleted at task end, scoped to files the task created; permanent files never parked there; no secrets in temp artifacts.'},
 {path:'dev-workflow/skills/_shared/rules/error-handling.md',size:'8.9 KB',kind:'rule',desc:'Error-handling conventions for adopting-repo code \u2014 two patterns, catch-logs-first, return-early, guard clauses.'},
 {path:'dev-workflow/skills/topic-init/templates/main-doc.md',size:'6.1 KB',kind:'template',desc:'Main doc skeleton \u2014 frontmatter, blocking \u00a72 Requirements, current/target state, technical details with \u00a75.5 NFRs, decisions, OQs.'},
 {path:'dev-workflow/skills/topic-plan/templates/plan-doc.md',size:'11.4 KB',kind:'template',desc:'Plan doc skeleton \u2014 branch/deployment, action overview, progress tracker, requirement coverage, phases, risks, OQs.'},
 {path:'dev-workflow/skills/topic-test/templates/test-doc.md',size:'33.8 KB',kind:'template',desc:'Test doc skeleton \u2014 environments, all 9 category sections, phased Testing Flow (Phase 0\u20137), side-effect guide, pass criteria.'},
-{path:'dev-workflow/skills/_shared/templates/adopting-repo-agents-snippet.md',size:'4.9 KB',kind:'template',desc:'The reusable AGENTS.md block workflow-apply writes into adopting repos \u2014 plugin invocation + reference rules + repo-adaptation table.'}
+{path:'dev-workflow/skills/_shared/templates/adopting-repo-agents-snippet.md',size:'4.9 KB',kind:'template',desc:'The reusable AGENTS.md block workflow-apply writes into adopting repos \u2014 plugin invocation + reference rules + repo-adaptation table.'},
+{path:'dev-workflow/hooks/hooks.json',size:'287 B',kind:'hook',desc:'Plugin hook registration \u2014 PostToolUse on Write|Edit dispatches ${CLAUDE_PLUGIN_ROOT}/hooks/adapters/claude-code.js. Claude Code auto-discovers this file; the adapter no-ops in non-adopted repos.'},
+{path:'dev-workflow/hooks/registry.js',size:'1.8 KB',kind:'hook',desc:'The hooks registry \u2014 the single source of truth listing every gate core (meta + check + optional fix). Both the Claude Code adapter and the watcher/check adapters read this one list; validate() will run the helper-reuse check once it migrates.'},
+{path:'dev-workflow/hooks/lib/project.js',size:'1.2 KB',kind:'hook',desc:'Project-root resolution \u2014 setProjectRoot() override \u2192 CLAUDE_PROJECT_DIR \u2192 cwd. Replaces the old __dirname-derived root, which would point into the plugin cache instead of the adopting repo.'},
+{path:'dev-workflow/hooks/lib/project-config.js',size:'2.1 KB',kind:'hook',desc:'Per-repo adoption gate \u2014 loads .claude/hooks.config.json; returns null when the repo is not adopted (missing file / enabled:false / parse failure). gateEnabled() defaults gates ON once adopted, with per-gate opt-out.'},
+{path:'dev-workflow/hooks/lib/gate-helpers.js',size:'7.2 KB',kind:'hook',desc:'Shared pure helpers for gate cores \u2014 section ranges, Progress Tracker parsing (column-layout tolerant), sibling doc paths, exemption markers, plan Current Code extraction, active-plan lookup.'},
+{path:'dev-workflow/hooks/lib/report.js',size:'4.4 KB',kind:'hook',desc:'Reporting \u2014 writes .claude/hooks/reports/latest.json in the project (never the plugin cache) and prints problemMatcher-compatible [gate] file: summary lines.'},
+{path:'dev-workflow/hooks/lib/fix.js',size:'1.7 KB',kind:'hook',desc:'Auto-fix runner \u2014 applies a gate core\u2019s fix() to file content and returns the rewritten content for the native Write/Edit path.'},
+{path:'dev-workflow/hooks/lib/match.js',size:'2.5 KB',kind:'hook',desc:'Dependency-free glob matcher \u2014 decides which meta.files globs a changed file hits (normalize + globToRegExp + matchesFiles).'},
+{path:'dev-workflow/hooks/cores/toc-sync-core.js',size:'5.9 KB',kind:'hook',desc:'toc-sync gate core \u2014 keeps a topic doc\u2019s TOC in sync with its headings and bumps Last Updated; auto-fixes the TOC in place on the native path. The pilot migration.'},
+{path:'dev-workflow/hooks/adapters/claude-code.js',size:'780 B',kind:'hook',desc:'Thin Claude Code hook wrapper \u2014 invokes the shared runCli() (must invoke, not bare-require: the stdin handler guard). The entry point named in hooks.json.'},
+{path:'dev-workflow/hooks/adapters/post-tool-use.js',size:'7.0 KB',kind:'hook',desc:'The shared engine \u2014 adoption + per-gate config cache, applicable-gates filtering (config + meta.files), runForFile for the Write/Edit path, and runCli() for the watcher/check CLIs.'},
+{path:'dev-workflow/hooks/adapters/watcher.js',size:'10.6 KB',kind:'hook',desc:'Filesystem watcher \u2014 fs.watch with debounce, initial full scan, and a \u201cHook watch cycle complete\u201d marker the VS Code problemMatcher keys on. The human-edit backstop.'},
+{path:'dev-workflow/hooks/adapters/check-on-save.js',size:'3.7 KB',kind:'hook',desc:'One-shot check \u2014 runs all applicable gates against one file and prints \u2714/\u2716 Doc check lines; exit code drives the on-save task.'},
+{path:'tools/run-dev-workflow-hook.js',size:'4.2 KB',kind:'tool',desc:'User-level shim (installed at ~/.claude/tools/) \u2014 resolves the active dev-workflow install via installed_plugins.json (env override for testing) and dispatches watch / check / precommit. Fixed path, zero logic \u2014 the repo\u2019s VS Code tasks never change.'}
 ];
 const EXTRA={
  skillPrinciples:{'topic-init':[1,3,4,5,6,10,11],'topic-plan':[2,3,7,14,17],'topic-implement':[1,2,3,7,9,14,17,18],'topic-test':[8,9,12,15,16,18],'topic-status':[1,11],'main-doc-verify':[3,4],'plan-doc-verify':[2,12,13,14,17],'doc-conciseness-review':[1],'workflow-self-correct':[6,9,10],'workflow-adopt':[10,19],'self-update':[10]},
@@ -976,9 +1064,10 @@ const FAQ=[
 {q:'Which parts are blocking vs optional?',a:'<b>Blocking:</b> main-doc \u00a72 Requirements (no cited source \u2192 stop), the human review checkpoints (main / plan / test docs + implementation start), open-questions gate before execution, NEG before <i>and</i> after the fix, REG when shared paths are touched, STG- cases when required. <b>Optional:</b> both verify nodes, conciseness review, EC/ERR/PERF categories, UNIT (recommended only).'},
 {q:'Why one skill per session?',a:'Context hygiene \u2014 Principle 1. Each skill completes with a <b>mandatory Confirm step</b> that reminds you to start a fresh session and pick the right model. It\u2019s non-blocking but always delivered: long mixed contexts are what make models hallucinate.'},
 {q:'Who runs git?',a:'<b>The human. Always.</b> The AI suggests branch names and Conventional Commits messages in the plan doc (Step 4), and may never run <code>git commit</code>/<code>git push</code>. The Branch &amp; Commit Strategy is a human-run convention \u2014 cherry-pick only <code>feat:</code>/<code>fix:</code> commits to stg/prd.'},
-{q:'Are the deterministic hooks included?',a:'No \u2014 the plugin is Phase A (skills/rules/templates/docs). Deterministic hook gates (toc-sync, open-questions, neg-flow, regression, env-scope, secret-scan) live in the <b>adopting repo\u2019s</b> <code>.claude/hooks/</code> \u2014 check whether they exist before relying on them. Where absent, the matching rules remain LLM-enforced (best-effort).'},
+{q:'Are the deterministic hooks included?',a:'<b>Yes \u2014 migration has started.</b> The plugin now ships <code>dev-workflow/hooks/</code>: a per-repo adoption gate (<code>.claude/hooks.config.json</code>), a shared registry, and the <b>toc-sync</b> pilot gate wired via <code>hooks/hooks.json</code> (PostToolUse on Write|Edit). The remaining six gates (neg-flow, env-scope, open-questions, regression, secret-scan, doc-reference) still live in the adopting repo\u2019s <code>.claude/hooks/</code> and migrate after the pilot is validated. Where a gate is absent, the matching rule stays LLM-enforced (best-effort).'},
+{q:'How do the hooks run without duplication?',a:'One registry, three surfaces. <b>Claude Code</b>: the plugin\u2019s <code>hooks.json</code> fires the adapter on Write|Edit. <b>Human edits</b>: a fixed-path user shim <code>~/.claude/tools/run-dev-workflow-hook.js</code> resolves the active plugin install (via <code>installed_plugins.json</code>) and serves the VS Code watcher (<code>watch</code>) and on-save check (<code>check</code>) tasks \u2014 zero logic in the repo, so tasks never change and the repo-local hooks directory becomes deletable at full migration. <b>Adoption</b>: adapters no-op unless the repo has <code>.claude/hooks.config.json</code>, so installing the plugin never affects non-adopted projects. Reports land in <code>&lt;project&gt;/.claude/hooks/reports/latest.json</code>.'},
 {q:'Claude Code vs VS Code Copilot \u2014 same thing?',a:'Yes \u2014 <b>same nodes, two harnesses</b>. A skill (<code>SKILL.md</code>, invoked as <code>/name</code>) and its Copilot agent (a thin wrapper that <i>reads the same SKILL.md</i>) are one node with two invocation surfaces. The graph itself is harness-agnostic \u2014 that\u2019s why the docs say \u201cno duplication\u201d.'},
-{q:'How do I adopt it into my repo?',a:'Run <code>/dev-workflow:workflow-adopt</code> \u2014 it scaffolds <code>AGENTS.md</code> + <code>CLAUDE.md</code> when absent, or inserts/re-syncs a managed anchor block between <code>&lt;!-- dev-workflow:begin --&gt;</code> markers when present, surfacing conflicts instead of overwriting. <code>--remove</code> strips it cleanly. Then follow the <code>docs/ref/&lt;MODULE&gt;/&lt;TOPIC&gt;/</code> convention and adapt path/command examples to your layout.'},
+{q:'How do I adopt it into my repo?',a:'Run <code>/dev-workflow:workflow-adopt</code> \u2014 it scaffolds <code>AGENTS.md</code> + <code>CLAUDE.md</code> when absent, or inserts/re-syncs a managed anchor block between <code>&lt;!-- dev-workflow:begin --&gt;</code> markers when present, surfacing conflicts instead of overwriting. It also installs the repo-root <code>.ai-tmp/</code> gitignore entry \u2014 the folder where the AI creates scratch scripts and generated files during tasks (deleted at task end, per the temporary-artifacts rule). <code>--remove</code> strips the managed block cleanly. Then follow the <code>docs/ref/&lt;MODULE&gt;/&lt;TOPIC&gt;/</code> convention and adapt path/command examples to your layout.'},
 {q:'What model should I use?',a:'Per Principle 11: a <b>light/cost-effective tier</b> for routine coding, test runs and quick checks; a <b>heavy reasoning tier</b> for planning, deep research and complex multi-file logic. The AI must remind you at every Confirm (non-blocking, mandatory). Sticky selection per session keeps context \u2014 escalate only when the task needs it.'},
 {q:'How is this visualization kept up to date?',a:'This page is generated from the plugin\u2019s own files \u2014 the sync badge shows the data date (<b>'+SYNC_DATE+'</b>). When the plugin changes, re-sync the <code>DATA</code> block at the bottom of this HTML (skills, rules, templates, graph) and bump the date. The graph\u2019s node list is intentionally generic \u2014 new workflow nodes only need a new node + edges in <code>GRAPH</code>.'}
 ];
@@ -1035,7 +1124,7 @@ const GRAPH={
  {id:'smk',type:'run',icon:'\ud83d\udc93',title:'SMK \u00b7 smoke',sub:'baseline health first',x:270,y:450,w:190,h:64,d:'Smoke & Sanity \u2014 service boots, core endpoints reachable, DB/cache connected. Must pass before Negative Flow.',points:['Phase 0 of the testing flow','Baseline health: service + endpoints + stores']},
  {id:'negpre',type:'run',icon:'\ud83d\udee1\ufe0f',title:'NEG \u00b7 pre-fix',sub:'prove the bug exists',x:500,y:450,w:190,h:64,d:'Negative flow BEFORE the fix \u2014 captures the original/buggy behavior so the fix can be proven. Both pre-fix and post-fix result lines are mandatory; one line = incomplete doc.',points:['Pre-implementation gate of topic-implement Step 3','neg-flow-gate enforces both result lines (where installed)']},
  {id:'hc4',type:'gate',icon:'\ud83d\udc64',title:'human checkpoint',sub:'implementation start \u00b7 blocking',x:730,y:450,w:160,h:64,entity:'rule:human-review-checkpoint',badge:'BLOCKING',badgeColor:'#f87171',d:'Implementation-start checkpoint (topic-implement Step 4) \u2014 the human owns the decision to start or resume code changes, and at what granularity. 5-row table: Current Position, Pre-Impl Tests, Next Phase & Granularity, Unit-Test Plan, Risks & Blockers. The point of no return for rollback cost.',points:['Never skipped \u2014 not for resumes, not for single-phase topics','Human approves the next phase and its granularity','Concerns \u2192 fix the plan doc, re-present affected rows only']},
- {id:'impl',type:'skill',icon:'\u2699\ufe0f',title:'topic-implement',sub:'executes the plan \u00b7 tracker \u2705',x:940,y:450,w:190,h:64,entity:'skill:topic-implement',badge:'no tests between phases',d:'The implementation executor skill \u2014 runs the plan doc phase by phase: pre-implementation gate (SMK + NEG pre-fix), the implementation-start checkpoint, then Phase 0 \u2192 Phase N with the Progress Tracker marked \u2705 after every phase, the post-implementation test gates, and the final cleanup sweep. Creates no doc of its own.',points:['Blocking implementation-start checkpoint before the first phase','Progress Tracker \u2705 + plan Last Updated after EVERY phase \u2014 never batched','Reuse field is binding; bounded repair (\u22643) when reality diverges from the plan','Includes the Documentation Update and Testing & Validation phases; results recorded via topic-test']},
+ {id:'impl',type:'skill',icon:'\u2699\ufe0f',title:'topic-implement',sub:'executes the plan \u00b7 tracker \u2705',x:940,y:450,w:190,h:64,entity:'skill:topic-implement',badge:'no tests between phases',d:'The implementation executor skill \u2014 runs the plan doc phase by phase: pre-implementation gate (SMK + NEG pre-fix), the implementation-start checkpoint, then Phase 0 \u2192 Phase N with the Progress Tracker marked \u2705 after every phase, the post-implementation test gates, and the final cleanup sweep (incl. deleting .ai-tmp/ scratch artifacts). Creates no doc of its own.',points:['Blocking implementation-start checkpoint before the first phase','Progress Tracker \u2705 + plan Last Updated after EVERY phase \u2014 never batched','Reuse field is binding; bounded repair (\u22643) when reality diverges from the plan','Scratch scripts/generated files go under repo-root .ai-tmp/ \u2014 deleted in the Final Cleanup Sweep','Includes the Documentation Update and Testing & Validation phases; results recorded via topic-test']},
  {id:'unit',type:'run',icon:'\ud83e\uddec',title:'UNIT \u00b7 full suite',sub:'after all phases',x:1180,y:450,w:190,h:64,badge:'recommended',d:'Full unit-test suite (e.g. npm test) \u2014 mocked, infrastructure-free, run ONCE after ALL implementation phases and before the NEG post-fix pass. Never between phases. Recommended when plan phases touch function-level logic in service/helper/util layers.',points:['White-box, mocked at the data-access seam','Skip for pure endpoint/doc/config-only changes']},
  {id:'negpost',type:'run',icon:'\ud83d\udee1\ufe0f',title:'NEG \u00b7 post-fix',sub:'confirm rejection',x:1410,y:450,w:190,h:64,d:'Negative flow AFTER the fix \u2014 confirms the fix resolves the bug without breaking the rejection path.',points:['Phase 2b of the testing flow','Second mandatory result line for every NEG case']},
  {id:'pos',type:'run',icon:'\u2705',title:'POS \u00b7 positive',sub:'happy paths green',x:1640,y:450,w:190,h:64,d:'Positive flow after the fix \u2014 the happy-path TC cases confirm correct behavior.'},
@@ -1044,7 +1133,7 @@ const GRAPH={
  {id:'deploy',type:'deploy',icon:'\ud83d\ude80',title:'deploy',sub:'branch \u2192 DEV \u2192 STG \u2192 PRD',x:1870,y:450,w:190,h:64,d:'Deploy the working branch through the environments. The Deployment Status table in the plan doc tracks each environment; STG marked Deployed triggers the STG- verification cases.',points:['Human performs all git operations','Never merge development forward \u2014 cherry-pick only feat:/fix: commits to stg/prd','docs: and chore(claude): commits stay on development']},
  {id:'stg',type:'deploy',icon:'\ud83d\udce1',title:'STG verify',sub:'STG- cases on staging',x:2110,y:450,w:190,h:64,badge:'conditional',d:'Staging post-deploy verification \u2014 run the test doc\u2019s STG- cases against the staging gateway once the plan doc marks STG Deployed. Required for Feature / Bug fix / Config-infra / Hotfix; optional for Refactor / Test-only; skipped for Investigation / Minor change.',points:['Proves the change behind the real gateway + staging config','LLM-enforced rule \u2014 no deterministic gate in the plugin']},
  {id:'update',type:'doc',icon:'\ud83d\udcdd',title:'update docs',sub:'results \u00b7 tracker \u00b7 status',x:2340,y:450,w:190,h:64,d:'Post-run documentation update \u2014 test doc result lines + run log (append-only), plan doc Progress Tracker + Deployment Status, so topic-status always reads accurate data.',points:['Update immediately after every run','Run log is append-only \u2014 never edit prior entries']},
- {id:'adopt',type:'meta',icon:'\ud83e\udd1d',title:'workflow-adopt',sub:'AGENTS.md managed block',x:40,y:700,w:190,h:64,d:'Meta node \u2014 repo onboarding. Writes/merges the managed topic-workflow section into AGENTS.md between dev-workflow:begin/end markers; scaffolds AGENTS.md + CLAUDE.md when absent; surfaces conflicts; --remove strips the block cleanly.',points:['Merge, never overwrite \u2014 one managed block','Re-run after plugin updates to re-sync boilerplate']},
+ {id:'adopt',type:'meta',icon:'\ud83e\udd1d',title:'workflow-adopt',sub:'AGENTS.md managed block',x:40,y:700,w:190,h:64,d:'Meta node \u2014 repo onboarding. Writes/merges the managed topic-workflow section into AGENTS.md between dev-workflow:begin/end markers; scaffolds AGENTS.md + CLAUDE.md when absent; surfaces conflicts; installs the .ai-tmp/ gitignore entry (temporary-artifacts rule); --remove strips the block cleanly.',points:['Merge, never overwrite \u2014 one managed block','Installs the repo-root .ai-tmp/ gitignore entry (idempotent, reported at the checkpoint)','Re-run after plugin updates to re-sync boilerplate']},
  {id:'selfupdate',type:'meta',icon:'\u2b06\ufe0f',title:'self-update',sub:'re-pin @ commit SHA',x:270,y:700,w:190,h:64,d:'Meta node \u2014 updates the plugin to the latest marketplace commit SHA (no version field \u2014 the SHA is the version). Refreshes the marketplace clone, updates, verifies every installed scope moved, re-pins stale scopes.',points:['Update applies only after a fresh chat session','Never installs at a scope the plugin was not already in']},
  {id:'selfcorrect',type:'meta',icon:'\u267b\ufe0f',title:'self-correct',sub:'zero duplication sweep',x:500,y:700,w:190,h:64,d:'Meta node \u2014 the self-correction loop for the workflow infrastructure itself. Detects duplication, consolidates universal rules into _shared/rules/, replaces duplicates with references, registers newly added nodes across all related docs.',points:['A rule or fact lives in exactly ONE place','Keeps node counts/names generic so new nodes need no doc edits','6-item audit checklist; verify before reporting']},
  {id:'concise',type:'meta',icon:'\u2702\ufe0f',title:'conciseness review',sub:'tighten any topic doc',x:2340,y:700,w:190,h:64,d:'Meta node \u2014 second-pass conciseness reviewer. Tightens prose without deleting any fact, path, link, number, or TODO marker; enforces the shared plain-language rule. Run after any topic doc.',points:['Citation discipline survives untouched','Fixes TOC when headings change']}
@@ -1111,11 +1200,13 @@ const REL_DATA=(function(){
   PRINCIPLES.forEach((p,i)=>nodes.push({id:'pr:'+p.num,type:'pr',icon:'\u2605',title:'P'+pad(p.num)+' \u00b7 '+trunc(p.title,26),sub:'category '+p.cat,x:790,y:30+i*44,w:250,h:34,fs:9.5,t1y:21,icR:9,icXo:16,txo:30}));
   TEMPLATES.forEach((t,i)=>nodes.push({id:'tpl:'+t.id,type:'tpl',icon:'\ud83e\ude9c',title:t.name,sub:'template \u00b7 first write',x:1150,y:190+i*70,w:220,h:58,fs:11}));
   DOCS.forEach((d,i)=>nodes.push({id:'doc:'+d.id,type:'doc',icon:'\ud83d\udcd8',title:d.name,sub:'reference doc',x:1150,y:190+(TEMPLATES.length+i)*70,w:220,h:58,fs:11}));
+  HOOKS.forEach((h,i)=>nodes.push({id:'hook:'+h.id,type:'hook',icon:'\ud83e\ude9d',title:h.name,sub:h.status==='plugin'?'plugin pilot':'adopting-repo gate',x:1460,y:40+i*76,w:220,h:56,fs:11}));
   RULES.forEach(r=>r.usedBy.forEach(u=>{if(SKILLS.some(s=>s.id===u))edges.push({from:'rule:'+r.id,to:'skill:'+u,s:'rel',stroke:'rgba(34,211,238,.32)',mc:'rule'});}));
   TEMPLATES.forEach(t=>{const sid=Array.isArray(t.usedBy)?t.usedBy[0]:t.usedBy;if(sid)edges.push({from:'skill:'+sid,to:'tpl:'+t.id,s:'rel',stroke:'rgba(96,165,250,.32)',mc:'tpl'});});
   Object.entries(EXTRA.skillPrinciples).forEach(([sid,nums])=>nums.forEach(n=>edges.push({from:'skill:'+sid,to:'pr:'+n,s:'rel',stroke:'rgba(163,230,53,.24)',mc:'pr'})));
   SKILLS.forEach(s=>edges.push({from:'doc:guide',to:'skill:'+s.id,s:'rel',stroke:'rgba(251,191,36,.20)',mc:'gate'}));
   edges.push({from:'doc:principles',to:'doc:guide',s:'rel',stroke:'rgba(251,191,36,.32)',mc:'gate'});
+  HOOKS.forEach(h=>(h.related||[]).forEach(id=>edges.push({from:'hook:'+h.id,to:id,s:'rel',stroke:'rgba(249,115,22,.30)',mc:'hook'})));
   return {nodes,edges};
 })();
 /* ================= APP ================= */
@@ -1140,8 +1231,8 @@ const ro=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.targ
 $$('.rv').forEach(x=>ro.observe(x));
 
 /* ---------- nav ---------- */
-const SECTIONS=['home','workflow','matrix','tree','skills','rules','templates','docs','files','principles','faq'];
-const SECTION_OF={node:'workflow',case:'workflow',skill:'skills',rule:'rules',tpl:'templates',pr:'principles',doc:'docs',file:'files',faq:'faq'};
+const SECTIONS=['home','workflow','matrix','tree','skills','rules','hooks','templates','docs','files','principles','faq'];
+const SECTION_OF={node:'workflow',case:'workflow',skill:'skills',rule:'rules',hook:'hooks',tpl:'templates',pr:'principles',doc:'docs',file:'files',faq:'faq'};
 $$('#rail .navitem').forEach(n=>n.addEventListener('click',()=>{goto(n.dataset.goto);if(innerWidth<820)$('#rail').classList.remove('open');}));
 $('#railToggle').addEventListener('click',()=>$('#rail').classList.toggle('open'));
 const secObs=new IntersectionObserver(es=>{es.forEach(x=>{if(x.isIntersecting){$$('#rail .navitem').forEach(n=>n.classList.toggle('active',n.dataset.goto===x.target.id));}});},{rootMargin:'-40% 0px -55% 0px'});
@@ -1165,10 +1256,19 @@ function ruleLinks(r){
 }
 function tplLinks(t){const sk=SKILLS.find(s=>s.id===t.usedBy);return sk?[{id:'skill:'+sk.id,label:sk.name,ic:'⚡'}]:[];}
 function prLinks(p){const out=[];(EXTRA.prSkills[p.num]||[]).forEach(s=>{const sk=SKILLS.find(x=>x.id===s);if(sk)out.push({id:'skill:'+s,label:sk.name,ic:'⚡'});});out.push({id:'doc:principles',label:'AI_ASSISTED_DEVELOPMENT_PRINCIPLES.md',ic:'📘'});return out;}
+function hookLinks(h){
+  return (h.related||[]).map(id=>{
+    const c=id.split(':'),k=c[0],v=c[1];
+    if(k==='rule'){const r=RULES.find(x=>x.id===v);return r?{id,label:r.name,ic:'📜'}:null;}
+    if(k==='skill'){const s=SKILLS.find(x=>x.id===v);return s?{id,label:s.name,ic:'⚡'}:null;}
+    return null;
+  }).filter(Boolean);
+}
 function fileEntity(f){
   if(f.path.includes('/skills/')&&f.path.endsWith('SKILL.md'))return'skill:'+f.path.split('/skills/')[1].split('/')[0];
   if(f.path.includes('/rules/'))return'rule:'+f.path.split('/rules/')[1].replace('.md','');
   if(f.path.includes('/templates/'))return'tpl:'+f.path.split('/templates/')[1].replace('.md','');
+  if(f.path.includes('/hooks/cores/'))return'hook:'+f.path.split('/hooks/cores/')[1].replace('-core.js','');
   if(f.path.includes('AI_ASSISTED_DEVELOPMENT_PRINCIPLES'))return'doc:principles';
   if(f.path.includes('TOPIC_WORKFLOW_GUIDE'))return'doc:guide';
   return null;
@@ -1236,6 +1336,16 @@ function openDrawer(id){
       +(d.quotes?quotesHtml(d.quotes):'')
       +linkChips(d.links||[],'doc:'+d.id)
       +`<div class="dw-sec"><h5>Open the file</h5><div class="linkchips"><span class="lchip" data-gh="${esc('dev-workflow/'+d.file)}"><span class="lic">📂</span>view on GitHub</span></div></div>`;
+  }else if(k==='hook'){
+    const h=HOOKS.find(x=>x.id===v);if(!h)return;
+    const plugin=h.status==='plugin';
+    kick=(plugin?'Hook gate · in the plugin':'Hook gate · still repo-local')+' · '+(h.scope||'');title=h.name;cmd='';
+    body=`<div class="dw-sec"><p>${esc(h.summary)}</p>${metaChips([{t:plugin?'plugin pilot · migrated '+(h.since||''):'adopting-repo .claude/hooks/',cls:plugin?'hi':'hi3'},{t:'watches: '+h.watches,cls:'hi2'}])}</div>`
+      +listHtml('What it enforces',h.keyRules)
+      +linkChips(hookLinks(h),'hook:'+h.id)
+      +(plugin
+        ?`<div class="dw-sec"><h5>Open the file</h5><div class="linkchips"><span class="lchip" data-gh="${esc(h.file)}"><span class="lic">📂</span>${esc(h.file)}</span></div></div>`
+        :`<div class="dw-sec"><h5>Where it lives today</h5><p class="mono">${esc(h.repoFile||'')} — in the adopting repo until it migrates</p></div>`);
   }else if(k==='file'){
     const f=FILES.find(x=>x.path===v);if(!f)return;
     const ent=fileEntity(f);
@@ -1274,7 +1384,7 @@ document.addEventListener('click',e=>{
 
 /* ================= HERO ================= */
 function countUp(elm,target){let s=null;const dur=1100;function f(t){if(!s)s=t;const p=Math.min((t-s)/dur,1);elm.textContent=Math.round(target*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f);}requestAnimationFrame(f);}
-const STATS=[{n:SKILLS.length,l:'skills',ic:'⚡',go:'skills'},{n:RULES.length,l:'rules',ic:'📜',go:'rules'},{n:TEMPLATES.length,l:'templates',ic:'🧩',go:'templates'},{n:PRINCIPLES.length,l:'principles',ic:'⭐',go:'principles'},{n:FILES.length,l:'files',ic:'🗂️',go:'files'},{n:2,l:'reference docs',ic:'📘',go:'docs'}];
+const STATS=[{n:SKILLS.length,l:'skills',ic:'⚡',go:'skills'},{n:RULES.length,l:'rules',ic:'📜',go:'rules'},{n:HOOKS.length,l:'hook gates',ic:'🪝',go:'hooks'},{n:TEMPLATES.length,l:'templates',ic:'🧩',go:'templates'},{n:PRINCIPLES.length,l:'principles',ic:'⭐',go:'principles'},{n:FILES.length,l:'files',ic:'🗂️',go:'files'},{n:2,l:'reference docs',ic:'📘',go:'docs'}];
 const hs=$('#heroStats');
 STATS.forEach((s,i)=>{hs.appendChild(el(`<div class="hstat" data-goto="${s.go}" style="transition-delay:${i*40}ms"><div class="num" data-count="${s.n}">0</div><div class="lbl">${s.l}</div><div class="ic">${s.ic}</div></div>`));});
 setTimeout(()=>$$('.hstat .num').forEach(n=>countUp(n,+n.dataset.count)),150);
@@ -1283,7 +1393,8 @@ const QUICK=[
  {q:'What is this plugin?',a:'A topic-documentation workflow for AI-assisted development — skills write & verify main/plan/test docs before any code changes.',go:'doc:guide'},
  {q:'Do I always write 3 docs?',a:'No — the 7-question classification scales the flow. Minor change → no docs at all. Feature → all three.',go:'case:feature'},
  {q:'Who runs git?',a:'The human. Always. The AI suggests branches & commit messages; every gate is human-approved.',go:'pr:2'},
- {q:'Where do the gates live?',a:'Rules are LLM-enforced in the plugin; deterministic hook gates live in the adopting repo\u2019s .claude/hooks/ — check before relying.',go:'rule:sensitive-file-scope'},
+ {q:'Where do scratch files go?',a:'Repo-root .ai-tmp/ \u2014 gitignored, created only when needed, deleted at task end. workflow-adopt installs the entry on onboarding.',go:'rule:temporary-artifacts'},
+ {q:'Where do the gates live?',a:'Rules are LLM-enforced; hook gates are the mechanical backstop — and they live in the adopting repo\u2019s .claude/hooks/ — toc-sync now ships in the plugin as the pilot; adopt via .claude/hooks.config.json.',go:'hook:toc-sync'},
  {q:'How do I install it?',a:'/plugin marketplace add AlimieRosli/Claude-Tools → /plugin install dev-workflow@claude-tools → fresh session.',go:'faq:1'},
  {q:'What model should I use?',a:'Light tier for routine work & test runs, heavy reasoning for planning & multi-file logic. The AI must remind you at every Confirm.',go:'pr:11'}];
 const qa=$('#quickAnswers');
@@ -1336,8 +1447,26 @@ function renderRuleGrid(f){
 }
 renderRuleGrid('all');
 const rf=$('#ruleFilters');
-[['all','All 14'],['shared','Shared · 7'],['per-skill','Per-skill · 7']].forEach(([id,label],i)=>{const b=el(`<button class="fchip ${i===0?'on':''}" data-f="${id}">${label}</button>`);b.addEventListener('click',()=>{$$('#ruleFilters .fchip').forEach(x=>x.classList.remove('on'));b.classList.add('on');renderRuleGrid(id);});rf.appendChild(b);});
+[['all','All 15'],['shared','Shared · 8'],['per-skill','Per-skill · 7']].forEach(([id,label],i)=>{const b=el(`<button class="fchip ${i===0?'on':''}" data-f="${id}">${label}</button>`);b.addEventListener('click',()=>{$$('#ruleFilters .fchip').forEach(x=>x.classList.remove('on'));b.classList.add('on');renderRuleGrid(id);});rf.appendChild(b);});
 $('#ruleGrid').addEventListener('click',e=>{const c=e.target.closest('.skcard');if(c)openDrawer(c.dataset.open);});
+
+function renderHookGrid(f){
+  const g=$('#hookGrid');g.innerHTML='';
+  HOOKS.filter(h=>f==='all'||h.status===f).forEach(h=>{
+    const plugin=h.status==='plugin';
+    g.appendChild(el(`<div class="skcard" data-open="hook:${h.id}" style="--c1:${plugin?'rgba(45,212,191,.12)':'rgba(148,163,184,.10)'};--c2:${plugin?'rgba(45,212,191,.4)':'rgba(148,163,184,.35)'}">
+      <div class="arrow">→</div>
+      <div class="top"><div class="icobox">🪝</div><div><h3>${esc(h.name)}</h3></div></div>
+      <span class="cmd">${esc(h.watches)}</span>
+      <p>${esc(h.summary)}</p>
+      <div class="meta-row"><span class="mini-chip ${plugin?'hi':'hi3'}">${plugin?'in the plugin · pilot':'still repo-local'}</span>${h.since?`<span class="mini-chip hi2">migrated ${h.since}</span>`:''}</div>
+    </div>`));
+  });
+}
+renderHookGrid('all');
+const hf=$('#hookFilters');
+[['all','All 7 gates'],['plugin','In the plugin · 1'],['repo','Repo-local · 6']].forEach(([id,label],i)=>{const b=el(`<button class="fchip ${i===0?'on':''}" data-f="${id}">${label}</button>`);b.addEventListener('click',()=>{$$('#hookFilters .fchip').forEach(x=>x.classList.remove('on'));b.classList.add('on');renderHookGrid(id);});hf.appendChild(b);});
+$('#hookGrid').addEventListener('click',e=>{const c=e.target.closest('.skcard');if(c)openDrawer(c.dataset.open);});
 
 const tg=$('#tplGrid');
 TEMPLATES.forEach(t=>tg.appendChild(el(`<div class="skcard" data-open="tpl:${t.id}" style="--c1:rgba(96,165,250,.12);--c2:rgba(96,165,250,.4)">
@@ -1382,7 +1511,7 @@ function buildTree(files){
   return root;
 }
 const FTREE=$('#ftree'),FDETAIL=$('#fdetail');
-function kindColor(f){return{manifest:'#fbbf24',doc:'#60a5fa',skill:'#8b5cf6',rule:'#22d3ee',template:'#34d399',json:'#f472b6',config:'#94a3b8'}[f.kind]||'#94a3b8';}
+function kindColor(f){return{manifest:'#fbbf24',doc:'#60a5fa',skill:'#8b5cf6',rule:'#22d3ee',template:'#34d399',json:'#f472b6',config:'#94a3b8',hook:'#f97316',tool:'#2dd4bf'}[f.kind]||'#94a3b8';}
 function renderTree(){
   const root=buildTree(FILES);
   function walk(node,depth,box){
@@ -1489,7 +1618,7 @@ if($('#treeInfo')){treeShowO('feature');}
 /* ================= WORKFLOW GRAPH ENGINE ================= */
 const GV={svg:$('#graphSvg'),wrap:$('#graphWrap'),k:.8,tx:60,ty:20,anim:true,labels:true,mode:'flow',focused:null,nodes:new Map(),edges:[],packets:[],raf:null,runner:null};
 const NS2='http://www.w3.org/2000/svg';
-const TYPE_COLOR={entry:'#22d3ee',skill:'#8b5cf6',verify:'#f472b6',gate:'#fbbf24',run:'#fb923c',deploy:'#34d399',meta:'#2dd4bf',stop:'#f87171',doc:'#60a5fa',rule:'#22d3ee',tpl:'#60a5fa',pr:'#a3e635'};
+const TYPE_COLOR={entry:'#22d3ee',skill:'#8b5cf6',verify:'#f472b6',gate:'#fbbf24',run:'#fb923c',deploy:'#34d399',meta:'#2dd4bf',stop:'#f87171',doc:'#60a5fa',rule:'#22d3ee',tpl:'#60a5fa',pr:'#a3e635',hook:'#f97316'};
 const EDGE_STYLE={main:{c:'#8b7cf8',w:2,d:''},alt:{c:'#7c89b0',w:1.5,d:''},opt:{c:'#eab308',w:1.5,d:'7 5'},cond:{c:'#f59e0b',w:1.6,d:'7 5'},meta:{c:'#2dd4bf',w:1.4,d:'3 6'},loop:{c:'#22d3ee',w:1.5,d:'7 5'},rel:{c:'#64748b',w:1.1,d:''}};
 function nodeGeom(nd){
   const gate=nd.type==='gate';
@@ -1568,7 +1697,7 @@ function buildGraph(){
     glbl(40,412,'\u2461 EXECUTION \u2014 /topic-implement drives this row');
     glbl(40,662,'\u2462 CONDITIONAL & META');
   }else{
-    glbl(80,26,'RULES');glbl(440,24,'SKILLS');glbl(790,14,'PRINCIPLES');glbl(1150,172,'TEMPLATES & DOCS');
+    glbl(80,26,'RULES');glbl(440,24,'SKILLS');glbl(790,14,'PRINCIPLES');glbl(1150,172,'TEMPLATES & DOCS');glbl(1460,24,'HOOKS');
   }
   layoutEdges();
   initPackets();
@@ -1690,7 +1819,7 @@ function initPackets(){
 /* ---------- legend ---------- */
 function renderLegend(){
   if(GV.mode==='rel'){
-    const L=[['rule','rules — the detail'],['skill','skills — the procedures'],['pr','principles — the why'],['tpl','templates — skeletons'],['doc','reference docs']];
+    const L=[['rule','rules — the detail'],['skill','skills — the procedures'],['pr','principles — the why'],['tpl','templates — skeletons'],['doc','reference docs'],['hook','hooks — deterministic gates']];
     $('#graphLegend').innerHTML=L.map(([t,l])=>`<div class="li"><span class="sw" style="background:${TYPE_COLOR[t]}"></span>${l}</div>`).join('')
      +`<div class="li" style="margin-top:6px;color:var(--txt3)">click a node → focus<br>its connections</div>`;
   }else{
@@ -1813,6 +1942,7 @@ const PAL={items:[],sel:0,shown:[]};
   TEMPLATES.forEach(t=>I.push({t:t.name,s:t.file,ic:'🧩',go:()=>openDrawer('tpl:'+t.id)}));
   PRINCIPLES.forEach(p=>I.push({t:'P'+String(p.num).padStart(2,'0')+' '+p.title,s:'principle · category '+p.cat,ic:'⭐',go:()=>openDrawer('pr:'+p.num)}));
   DOCS.forEach(d=>I.push({t:d.name,s:d.file,ic:'📘',go:()=>openDrawer('doc:'+d.id)}));
+  HOOKS.forEach(h=>I.push({t:h.name,s:'hook gate · '+(h.status==='plugin'?'plugin pilot':'repo-local'),ic:'🪝',go:()=>openDrawer('hook:'+h.id)}));
   FILES.forEach(f=>I.push({t:f.path,s:(f.size||'')+' · '+f.kind,ic:'🗂️',go:()=>goto('files',()=>selectFile(f.path))}));
   FAQ.forEach((f,i)=>I.push({t:f.q,s:'FAQ',ic:'❓',go:()=>goto('faq',()=>{const it=$('#faqList').children[i];if(it){it.classList.add('open');it.querySelector('.faq-a').style.maxHeight=it.querySelector('.faq-a-in').scrollHeight+'px';flashEl(it);}})}));
   PRESETS.forEach(p=>I.push({t:'Trace: '+p.label,s:'workflow route',ic:'🧭',go:()=>goto('workflow',()=>tracePreset(p.id))}));
@@ -1862,7 +1992,7 @@ function animateView(k,tx,ty,dur){
     animateView(.72,r.width/2-640*.72,r.height/2-330*.72,1500);
   },450);});
   $('#c-flow').textContent=GRAPH.nodes.length+' nodes';
-  $('#c-skills').textContent=SKILLS.length;$('#c-rules').textContent=RULES.length;$('#c-tpl').textContent=TEMPLATES.length;$('#c-files').textContent=FILES.length;$('#c-faq').textContent=FAQ.length;
+  $('#c-skills').textContent=SKILLS.length;$('#c-rules').textContent=RULES.length;$('#c-hooks').textContent=HOOKS.length;$('#c-tpl').textContent=TEMPLATES.length;$('#c-files').textContent=FILES.length;$('#c-faq').textContent=FAQ.length;
   console.log('%c dev-workflow explorer ','background:linear-gradient(90deg,#8b5cf6,#22d3ee);color:#fff;padding:4px 10px;border-radius:6px;font-weight:700','ready · press Ctrl+K to search');
 })();
 </script>
