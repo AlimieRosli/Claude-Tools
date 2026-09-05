@@ -57,6 +57,7 @@ Read each of these files with the Read tool at the indicated point. Inline refer
 1. BEFORE Step 1 (classification): [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-classification.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-classification.md) — the single source of truth for the 7 cases, the classification questions, and the flow mapping; Step 1.1 depends on it.
 2. BEFORE Step 1.2 (name resolution): [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/locate-topic.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/locate-topic.md) — the single source of truth for the name-resolution priority order and the path-derivation table; Step 1.2 depends on it.
 3. BEFORE Step 2 (codebase exploration): [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/sensitive-file-scope.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/sensitive-file-scope.md) — never read sensitive files (stack-dependent: env/config files, profile files, keys, credentials) while exploring; env/config values come from the adopting repo's placeholder reference doc (e.g. `docs/PLACEHOLDER_REFERENCE.md`).
+3b. BEFORE Step 2 (codebase exploration): [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/temporary-artifacts.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/temporary-artifacts.md) — exploration one-off scripts/probe outputs go under the repo-root `.ai-tmp/` folder and are deleted when Step 2 ends.
 4. BEFORE writing the doc (Step 3.1): [${CLAUDE_PLUGIN_ROOT}/skills/topic-init/templates/main-doc.md](${CLAUDE_PLUGIN_ROOT}/skills/topic-init/templates/main-doc.md) — the doc skeleton; every section heading must come from it.
 5. BEFORE writing the doc (Step 3.1): [${CLAUDE_PLUGIN_ROOT}/skills/topic-init/rules/topic-main-doc-writing.md](${CLAUDE_PLUGIN_ROOT}/skills/topic-init/rules/topic-main-doc-writing.md) — the writing rules enforced on the main doc; Steps 3.1 and 3.2 depend on it.
 6. BEFORE running the Step 5 checkpoint: [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md) — the single source of truth for the gate behavior, summary table format, and presentation rules; Step 5 depends on it.
@@ -121,6 +122,8 @@ Minimum before writing:
 - At least 2 source files read in full
 
 *Adapt paths/commands to your repository's actual layout and tooling.*
+
+If exploration needs a one-off script or probe (e.g. to test an endpoint or convert data), write it under the repo-root `.ai-tmp/` folder (Mandatory reads #3b) and delete it when Step 2 ends — never in source directories.
 
 ---
 

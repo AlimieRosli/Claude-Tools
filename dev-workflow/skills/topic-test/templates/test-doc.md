@@ -12,6 +12,7 @@
 
 - [ — Test Cases](#--test-cases)
   - [Table of Contents](#table-of-contents)
+  - [Test Results Dashboard](#test-results-dashboard)
   - [Test Scope](#test-scope)
   - [Test Environment](#test-environment)
     - [Local](#local)
@@ -54,6 +55,26 @@
   - [Pass Criteria (Feature Complete)](#pass-criteria-feature-complete)
   - [Open Questions](#open-questions)
   - [References](#references)
+
+---
+
+## Test Results Dashboard
+
+**Required.** The at-a-glance status board at the top of the doc — one row per test case so pass/fail state is visible without scrolling to each case's `**Result:**` line. Updated in the **same edit** as every `**Result:**` line change (see the "Dashboard is synced with result lines" rule in [`${CLAUDE_PLUGIN_ROOT}/skills/topic-test/rules/topic-test-doc-writing.md`](${CLAUDE_PLUGIN_ROOT}/skills/topic-test/rules/topic-test-doc-writing.md)).
+
+| Case | Category | Status | Result (pre-fix) | Result (post-fix) | Last Run |
+|------|----------|--------|------------------|-------------------|----------|
+| SMK-001 | Smoke | ☐ Not Run | — | — | |
+| SMK-002 | Smoke | ☐ Not Run | — | — | |
+| NEG-001 | Negative | ☐ Not Run | | | |
+| NEG-002 | Negative | ☐ Not Run | | | |
+| NEG-003 | Negative | ☐ Not Run | | | |
+| TC-001 | Positive | ☐ Not Run | — | — | |
+| TC-002 | Positive | ☐ Not Run | — | — | |
+| TC-003 | Positive | ☐ Not Run | — | — | |
+| UNIT-001 | Unit | ☐ Not Run | — | — | |
+
+> **Status vocabulary:** `☐ Not Run` / `🔄 In Progress` / `✅ PASS` / `❌ FAIL` — mirrors the plan-doc Progress Tracker vocabulary. `Result (pre-fix)` and `Result (post-fix)` columns are filled **only** for NEG rows (the pre/post-fix columns of every other row stay `—`); a NEG row's Status reflects the **post-fix** result once recorded. `Last Run` = date of the latest run (or the latest of pre/post-fix runs for NEG rows). Keep rows in the doc's case order (SMK → NEG → TC → UNIT → optional categories as generated). **Status derives from the case's actual `**Result:**` line(s)** — never mark a row ✅ without the matching result line in the case body; if they disagree, the case body wins and the dashboard row must be corrected in the same edit.
 
 ---
 

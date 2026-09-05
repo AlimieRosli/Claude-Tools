@@ -14,8 +14,9 @@ Follow the [Shared: Topic Doc Writing Conventions](`${CLAUDE_PLUGIN_ROOT}/skills
 ## Progress Sync After Every Phase
 
 - **Immediately after a phase's Done When is verified — and before starting the next phase** — mark the phase's Progress Tracker row `✅ Complete`, set the next phase `🔄 In Progress` when work on it starts, and update the plan doc's `Last Updated` date.
-- **Never batch progress updates to the end of the run.** `topic-status` reads the Progress Tracker to report where the topic is — a stale tracker reports an incorrect next step.
-- The AI or the human can write the update; the obligation is that it **is written after every phase completion**.
+- **Per-step granularity — tick each step's checkbox (`- [ ]` → `- [x]`) in the phase's Steps list the moment the step is completed**, and bump the tracker's `Steps` count (`<ticked>/<total>`) in the same edit. Do not wait for the phase to finish: the tracker's Steps count + the active phase's ticked checkboxes answer "which steps are done" without reading the phase body.
+- **Never batch progress updates to the end of the run.** `topic-status` reads the Progress Tracker (Status + Steps counts) to report where the topic is — a stale tracker reports an incorrect next step.
+- The AI or the human can write the update; the obligation is that it **is written after every phase completion** (and per-step as steps complete).
 
 ## Session & Granularity
 
@@ -49,6 +50,7 @@ Follow the [Shared: Topic Doc Writing Conventions](`${CLAUDE_PLUGIN_ROOT}/skills
 - Match the repo's layering and patterns (e.g. endpoint → controller → service in an Express.js-style backend — *adapt to the repo's layout*).
 - Error handling and logging follow [Shared: Error Handling Conventions](`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/error-handling.md`) — every `catch` logs before responding, every error response is returned, guard clauses first; use the repo's structured logger, never `console.log`.
 - **Never read sensitive files** — env/config values come from the adopting repo's placeholder reference doc (see [Shared: Sensitive File Scope](`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/sensitive-file-scope.md`)).
+- **Scratch work has one home** — any throwaway script, generated data file, or probe output the implementation needs goes under the repo-root `.ai-tmp/` folder (see [Shared: Temporary Artifacts & Scratch Work](`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/temporary-artifacts.md`)), never in source directories; delete what the task created when its purpose is served.
 
 ## Related-Doc Sync During Implementation
 
@@ -63,6 +65,7 @@ Follow the [Shared: Topic Doc Writing Conventions](`${CLAUDE_PLUGIN_ROOT}/skills
 After all phases are ✅ and the post-implementation test gates have run:
 
 - **Remove temporary instrumentation** — debug logs added only for verification, scratch files, commented-out experiments. Production code keeps only the logging the plan specified.
+- **Delete `.ai-tmp/` artifacts** — remove everything this topic created under the repo-root `.ai-tmp/` folder (see [Shared: Temporary Artifacts & Scratch Work](`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/temporary-artifacts.md`)), including after a failed run where possible. Scope the deletion to files this task created — never wipe the whole folder blindly.
 - **Resolve every `<!-- TODO: confirm -->`** the implementation was meant to answer; anything still unknown becomes an Open Question in the doc where it was raised.
 - **Doc-sync sweep** — every doc the work touched reflects the final state: plan doc (tracker, Status field, `Last Updated`, deployment as reported), test doc results (per `topic-test`), main doc drift (per `topic-init` update rules).
 - **Plan doc `Status` field per its vocabulary** — `Complete` only when fully deployed to Production and all phases are ✅; otherwise `In Progress` (or `Blocked` / `On Hold` as applicable). Deployment is human-driven; record each environment's status as the user reports it.

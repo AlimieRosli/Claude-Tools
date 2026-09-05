@@ -24,6 +24,8 @@
     - [9. Self-Correction \& Healing Loops](#9-self-correction--healing-loops)
     - [10. Persistent Memory \& Self-Improvement](#10-persistent-memory--self-improvement)
     - [11. Proper Model Selection \& Tiering](#11-proper-model-selection--tiering)
+    - [Recommended models (updated based on cost, availability, and performance)](#recommended-models-updated-based-on-cost-availability-and-performance)
+    - [How the AI enforces model selection](#how-the-ai-enforces-model-selection)
   - [Category B — Production \& Governance](#category-b--production--governance)
     - [12. Security, Vulnerability \& Secret Defense](#12-security-vulnerability--secret-defense)
     - [13. Data Privacy \& Supply Chain Compliance](#13-data-privacy--supply-chain-compliance)
@@ -130,7 +132,8 @@ Each principle states **why it is needed** (the root failure mode that justifies
 | `topic-plan` Open Questions gate | All open questions (including requirement ambiguities) must be `✅ Resolved` before execution or test doc creation. |
 | Open-questions gate (if present) | A deterministic gate may exist in the adopting repo's `.claude/hooks/` — e.g. one that mechanically blocks test doc creation if the plan doc has unresolved open questions. Check before relying on it. |
 | `topic-test` Post-run update | After tests are run, each test case gets a `**Result:**` line (✅ PASS / ❌ FAIL); the plan doc's Progress Tracker is updated. |
-| `topic-plan` Progress Tracker | Each phase has a status (☐ Not Started / 🔄 In Progress / ✅ Complete) — visual confirmation that all phases are done. |
+| `topic-plan` Progress Tracker | Each phase has a status (☐ Not Started / 🔄 In Progress / ✅ Complete) and a `Steps` count (`<ticked>/<total>` from that phase's step checkboxes) — phase + step completion visible at a glance, no scrolling. |
+| `topic-test` Test Results Dashboard | Each test doc has a `## Test Results Dashboard` table at the top — one row per case (Status / NEG pre-post-fix results / Last Run) synced with the case's `**Result:**` line in the same edit — pass/fail state visible without scrolling to each case. |
 | `topic-implement` execution | Executes the plan's phases per its execution rules and keeps the Progress Tracker in sync after every phase — the tracker is only trustworthy because the executor updates it immediately. |
 | `topic-plan` "Done When" per phase | Each phase has a verifiable outcome, not a vague "it works". |
 

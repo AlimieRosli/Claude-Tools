@@ -68,14 +68,16 @@
 
 ## Progress Tracker
 
-| Phase | Name | Status |
-|-------|------|--------|
-| 0 | Prerequisites | ☐ Not Started |
-| 1 | <!-- name --> | ☐ Not Started |
-| 2 | <!-- name --> | ☐ Not Started |
-| 3 | <!-- name --> | ☐ Not Started |
-| 4 | Documentation Update | ☐ Not Started |
-| 5 | Testing & Validation | ☐ Not Started |
+| Phase | Name | Steps | Status |
+|-------|------|-------|--------|
+| 0 | Prerequisites | 0/1 | ☐ Not Started |
+| 1 | <!-- name --> | 0/3 | ☐ Not Started |
+| 2 | <!-- name --> | 0/3 | ☐ Not Started |
+| 3 | <!-- name --> | 0/3 | ☐ Not Started |
+| 4 | Documentation Update | 0/3 | ☐ Not Started |
+| 5 | Testing & Validation | 0/4 | ☐ Not Started |
+
+> **Steps column:** `<ticked>/<total>` from that phase's **Steps** checklist below — e.g. `2/3` means 2 of the phase's 3 step checkboxes are ticked. Read the tracker (Steps + Status) for where the topic stands without scrolling; the phase body's ticked checkboxes show *which* steps inside the active phase are done. Update the Steps count in the same edit as the Status column (see the progress-sync rule in [`${CLAUDE_PLUGIN_ROOT}/skills/topic-implement/rules/topic-implementation-execution.md`](${CLAUDE_PLUGIN_ROOT}/skills/topic-implement/rules/topic-implementation-execution.md) — "Progress Sync After Every Phase").
 
 > **Execution tip:** implementation is executed by the [`topic-implement` skill](${CLAUDE_PLUGIN_ROOT}/skills/topic-implement/SKILL.md) — its execution rules ([`${CLAUDE_PLUGIN_ROOT}/skills/topic-implement/rules/topic-implementation-execution.md`](${CLAUDE_PLUGIN_ROOT}/skills/topic-implement/rules/topic-implementation-execution.md)) carry the per-phase-per-prompt session rule and the progress-sync obligation (tracker ✅ after every phase, `Last Updated` updated).
 
@@ -106,7 +108,7 @@
 **Goal:** Ensure environment and codebase are ready.
 
 **Steps:**
-1. <!-- e.g. Verify the config keys for the new dependency in the repo's config module -->
+- [ ] <!-- e.g. Verify the config keys for the new dependency in the repo's config module -->
 
 **Done When:**
 - <!-- e.g. Service starts with new env vars without errors -->
@@ -127,9 +129,10 @@
 **Reuse:** <!-- existing helper/service to call, or "none (grep: <keywords>)" — before adding a new utility, grep the repo's shared-helper directories (e.g. server/helpers/, server/utils/, server/services/) for an existing equivalent -->
 
 **Steps:**
-1. <!-- File + function to touch, and what to do -->
-2.
-3.
+<!-- Step checkboxes: tick each as it is completed, and update this phase's Progress Tracker Steps count + Status in the same edit (progress-sync rule). -->
+- [ ] <!-- File + function to touch, and what to do -->
+- [ ]
+- [ ]
 
 **Done When:**
 - <!-- Verifiable outcome -->
@@ -150,9 +153,9 @@
 **Reuse:** <!-- existing helper/service to call, or "none (grep: <keywords>)" -->
 
 **Steps:**
-1.
-2.
-3.
+- [ ]
+- [ ]
+- [ ]
 
 **Done When:**
 -
@@ -173,9 +176,9 @@
 **Reuse:** <!-- existing helper/service to call, or "none (grep: <keywords>)" -->
 
 **Steps:**
-1.
-2.
-3.
+- [ ]
+- [ ]
+- [ ]
 
 **Done When:**
 -
@@ -208,9 +211,9 @@
 2. <!-- e.g. Architecture doc: add the new DB connection to the connection list + schema-registration branch -->
 
 **Steps:**
-1. Update each affected section listed above to reflect the new code — match the existing doc's style, heading levels, and Table of Contents.
-2. If the API reference was impacted, ensure its Table of Contents stays in sync (a TOC-sync gate may exist in the adopting repo's `.claude/hooks/` — check before relying on it).
-3. Re-read every changed section against the actual source to confirm no drift — file paths, function names, endpoints, route prefixes, and config keys must match the code.
+- [ ] Update each affected section listed above to reflect the new code — match the existing doc's style, heading levels, and Table of Contents.
+- [ ] If the API reference was impacted, ensure its Table of Contents stays in sync (a TOC-sync gate may exist in the adopting repo's `.claude/hooks/` — check before relying on it).
+- [ ] Re-read every changed section against the actual source to confirm no drift — file paths, function names, endpoints, route prefixes, and config keys must match the code.
 
 **Done When:**
 - Every affected section listed above reflects the code changes from the implementation phases.
@@ -228,16 +231,16 @@
 **Goal:** All test cases pass, no regressions.
 
 **Steps:**
-1. Run test cases in [Test Doc](./<TOPIC_UPPER>_TEST.md) <!-- only if created -->, following its **Testing Flow** order exactly — do not invent a different order:
+- [ ] Run test cases in [Test Doc](./<TOPIC_UPPER>_TEST.md) <!-- only if created -->, following its **Testing Flow** order exactly — do not invent a different order:
    ```
    Phase 0 — Smoke & Sanity → Phase 1 — Negative Flow pre-fix pass →
    implement the fix → Phase 2 — Positive Flow → Phase 2b — Negative Flow post-fix pass →
    Phase 3+ — optional categories (Edge / Error / Regression / Performance) →
    Phase 7 — Side-Effect Spot Checks
    ```
-2. Verify the Negative Flow post-fix pass (Phase 2b): each NEG case now returns the correct rejection instead of the original bug — both `Result (pre-fix)` and `Result (post-fix)` must be recorded.
-3. Confirm regression checks (REG), if included, show no change to existing endpoints/behavior.
-4. <!-- Any smoke/load test steps -->
+- [ ] Verify the Negative Flow post-fix pass (Phase 2b): each NEG case now returns the correct rejection instead of the original bug — both `Result (pre-fix)` and `Result (post-fix)` must be recorded.
+- [ ] Confirm regression checks (REG), if included, show no change to existing endpoints/behavior.
+- [ ] <!-- Any smoke/load test steps -->
 
 **Done When:**
 - Test doc's "Pass Criteria (Feature Complete)" checklist is fully checked off.

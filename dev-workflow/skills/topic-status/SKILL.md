@@ -77,8 +77,8 @@ If the user's message mentions a topic name but not the module name, search `doc
 Read the docs that exist in the topic folder, in this order (Mandatory reads #2 — Read them now with the Read tool; do not report from memory):
 
 1. **Main doc** (`<PREFIX>.md`) — always required. Extract: Classification, Recommended flow, Current State, Target State, Open Questions (and their status).
-2. **Plan doc** (`<PREFIX>_PLAN.md`) — if it exists. Extract: Progress Tracker (phase statuses), Deployment Status table, Open Questions (and their status), the current/next phase.
-3. **Test doc** (`<PREFIX>_TEST.md`) — if it exists. Extract: which test cases have `**Result:**` lines (run), which don't (not yet run), overall test status.
+2. **Plan doc** (`<PREFIX>_PLAN.md`) — if it exists. Extract: Progress Tracker (**Status and `Steps` (`<ticked>/<total>`) columns** — the Steps count shows per-phase step completion at a glance), Deployment Status table, Open Questions (and their status), the current/next phase.
+3. **Test doc** (`<PREFIX>_TEST.md`) — if it exists. Extract: the **Test Results Dashboard table** (per-case Status, NEG pre/post-fix results, Last Run) — fall back to per-case `**Result:**` lines only if the dashboard is missing — and overall test status.
 
 If only the main doc exists, the topic is at the "plan doc" stage. If main + plan exist but no test doc, the topic is at the "test doc" stage. If all three exist, check the Progress Tracker and test results to determine the exact position.
 
@@ -128,8 +128,8 @@ Present a concise status report:
 - Test doc: ✅/❌ exists (Last Updated: <date>)
 
 ### Progress
-<if plan doc exists: paste the Progress Tracker table — as a proper markdown table, not plain text>
-<if test doc exists: one-line summary — "X passed, Y failed, Z not run" — do NOT list every test case>
+<if plan doc exists: paste the Progress Tracker table (Status + Steps columns) — as a proper markdown table, not plain text>
+<if test doc exists: one-line summary from the Test Results Dashboard — "X passed, Y failed, Z not run" — do NOT list every test case>
 
 ### Deployment
 <if plan doc exists: paste the Deployment Status table — as a proper markdown table>

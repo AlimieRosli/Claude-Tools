@@ -57,6 +57,7 @@ Read each of these files with the Read tool at the indicated point. Inline refer
 1. BEFORE Step 1: [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/locate-topic.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/locate-topic.md) — required to resolve `<module>/<topic>` and derive the doc paths correctly (Step 1 depends on it).
 2. BEFORE Step 3 (and again at Step 5): [${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/rules/topic-plan-doc-writing.md](${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/rules/topic-plan-doc-writing.md) — the plan-doc writing rules ("Reuse Existing Code", Documentation Update Phase, Requirement Coverage, Open Questions, Table of Contents & Last Updated rules). Steps 3, 5, 5.1, and 5.2 all depend on it.
 3. BEFORE Step 3 (any env/deploy value is needed): [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/sensitive-file-scope.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/sensitive-file-scope.md) — never read sensitive files (stack-dependent: env/config files, profile files, keys, credentials); env/deploy values come from the adopting repo's placeholder reference doc (e.g. `docs/PLACEHOLDER_REFERENCE.md`).
+3b. BEFORE Step 3 (codebase exploration): [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/temporary-artifacts.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/temporary-artifacts.md) — exploration one-off scripts/probe outputs go under the repo-root `.ai-tmp/` folder and are deleted when Step 3 ends.
 4. BEFORE Step 5.1 (first-time write): [${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/templates/plan-doc.md](${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/templates/plan-doc.md) — the doc skeleton; every section heading must come from it.
 5. BEFORE Step 5.3 (only if the user agrees to run the verifier): [${CLAUDE_PLUGIN_ROOT}/skills/plan-doc-verify/SKILL.md](${CLAUDE_PLUGIN_ROOT}/skills/plan-doc-verify/SKILL.md) — the verifier skill's procedure must be read before it is run.
 6. BEFORE Step 5.5: [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md) — the single source of truth for the gate behavior, summary table format, and presentation rules of the blocking checkpoint.
@@ -111,6 +112,8 @@ Minimum before writing:
 - If the main doc lists open questions, search the codebase for clues to answer them.
 
 *Adapt paths/commands to your repository's actual layout and tooling.*
+
+If exploration needs a one-off script or probe (e.g. to test an endpoint or convert data), write it under the repo-root `.ai-tmp/` folder (Mandatory reads #3b) and delete it when Step 3 ends — never in source directories.
 
 ---
 

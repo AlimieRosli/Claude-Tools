@@ -25,6 +25,7 @@ This repo uses the **`dev-workflow` plugin** (Claude Code) for AI-assisted devel
 **Reference rules (strict):**
 
 - Reference plugin content **by command name or doc title only** — never by file path. The plugin's install location differs per machine and platform; a hardcoded path breaks for everyone but the author.
+- **Temporary artifacts** — all AI-created scratch scripts, generated data files, patches, and intermediate artifacts go under the repo-root `.ai-tmp/` folder (gitignored), and are deleted when the task finishes. Never write throwaway files into source directories, and never park would-be-permanent files there.
 - Skills are **self-contained**: invoking a skill loads its rules and templates. This file states *when* to run what; the plugin supplies *how*. Do not duplicate skill internals here.
 - The plugin references this repo **defensively** (e.g. "a `secret-scan` gate in the adopting repo's `.claude/hooks/`, if present — check before relying on them"). Where this repo has no such gate, the corresponding rule stays LLM-enforced (best-effort).
 

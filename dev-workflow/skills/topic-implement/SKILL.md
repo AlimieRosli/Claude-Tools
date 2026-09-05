@@ -60,6 +60,7 @@ Read each of these files with the Read tool at the indicated point. Inline refer
 5. BEFORE writing any code (Step 5): [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/error-handling.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/error-handling.md) and [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/sensitive-file-scope.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/sensitive-file-scope.md) — the repo's error-handling/logging conventions apply to every line written; sensitive files are never read.
 6. BEFORE Step 4: [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md) — the single source of truth for the gate behavior, summary table format, and presentation rules; Step 4 depends on it.
 7. BEFORE delivering the Step 9 reminders: [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md) — the exact text of the per-prompt and per-session discipline rules; Step 9 depends on it.
+8. BEFORE Step 5 (and again before Step 7): [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/temporary-artifacts.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/temporary-artifacts.md) — scratch scripts/generated files go under the repo-root `.ai-tmp/` folder with scoped deletion at task end; Step 5 creates artifacts there, Step 7's cleanup sweep deletes them.
 
 ---
 
@@ -140,7 +141,8 @@ For each phase in the plan doc's recorded order — Phase 0 (Prerequisites & Set
 2. Follow the phase's **Steps 1-by-1** as written — each step names the file + function to touch and what to do. Verify the **Done When** outcome before declaring the phase complete; the **Rollback** plan is what you execute if the phase goes wrong.
 3. The **Reuse** field is binding — call the named existing helper/service; never write a duplicate (Phase 0 exempt). The **Unit Tests** field means the phase *writes* its colocated test file — never runs it (see Step 6).
 4. Write code that matches the repo's layering, error-handling, and logging conventions (Mandatory reads #5) — every `catch` logs before responding, every error response is returned, guard clauses first, structured logger only.
-5. Mark the phase ✅ (Step 5.2) and move to the next phase.
+6. Any scratch script, generated data file, or probe output this phase needs goes under the repo-root `.ai-tmp/` folder (Mandatory reads #8) — never in source directories; delete what this phase created as soon as its purpose is served.
+7. Mark the phase ✅ (Step 5.2) and move to the next phase.
 
 ### 5.2 — Update the plan doc after every phase
 
@@ -177,6 +179,7 @@ Run the tests per the test doc; record results per the `topic-test` skill's post
 Execute the **Final Cleanup Sweep** from the rules file (Mandatory reads #2). In summary:
 
 - **Remove temporary instrumentation** — debug logs added only for verification, scratch files, commented-out experiments. Production code keeps only the logging the plan specified.
+- **Delete `.ai-tmp/` artifacts** — remove everything this topic created under the repo-root `.ai-tmp/` folder (Mandatory reads #8), including after a failed run where possible. Only files this task created; never wipe the whole folder blindly.
 - **Resolve every `<!-- TODO: confirm -->`** the implementation was meant to answer; anything still unknown becomes an Open Question in the doc where it was raised.
 - **Doc-sync sweep** — every doc the work touched reflects the final state: plan doc (tracker, Status field per its vocabulary, `Last Updated`, deployment as reported), test doc results (via `topic-test` rules), main doc drift (targeted edits per the `topic-init` update rules — never a wholesale rewrite).
 - **Set the plan doc's `Status` field** per its vocabulary — `Complete` only when fully deployed to Production and all phases are ✅; otherwise `In Progress` (or `Blocked` / `On Hold` as applicable). Deployment itself is human-driven; record each environment's status as the user reports it.

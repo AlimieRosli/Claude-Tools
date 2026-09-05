@@ -9,6 +9,15 @@ Follow the [Shared: Topic Doc Writing Conventions](${CLAUDE_PLUGIN_ROOT}/skills/
 - When the work is fully deployed to Production and all phases are complete, set Status to `Complete`.
 - **Link the test doc in the References section only if it already exists** — test docs are created later by `topic-test`. A freshly-written plan doc should not have a broken Test Doc link.
 
+## Step Checkboxes & Progress Tracker (at-a-glance progress)
+
+- **Every phase's `Steps` list is a task-list (checkbox) list — `- [ ]` per step, never plain numbered items.** This makes step completion visually scannable and tickable in VS Code / GitHub rendering without opening the phase body.
+- **Tick a step's checkbox the moment the step is completed** — do not wait for the phase to finish. An unticked step in an `✅ Complete` phase is a sync failure.
+- **The Progress Tracker's `Steps` column records `<ticked>/<total>` from that phase's Steps checklist** (e.g. `2/3`) — a per-phase step-completion summary so the tracker alone shows both phase status and internal step progress without scrolling to the phase body.
+- **Update in the same edit:** whenever a step is ticked, the tracker's Steps count and (when the phase completes) the tracker's Status are updated in the same edit — never batched. The full progress-sync obligation (after every phase) is in the `topic-implement` execution rules ("Progress Sync After Every Phase"); this rule adds the per-step granularity.
+- **Steps counts must match the body** — the tracker's `<total>` must equal the number of step checkboxes in that phase's Steps list. `plan-doc-verify` flags a mismatch (e.g. tracker says `0/3` but the phase has 4 steps). When steps are added/removed mid-execution (with human approval), update both the checklist and the count in the same edit.
+- **All `<total>` counts in a freshly-written plan are `0`** (e.g. `0/3`) — no step is ticked at authoring time. Ticking starts only when `topic-implement` executes the phase.
+
 ## Action Overview
 
 - The plan doc must have an **Action Overview** section (a `## Action Overview` heading) that records the confirmed action overview for the topic. It is required, not optional.

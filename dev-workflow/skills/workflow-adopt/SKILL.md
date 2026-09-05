@@ -49,6 +49,7 @@ This skill is the **onboarding node**: it applies the canonical snippet template
 ## Mandatory reads
 
 1. BEFORE Step 3: [${CLAUDE_PLUGIN_ROOT}/skills/_shared/templates/adopting-repo-agents-snippet.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/templates/adopting-repo-agents-snippet.md) — the canonical snippet this skill applies. Never write boilerplate from memory; the template is the source and may have changed since your training data.
+2. BEFORE Step 5 (the temp-artifact ignore-entry install): [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/temporary-artifacts.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/temporary-artifacts.md) — the rule behind the repo-root `.ai-tmp/` folder this skill gitignores on onboarding; do not install the entry from memory.
 
 ---
 
@@ -71,6 +72,7 @@ Check, and record the findings:
 2. **`CLAUDE.md`** — exists? If yes: does it import `AGENTS.md` (an `@AGENTS.md` line)?
 3. **`.claude/settings.json`** — is the `claude-tools` marketplace registered under `extraKnownMarketplaces`? (For team distribution — the plugin being runnable means *your* machine has it; teammates need the project-level registration.)
 4. **Repo layout signals for the adaptation table** — does `docs/` (or a topic-doc tree) exist? What stack/commands (`package.json`, etc.)? Do repo-local hooks or skills exist under `.claude/`?
+5. **Temp-artifact ignore state** — does a repo-root `.gitignore` exist? Does it already ignore `.ai-tmp/` (or a repo-specific equivalent temp folder)? Record for Step 5.
 
 ---
 
@@ -120,9 +122,30 @@ Then, per the Step 2 survey:
 
 Also report (do not edit unless the human asks): whether `.claude/settings.json` registers the `claude-tools` marketplace for teammates (Step 2 finding #3) — if absent, give the `extraKnownMarketplaces` / `enabledPlugins: false` snippet for the human to review.
 
+#### Temp-artifact ignore-entry install (part of every adopt run)
+
+Per the mandatory read (Temporary Artifacts & Scratch Work): ensure the repo-root `.gitignore` ignores the AI temp folder — the AI creates scratch scripts/files there during tasks and deletes them at task end.
+
+| Repo state | Action |
+|------|------|
+| No `.gitignore` | Create one containing exactly the entry below |
+| `.gitignore` exists, no `.ai-tmp/` entry | **Append** the entry at the end (after a newline); touch nothing above it |
+| Already ignores `.ai-tmp/` (or an equivalent convention is already pinned in the adaptation table) | Report "already ignored" — change nothing |
+
+Entry to add:
+
+```gitignore
+# AI (Claude) temporary artifacts — scratch scripts/files, deleted after tasks
+.ai-tmp/
+```
+
+Idempotent: re-running the skill re-checks the entry rather than duplicating it. This install is part of the managed adoption — it is presented in the Step 6 checkpoint summary like every other write.
+
 ### Remove path
 
 Strip the managed block **inclusive of both marker lines**, plus any blank line left immediately before it or after it, so no orphaned separator remains. Everything else in the file stays byte-identical. If no markers exist, report "nothing to remove" and change nothing.
+
+**`.gitignore` on opt-out:** the `.ai-tmp/` entry is left in place by default — an already-created `.ai-tmp/` folder may still hold artifacts worth sweeping before removal. Ask the human; only remove the entry (and optionally the folder) if they explicitly confirm.
 
 ---
 
@@ -136,6 +159,7 @@ Present a summary: which files were created/modified, the exact inserted or repl
 
 - Files created / modified / untouched, with paths.
 - The resolved adaptation table (the repo's pinned conventions).
+- The temp-artifact ignore entry status — added / already ignored / not applicable, with the file path.
 - Conflicts found and how each was resolved.
 - Re-run guidance: to pull future boilerplate updates, re-run `/dev-workflow:workflow-adopt` after updating the plugin (`/dev-workflow:self-update` + fresh session).
 - Any `<!-- TODO: confirm -->` items left for the team.
@@ -145,7 +169,7 @@ Present a summary: which files were created/modified, the exact inserted or repl
 
 ## Constraints
 
-- **Merge, never overwrite** — only the block between the anchor markers is managed; never rewrite, reorder, or reformat the repo's existing content.
+- **Merge, never overwrite** — only the block between the anchor markers is managed; never rewrite, reorder, or reformat the repo's existing content. (The `.gitignore` temp-artifact entry is the one unmanaged touch — append-only, idempotent, and reported in the checkpoint.)
 - **Never guess a repo fact** — unresolved values stay `<!-- TODO: confirm -->`.
 - **Never write on an unresolved conflict** — stop and ask.
 - **Never run `git commit` / `git push`** — the human owns all git operations.
