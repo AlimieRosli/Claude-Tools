@@ -55,16 +55,22 @@ const PUBLIC_DOC_HOSTS = new Set([
 
 // Value/key-based rules: value capture group is checked against the placeholder
 // convention (`<SOMETHING>`) and skipped if it matches — real secrets never do.
+//
+// Keyword rules use a (?<![A-Za-z0-9]) negative lookbehind instead of \b: `_` is a
+// word character, so \b never matches inside a prefixed variable name
+// (e.g. GOOGLE_API_KEY, MY_SECRET) and the rule silently misses it. The lookbehind
+// still rejects alphanumeric prefixes (avoiding matches inside longer words) while
+// treating `_` as a valid boundary.
 const VALUE_RULES = [
   {
     id: 'api-key-secret',
-    pattern: /\b(api[_-]?key|apikey|secret|access[_-]?key|client[_-]?secret|private[_-]?key)\s*[:=]\s*['"]?([^\s'")]{6,})['"]?/gi,
+    pattern: /(?<![A-Za-z0-9])(api[_-]?key|apikey|secret|access[_-]?key|client[_-]?secret|private[_-]?key)\s*[:=]\s*['"]?([^\s'")]{6,})['"]?/gi,
     valueGroup: 2,
     describe: 'Possible hardcoded API key / secret',
   },
   {
     id: 'password-literal',
-    pattern: /\b(password|pwd|passwd)\s*[:=]\s*['"]?([^\s'")]{4,})['"]?/gi,
+    pattern: /(?<![A-Za-z0-9])(password|pwd|passwd)\s*[:=]\s*['"]?([^\s'")]{4,})['"]?/gi,
     valueGroup: 2,
     describe: 'Possible hardcoded password',
   },
@@ -79,6 +85,16 @@ const VALUE_RULES = [
     pattern: /\b(AKIA[0-9A-Z]{16})\b/g,
     valueGroup: 1,
     describe: 'AWS access key ID pattern',
+  },
+  {
+    // Google API key shape (AIza + 35 chars). Catches the value even when the
+    // LHS variable name is unrecognized (e.g. `maps_cred=AIza...`). No trailing
+    // \b — the char class includes `-`/`_`, which are non-word chars, so a \b
+    // after a key ending in one would fail to match.
+    id: 'google-api-key',
+    pattern: /\b(AIza[0-9A-Za-z_\-]{35})/g,
+    valueGroup: 1,
+    describe: 'Google API key pattern',
   },
 ];
 
