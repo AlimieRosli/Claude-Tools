@@ -29,7 +29,7 @@ disable-model-invocation: true
 
 This node is **main-doc specific**. Plan and test docs have their own concerns (implementation detail, security/OWASP for plan docs) and are verified by their own verifier nodes — do not apply this checklist to them.
 
-The deterministic structural rules (TOC sync, dangling doc links, secrets) may be enforced by gates in the adopting repo's `.claude/hooks/` (if present — check before relying on them) — this node **references** those rather than re-running them (see Step 7).
+The deterministic structural rules (TOC sync, dangling doc links, secrets) may be enforced by the plugin's deterministic gates (adopted when the repo has a `.claude/hooks.config.json` — check before relying on them) — this node **references** those rather than re-running them (see Step 7).
 
 ---
 
@@ -43,7 +43,7 @@ The deterministic structural rules (TOC sync, dangling doc links, secrets) may b
 **Do NOT use this skill when:**
 - You need to verify a plan doc or test doc — those have their own verifiers (e.g. `plan-doc-verify` / `topic-test`, if present in the adopting repo).
 - You need to tighten prose — use `doc-conciseness-review` instead (if present in the adopting repo).
-- You need to fix a hook-gate failure — use a hook-fixing workflow instead, if the adopting repo provides one (see its `.claude/hooks/`).
+- You need to fix a hook-gate failure — use `/dev-workflow:hook-fix` (the plugin's hook-fixing workflow).
 
 ---
 
@@ -126,7 +126,7 @@ Check the main-doc-specific structural rules from [`${CLAUDE_PLUGIN_ROOT}/skills
 
 ## Step 7 — Confirm Deterministic Hooks
 
-The structural rules below **may be enforced mechanically by deterministic gates in the adopting repo's `.claude/hooks/`** — check whether they exist before relying on them. If they exist, do not re-run them; just confirm they apply (a hook watcher / save-time check covers them):
+The structural rules below **may be enforced mechanically by the plugin's deterministic gates** (adopted via the repo's `.claude/hooks.config.json`) — check whether the repo has adopted before relying on them. If they exist, do not re-run them; just confirm they apply (a hook watcher / save-time check covers them):
 
 - **TOC sync** — `toc-sync` gate
 - **No dangling doc links** — `doc-reference-gate` gate

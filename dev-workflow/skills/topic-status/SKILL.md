@@ -168,5 +168,5 @@ Present a concise status report:
 - **Always name the specific model** — never say "use the default model" or "use the current agent". State the model name + provider priority from §11 of the adopting repo's principles doc (if present — adapt as needed).
 - **NEG-before-fix is mandatory for bug fixes** — never recommend starting implementation before NEG pre-fix tests are recorded. The correct order is: SMK → NEG pre-fix → `/topic-implement` → NEG post-fix → Positive. If the test doc exists but NEG pre-fix has no result, the next step is "run NEG pre-fix", NOT "start implementation".
 - **No tests between implementation phases** — when implementation is in progress (phases ☐ or 🔄), the next step is always "continue/next phase via `/topic-implement`", never "run tests". All implementation phases must be completed before running post-implementation tests (NEG post-fix, Positive, REG).
-- **Deterministic doc gates may exist in the adopting repo's `.claude/hooks/`** — check before relying on them; do not assume gates are present in every adopting repo.
+- **Deterministic doc gates ship with the plugin** but apply only in repos that adopted them (a `.claude/hooks.config.json` in the repo root) — check before relying on them.
 - If the topic folder doesn't exist or has no main doc, stop and tell the user — do not proceed.

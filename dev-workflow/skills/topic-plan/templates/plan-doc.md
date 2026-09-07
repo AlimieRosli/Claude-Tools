@@ -212,7 +212,7 @@
 
 **Steps:**
 - [ ] Update each affected section listed above to reflect the new code — match the existing doc's style, heading levels, and Table of Contents.
-- [ ] If the API reference was impacted, ensure its Table of Contents stays in sync (a TOC-sync gate may exist in the adopting repo's `.claude/hooks/` — check before relying on it).
+- [ ] If the API reference was impacted, ensure its Table of Contents stays in sync (the plugin's `toc-sync` gate enforces this when the repo has adopted the hooks — check before relying on it).
 - [ ] Re-read every changed section against the actual source to confirm no drift — file paths, function names, endpoints, route prefixes, and config keys must match the code.
 
 **Done When:**
@@ -261,7 +261,7 @@
 ---
 ## Open Questions
 
-**Required.** Any assumption, missing detail, unclear behavior, or unresolved decision the AI encountered while writing this plan must be listed here — never guess or silently fill in an answer. **All open questions must be resolved before proceeding to execution or creating the test doc.** The `open-questions-gate` hook enforces this — a deterministic gate may exist in the adopting repo's `.claude/hooks/` (check before relying on it); the convention stands regardless: if any question has Status `Open`, execution phases (Phase 1+) and test doc creation are blocked.
+**Required.** Any assumption, missing detail, unclear behavior, or unresolved decision the AI encountered while writing this plan must be listed here — never guess or silently fill in an answer. **All open questions must be resolved before proceeding to execution or creating the test doc.** The `open-questions-gate` hook enforces this — it ships with the plugin and applies when the repo has adopted the hooks (a `.claude/hooks.config.json` in the repo root; check before relying on it); the convention stands regardless: if any question has Status `Open`, execution phases (Phase 1+) and test doc creation are blocked.
 
 <!-- Completed topic not being backfilled with an Open Questions section? See "Opt-out for topics with no open questions to track" in ${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/rules/topic-plan-doc-writing.md to exempt this doc from the open-questions-gate. Delete this comment once resolved. -->
 

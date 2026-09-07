@@ -55,7 +55,7 @@ The doc is written for a human reader, not an LLM. Flag as FAIL (with the offend
 
 ### 7. Deterministic Hooks (reference, don't re-run)
 
-The following **may be enforced mechanically by gates in the adopting repo's `.claude/hooks/`** — check whether they exist before relying on them. The verifier confirms they apply but does not duplicate their logic; if the repo has no such hooks, run these checks manually as part of this verification:
+The following **may be enforced mechanically by the plugin's deterministic gates** (they apply when the repo has adopted the hooks — a `.claude/hooks.config.json` in the repo root; check before relying on them). The verifier confirms they apply but does not duplicate their logic; if the repo has no such hooks, run these checks manually as part of this verification:
 
 - **TOC sync** — `toc-sync` gate
 - **No dangling doc links** — `doc-reference-gate` gate

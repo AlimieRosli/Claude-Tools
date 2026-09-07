@@ -38,7 +38,7 @@ A design-level review of the *planned* changes (before code exists). Check the p
 - **Injection surface** — no concatenation of user input into database queries or external API URLs; aggregation operators do not take raw user input.
 - **PII / secret logging** — no logging of tokens, passwords, keys, or PII outside the repo's redaction config; error responses do not leak internals (stack traces, config values, connection strings).
 - **External data egress** — new outbound calls send only required data; no over-sharing of user PII to third parties.
-- **Secrets in docs** — no real connection info/credentials in the plan doc (placeholders only — see the `<UPPER_SNAKE_CASE>` placeholder convention). (A `secret-scan` gate in the adopting repo's `.claude/hooks/` backstops this, if present — see check 7.)
+- **Secrets in docs** — no real connection info/credentials in the plan doc (placeholders only — see the `<UPPER_SNAKE_CASE>` placeholder convention). (The plugin's `secret-scan` gate backstops this when the repo has adopted the hooks — see check 7.)
 
 This is design-level: flag the concern and the mitigation the plan needs. It is not a code-level exploit audit (that is `/security-review`, after coding).
 
@@ -65,7 +65,7 @@ Check against the adopting repo's branch & commit strategy (see `${CLAUDE_PLUGIN
 
 ### 7. Deterministic Gates (reference, don't re-run)
 
-The following may be enforced mechanically by gates in the adopting repo's `.claude/hooks/` (if present — check before relying on them) — the verifier confirms they apply but does not duplicate their logic:
+The following may be enforced mechanically by the plugin's gates (they apply when the repo has adopted the hooks via a `.claude/hooks.config.json` in the repo root — check before relying on them) — the verifier confirms they apply but does not duplicate their logic:
 
 - **TOC sync** — `toc-sync` gate (if present)
 - **Open questions resolved** — `open-questions-gate` gate (if present; all plan-doc open questions `✅ Resolved` before execution or test doc creation)

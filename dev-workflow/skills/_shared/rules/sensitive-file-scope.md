@@ -26,7 +26,7 @@ Sensitive files (gitignored env files, credentials, keys) exist so the **human**
   - *Writing a doc or command* → use the placeholder name and its dummy value from the reference doc.
   - *Running a test that needs env values* → use the dummy/placeholder values from the reference doc. The human sets real values in the actual environment (env file, profile file, secret store — stack-dependent); the AI never needs to see them.
 - **Value not in the reference doc?** Do not hunt for it in sensitive files. Ask the human to add it to the reference doc (placeholder name + dummy value), or mark `<!-- TODO: confirm -->` in the doc and list it in Open Questions.
-- **Real values stay out of committed docs** — topic docs use the `<UPPER_SNAKE_CASE>` placeholder convention only (see the existing env-scope/secret-scan rules and the deterministic `check-env-scope.js` / `secret-scan` gates in the adopting repo's `.claude/hooks/`, if present — check before relying on them).
+- **Real values stay out of committed docs** — topic docs use the `<UPPER_SNAKE_CASE>` placeholder convention only (see the existing env-scope/secret-scan rules and the plugin's deterministic `env-scope` / `secret-scan` gates, which apply when the repo has adopted the hooks — a `.claude/hooks.config.json` in the repo root).
 
 ## Enforcement
 

@@ -9,7 +9,7 @@ Follow the [Shared: Topic Doc Writing Conventions](`${CLAUDE_PLUGIN_ROOT}/skills
 - Execute phases in the plan doc's recorded order — Phase 0 (Prerequisites & Setup) → implementation phases → the fixed **Documentation Update** phase → the final **Testing & Validation** phase. Never skip, reorder, or merge phases without the human's explicit approval and a plan-doc update recording the change.
 - Follow each phase's **Steps 1-by-1** as written. Each step names the file + function to touch and what to do — complete one step before the next.
 - Verify the phase's **Done When** before marking it complete — it is a verifiable outcome, not a vague "it works". If it cannot be verified, the phase is not complete. If the phase goes wrong, execute its **Rollback** plan.
-- All plan open questions must be `✅ Resolved` before any Phase 1+ execution (the open-questions gate — see the plan-doc rules; a deterministic gate may exist in the adopting repo's `.claude/hooks/` — check before relying on it).
+- All plan open questions must be `✅ Resolved` before any Phase 1+ execution (the open-questions gate — see the plan-doc rules; the plugin's `open-questions-gate` enforces this deterministically when the repo has adopted the hooks — a `.claude/hooks.config.json` in the repo root — check before relying on it).
 
 ## Progress Sync After Every Phase
 

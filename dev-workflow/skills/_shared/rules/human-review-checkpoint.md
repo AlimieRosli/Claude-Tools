@@ -100,7 +100,7 @@ The checkpoint is a **decision surface, not a report**. The human must be able t
 ## What This Is Not
 
 - **Not a code review.** The AI has already explored the codebase. This is about human understanding and ownership.
-- **Not a doc formatting review.** Deterministic gates (e.g. in the adopting repo's `.claude/hooks/`, if present — check before relying on them) handle formatting (TOC sync, secret scan). This is about content accuracy.
+- **Not a doc formatting review.** Deterministic gates (the plugin's hooks system — applies when the repo has adopted it via a `.claude/hooks.config.json` in the repo root; check before relying on them) handle formatting (TOC sync, secret scan). This is about content accuracy.
 - **Not optional.** Even for simple topics, the checkpoint runs. The table may be short, but it still runs.
 - **Not a replacement for any hook/gate system.** Deterministic gates enforce structural rules mechanically. The checkpoint enforces human understanding — they are complementary.
 

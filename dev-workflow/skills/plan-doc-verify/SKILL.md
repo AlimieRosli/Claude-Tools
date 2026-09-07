@@ -32,7 +32,7 @@ This node is **plan-doc specific**. Main docs are verified by `main-doc-verify`;
 
 The security check here is a **design-level review of the planned changes** (input validation, auth guards, injection surface, PII/secret logging). It is complementary to, not a replacement for, the `/security-review` skill, which reviews the **actual diff** after code is written — this node runs before coding, that one runs after.
 
-The deterministic structural rules (TOC sync, open-questions gate, dangling doc links, secrets) may already be enforced by gates in the adopting repo's `.claude/hooks/` (if present — check before relying on them) — this node **references** those rather than re-running them (see Step 8).
+The deterministic structural rules (TOC sync, open-questions gate, dangling doc links, secrets) may already be enforced by the plugin's deterministic gates (adopted when the repo has a `.claude/hooks.config.json` — check before relying on them) — this node **references** those rather than re-running them (see Step 8).
 
 *Adapt paths, conventions, and commands to your repository's actual layout and tooling.*
 
@@ -107,7 +107,7 @@ This is a **design-level** review of the *planned* changes — it runs before co
 - **Injection surface** — query/params are not concatenated into database queries or external API URLs; aggregation operators do not take raw user input.
 - **PII / secret logging** — the plan does not introduce logging of tokens, passwords, keys, or PII outside the repo's redaction config; error responses do not leak internals (stack traces, config values, connection strings).
 - **External data egress** — new outbound calls (third-party APIs, caches) send only required data; no over-sharing of user PII to third parties.
-- **Secrets in docs** — no real connection info / credentials in the plan doc (placeholders only — see the `<UPPER_SNAKE_CASE>` placeholder convention). (A `secret-scan` gate in the adopting repo's `.claude/hooks/` backstops this, if present — see Step 8.)
+- **Secrets in docs** — no real connection info / credentials in the plan doc (placeholders only — see the `<UPPER_SNAKE_CASE>` placeholder convention). (The plugin's `secret-scan` gate backstops this when the repo has adopted the hooks — see Step 8.)
 
 **Fail** if any planned change introduces an unaddressed security/OWASP concern. Note: this is design-level — flag the concern and the mitigation the plan needs, it is not a code-level exploit audit.
 
@@ -150,7 +150,7 @@ Read [`${CLAUDE_PLUGIN_ROOT}/docs/TOPIC_WORKFLOW_GUIDE.md`](${CLAUDE_PLUGIN_ROOT
 
 ## Step 8 — Confirm Deterministic Gates
 
-The structural rules below may be enforced mechanically by gates in the adopting repo's `.claude/hooks/` (if present — check before relying on them) — **do not re-run them**, just confirm they apply (a hook watcher, if configured, covers them on save):
+The structural rules below may be enforced mechanically by the plugin's gates (adopted when the repo has a `.claude/hooks.config.json` — check before relying on them) — **do not re-run them**, just confirm they apply (a hook watcher, if configured, covers them on save):
 
 - **TOC sync** — `toc-sync` gate (if present)
 - **Open questions resolved** — `open-questions-gate` gate (if present; all plan-doc open questions must be `✅ Resolved` before execution or test doc creation)

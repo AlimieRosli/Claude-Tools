@@ -52,7 +52,7 @@ This workflow is modeled as a **state graph**: **nodes** (the discrete steps of 
 | **Skill** | A Claude Code slash-command procedure (`${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md`) — the canonical, detailed procedure | `/topic-init`, `/main-doc-verify` |
 | **Agent** | A VS Code Copilot custom agent (`.github/agents/<name>.agent.md`, if the adopting repo uses one) — the **same procedure** as the skill, invoked differently | `topic-init` agent, `main-doc-verify` agent |
 | **Rule** | A shared or per-skill rule file (`${CLAUDE_PLUGIN_ROOT}/skills/**/rules/*.md`) that the skill/agent follows | `topic-main-doc-writing.md`, `topic-doc-writing-conventions.md` |
-| **Hook** | A deterministic (no-LLM) gate/transform that mechanically enforces a rule — such gates may exist in the adopting repo's `.claude/hooks/` (check before relying on them) | `toc-sync`, `doc-reference-gate`, `secret-scan` |
+| **Hook** | A deterministic (no-LLM) gate/transform that mechanically enforces a rule — such gates ship with the plugin's `hooks/` system and apply when the repo has adopted them (a `.claude/hooks.config.json` in the repo root; check before relying on them) | `toc-sync`, `doc-reference-gate`, `secret-scan` |
 | **Template** | A first-time-write skeleton (`${CLAUDE_PLUGIN_ROOT}/skills/<name>/templates/*.md`) | `main-doc.md`, `plan-doc.md`, `test-doc.md` |
 
 ### Claude Code vs VS Code — same concept, different harness
@@ -203,7 +203,7 @@ Instead of asking "is this a bugfix or a feature?", ask these questions to deter
 
 Shared code paths = shared middleware/helper/util/config directories (e.g. `server/middleware/`, `server/helpers/`, `server/utils/`, `config/` in an Express.js-style backend — *adapt to your repo's layout*), or any file imported by 2+ modules.
 
-- **Yes** → Write the main doc + test doc with **REG (regression) cases**. The regression gate (if present in the adopting repo's `.claude/hooks/`) will enforce this. This is where silent breakage happens.
+- **Yes** → Write the main doc + test doc with **REG (regression) cases**. The plugin's `regression-gate` enforces this when the repo has adopted the hooks. This is where silent breakage happens.
 - **No** → Regression testing is optional. Focus on the specific module's behavior.
 
 ### 4. Is the requirement unclear or could it change?
@@ -268,13 +268,13 @@ flowchart TD
 
 **How it's recorded:** The test doc includes a `## Staging Post-Deploy Verification` section with `STG-###` cases. Each case targets the staging URL explicitly (`<STG_GATEWAY_URL>/<gateway-prefix>/api/...` — placeholders use the `<UPPER_SNAKE_CASE>` convention; e.g. `<STG_GATEWAY_URL>/cr/api/...` in an environment that routes through a `/cr` prefix — plus any required auth headers, e.g. `X-User-Role`) and records a `**Result:**` line after the staging run. The plan doc's Deployment Status table marks STG as Deployed, which is the trigger to run these cases.
 
-**Enforcement:** This is currently **LLM-enforced** (a `topic-test` rule) — there is **no deterministic gate** for it in the plugin. The `topic-test` skill instructs the model to generate the `STG-` section when the classification requires it and the topic is deployed to STG. If you want a mechanical backstop later, add a `check-staging-gate.js` hook to the adopting repo's `.claude/hooks/` (mirroring the regression gate) that reads the plan doc's Deployment Status and requires a `STG-` section when STG is Deployed.
+**Enforcement:** This is currently **LLM-enforced** (a `topic-test` rule) — there is **no deterministic gate** for it in the plugin. The `topic-test` skill instructs the model to generate the `STG-` section when the classification requires it and the topic is deployed to STG. If you want a mechanical backstop later, add a gate core to the plugin's `hooks/` registry (via `/dev-workflow:hook-init`, mirroring the regression gate) that reads the plan doc's Deployment Status and requires a `STG-` section when STG is Deployed.
 
 ---
 
 ## Rules, Hooks & Gates Reference
 
-The skills can be backed by deterministic hooks (JavaScript) in the adopting repo's `.claude/hooks/` that enforce specific rules regardless of which agent or human is editing. These are the **backstop** — the skills instruct the LLM to follow rules, but hooks catch violations mechanically. **Check whether these gates exist in the adopting repo before relying on them**; where they are absent, the corresponding rules remain LLM-enforced (best-effort).
+The skills are backed by deterministic hooks (JavaScript) shipped with the plugin's `hooks/` system that enforce specific rules regardless of which agent or human is editing. These are the **backstop** — the skills instruct the LLM to follow rules, but hooks catch violations mechanically. Gates apply only in repos that have **adopted** them (a `.claude/hooks.config.json` in the repo root — check before relying on them); where adoption is absent, the corresponding rules remain LLM-enforced (best-effort).
 
 ### Hooks
 
@@ -423,7 +423,7 @@ It is **main-doc specific** — plan and test docs have their own concerns (impl
 | 3 | No invented metrics — no unverified %/latency/cost numbers stated as fact | `${CLAUDE_PLUGIN_ROOT}/skills/topic-init/rules/topic-main-doc-writing.md` |
 | 4 | Accuracy vs current code — file paths, functions, endpoints, DB/collection names match source | Adopting-repo `AGENTS.md` "docs can drift" guidance (if present) |
 | 5 | Structural — no code blocks, no files-to-modify, §5.5 NFR present, OQ table format | `${CLAUDE_PLUGIN_ROOT}/skills/topic-init/rules/topic-main-doc-writing.md` |
-| 6 | Deterministic gates (TOC, doc-reference, secret-scan) — reference, don't re-run (check whether the adopting repo's `.claude/hooks/` has them) | Hooks |
+| 6 | Deterministic gates (TOC, doc-reference, secret-scan) — reference, don't re-run (check whether the repo has adopted them via a `.claude/hooks.config.json`) | Hooks |
 
 **When to use it:** `topic-init` Step 4 encourages running it before the human review checkpoint (optional, non-blocking). Also use it to re-verify a main doc after edits.
 
@@ -450,7 +450,7 @@ It is **plan-doc specific** — main docs are verified by `main-doc-verify`; tes
 | 4 | Accuracy vs current code — file paths, functions, endpoints, DB/collection names, config keys all match the actual source | Adopting-repo `AGENTS.md` "docs can drift" guidance (if present) |
 | 5 | Rollback, NFR coverage & phasing sanity — each Rollback is executable; main-doc §5.5 NFRs addressed by some phase; phasing order sane; Done-When verifiable | `${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/rules/topic-plan-doc-writing.md`; `${CLAUDE_PLUGIN_ROOT}/skills/topic-init/rules/topic-main-doc-writing.md` (§5.5 NFR) |
 | 6 | Branch & commit hygiene — Conventional Commits, no hashes, `[HOTFIX]` only for hotfixes, one logical change per commit, Deployment Status complete | Branch & Commit Strategy (this guide); `${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/rules/topic-plan-doc-writing.md` |
-| 7 | Deterministic gates (TOC, open-questions-gate, doc-reference, secret-scan) — reference, don't re-run (check whether the adopting repo's `.claude/hooks/` has them) | Hooks |
+| 7 | Deterministic gates (TOC, open-questions-gate, doc-reference, secret-scan) — reference, don't re-run (check whether the repo has adopted them via a `.claude/hooks.config.json`) | Hooks |
 
 **Relationship to `/security-review`:** the security check here is **design-level** — it reviews the *planned* changes before code exists. The built-in `/security-review` skill reviews the **actual diff** after coding. They are complementary: `plan-doc-verify` before coding, `/security-review` after. This node does not duplicate that skill.
 

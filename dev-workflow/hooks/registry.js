@@ -4,12 +4,15 @@
 // two. Both the Claude Code PostToolUse adapter and the shim-launched
 // watcher / on-save adapters read from this registry — no per-surface gate lists.
 //
-// MIGRATION SCOPE: toc-sync (pilot, 2026-09-05) + the four doc-only gates
-// (env-scope, doc-reference-gate, open-questions-gate, secret-scan — 2026-09-07).
-// Still repo-local in ServerJP: neg-flow-gate and regression-gate (they need the
-// per-repo codeGlobs/sharedDirs adoption values wired through lib/project-config.js).
-// The helper-reuse load-time check (registry.validate() in the repo copy) moves
-// when those last two gates migrate.
+// MIGRATION COMPLETE (2026-09-07): all gates are plugin-shipped — toc-sync
+// (pilot, 2026-09-05), the four doc-only gates (env-scope, doc-reference-gate,
+// open-questions-gate, secret-scan — 2026-09-07), and the final pair
+// neg-flow-gate + regression-gate plus the helper-reuse load-time check.
+// neg-flow-gate and regression-gate consume their repo-specific data
+// (codeGlobs / sharedDirs) from the adopting repo's .claude/hooks.config.json
+// via lib/project-config.js — no per-repo values are hardcoded here. The
+// repo-local .claude/hooks/ machinery in adopting repos is retired; the
+// plugin registry + adapters are the only copy.
 //
 // Per-repo adoption is NOT decided here — adapters consult
 // lib/project-config.js (presence of <project>/.claude/hooks.config.json) so a
@@ -30,6 +33,19 @@ const gates = [
     },
   },
   { meta: require('./cores/secret-scan-core').meta, check: require('./cores/secret-scan-core').checkSecretScan },
+  {
+    meta: require('./cores/neg-flow-gate-core').meta,
+    check: (filePath) => {
+      const core = require('./cores/neg-flow-gate-core');
+      // Dispatch on file type: *_PLAN.md edits run the plan check; code-file
+      // edits (per the adopting repo's codeGlobs) run the code-file check that
+      // finds active plans referencing the edited file.
+      return /_PLAN\.md$/i.test(filePath)
+        ? core.checkNegFlowGate(filePath)
+        : core.checkNegFlowGateForCodeFile(filePath);
+    },
+  },
+  { meta: require('./cores/regression-gate-core').meta, check: require('./cores/regression-gate-core').checkRegressionGate },
 ];
 
 // Ordered list of transform cores. Each entry is { meta, apply }; `meta.files`
@@ -42,12 +58,26 @@ const gates = [
 // (e.g. `{ meta, apply }`) when a content-rewriting hook is needed.
 const transforms = [];
 
-// Load-time validation. In the repo-local copy this ran the demoted
-// helper-reuse check over every core; that check migrates with the remaining
-// gates. Until then it is a no-op so the adapter contract (validate() -> string[])
-// stays identical.
+// Load-time validation. Runs the helper-reuse check over every core in cores/
+// (and any other *-core.js there) and returns an array of problem strings.
+// A non-empty result means the hook system itself is misconfigured — the
+// adapters report it loudly rather than silently disabling a gate.
+const path = require('path');
+const fs = require('fs');
+const { checkHelperReuse } = require('./cores/helper-reuse-core');
+
+const CORES_DIR = path.join(__dirname, 'cores');
+
 function validate() {
-  return [];
+  const problems = [];
+  const files = fs.existsSync(CORES_DIR)
+    ? fs.readdirSync(CORES_DIR).filter((f) => f.endsWith('-core.js')).map((f) => path.join(CORES_DIR, f))
+    : [];
+  for (const corePath of files) {
+    const problem = checkHelperReuse(corePath);
+    if (problem) problems.push(problem);
+  }
+  return problems;
 }
 
 module.exports = { gates, transforms, validate };

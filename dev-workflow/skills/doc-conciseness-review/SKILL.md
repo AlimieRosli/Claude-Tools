@@ -60,7 +60,7 @@ Never remove code blocks, tables, links, or TODO markers. Never add claims or nu
 
 ## Step 4 — Verify Nothing Was Lost
 
-Re-check every item from Step 2 is still present. Restore anything missing. Fix the Table of Contents if headings changed. If the adopting repo enforces deterministic doc gates (e.g. in its `.claude/hooks/` — check before relying on them), the TOC-sync rule above is what keeps those gates passing.
+Re-check every item from Step 2 is still present. Restore anything missing. Fix the Table of Contents if headings changed. If the repo adopted the plugin's deterministic doc gates (adoption = a `.claude/hooks.config.json` in the repo root — check before relying on them), the TOC-sync rule above is what keeps those gates passing.
 
 ---
 

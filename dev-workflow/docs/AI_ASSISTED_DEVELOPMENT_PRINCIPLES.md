@@ -85,7 +85,7 @@ Each principle states **why it is needed** (the root failure mode that justifies
 | `topic-plan` Confirm step | **Mandatory post-task reminder** — the AI must tell the human to start a new session for `topic-test` or implementation, and remind them to select the right model. |
 | `topic-test` Confirm step | **Mandatory post-task reminder** — the AI must tell the human to start a new session for test execution or the next workflow step, and remind them to select the right model. |
 | `topic-test` env placeholder policy | Never store real connection info in the test doc — use placeholders (`<LOCAL_API_URL>`) marked `<!-- TODO: confirm -->`. (Placeholders use the `<UPPER_SNAKE_CASE>` convention; the adopting repo keeps real values out of committed docs.) |
-| Env-scope gate (if present) | A deterministic gate may exist in the adopting repo's `.claude/hooks/` — e.g. one that mechanically scans test docs for disallowed environment references (PRD, production, dev). Check before relying on it. |
+| Env-scope gate (if adopted) | The plugin's `env-scope` gate mechanically scans test docs for disallowed environment references (PRD, production, dev), when the repo has adopted the hooks (a `.claude/hooks.config.json` in the repo root). Check before relying on it. |
 | Adopting-repo instructions (`CLAUDE.md`/`AGENTS.md`) documentation standards | External factual claims must carry inline citations; unverifiable claims marked `[UNVERIFIED — needs source]`. Do not invent percentage/metric estimates. |
 
 ---
@@ -130,7 +130,7 @@ Each principle states **why it is needed** (the root failure mode that justifies
 | `topic-plan` Requirement Coverage table | **Required table.** Maps each main-doc §2.1 requirement item to its phase(s) and test case ID(s). Every requirement must have at least one phase and one test case. |
 | `${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-plan-doc-writing.md` | Full enforcement details for the Requirement Coverage table. |
 | `topic-plan` Open Questions gate | All open questions (including requirement ambiguities) must be `✅ Resolved` before execution or test doc creation. |
-| Open-questions gate (if present) | A deterministic gate may exist in the adopting repo's `.claude/hooks/` — e.g. one that mechanically blocks test doc creation if the plan doc has unresolved open questions. Check before relying on it. |
+| Open-questions gate (if adopted) | The plugin's `open-questions-gate` mechanically blocks test doc creation if the plan doc has unresolved open questions, when the repo has adopted the hooks (a `.claude/hooks.config.json` in the repo root). Check before relying on it. |
 | `topic-test` Post-run update | After tests are run, each test case gets a `**Result:**` line (✅ PASS / ❌ FAIL); the plan doc's Progress Tracker is updated. |
 | `topic-plan` Progress Tracker | Each phase has a status (☐ Not Started / 🔄 In Progress / ✅ Complete) and a `Steps` count (`<ticked>/<total>` from that phase's step checkboxes) — phase + step completion visible at a glance, no scrolling. |
 | `topic-test` Test Results Dashboard | Each test doc has a `## Test Results Dashboard` table at the top — one row per case (Status / NEG pre-post-fix results / Last Run) synced with the case's `**Result:**` line in the same edit — pass/fail state visible without scrolling to each case. |
@@ -159,7 +159,7 @@ Each principle states **why it is needed** (the root failure mode that justifies
 | `topic-init` Step 2 — Explore the codebase | Minimum 1 grep + 2 source files read. The AI must ground its writing in real codebase findings, not assumptions. |
 | `topic-plan` Step 3 — Explore the codebase | Deeper exploration: exact functions, line numbers, config keys, call sites. The plan needs implementation-level detail, not guesses. |
 | `topic-test` Step 3 — Explore the codebase | Verification-level detail: exact endpoints, request/response shapes, cache keys, DB collections, error bodies. |
-| Helper-reuse gate (if present) | A deterministic gate may exist in the adopting repo's `.claude/hooks/` — e.g. one that mechanically checks that the plan doc's "Current Code" section references real files before allowing test doc creation. Check before relying on it. |
+| `doc-reference-gate` (if adopted) | The plugin's `doc-reference-gate` mechanically checks that the plan doc's "Current Code" section references real files before allowing test doc creation, when the repo has adopted the hooks (a `.claude/hooks.config.json` in the repo root). Check before relying on it. |
 
 ---
 
@@ -243,9 +243,9 @@ Each principle states **why it is needed** (the root failure mode that justifies
 | Enforcer | What it does |
 |----------|-------------|
 | `topic-test` NEG test cases (required) | Run **before AND after** the fix. Before: captures the bug/original behavior. After: confirms the fix resolves it without breaking the rejection path. |
-| Negative-flow gate (if present) | A deterministic gate may exist in the adopting repo's `.claude/hooks/` — e.g. one that mechanically checks that each `NEG-###` case has BOTH `**Result (pre-fix):**` and `**Result (post-fix):**` lines. One line = incomplete. Check before relying on it. |
+| Negative-flow gate (if adopted) | The plugin's `neg-flow-gate` mechanically checks that each `NEG-###` case has BOTH `**Result (pre-fix):**` and `**Result (post-fix):**` lines (one line = incomplete), when the repo has adopted the hooks (a `.claude/hooks.config.json` in the repo root). Check before relying on it. |
 | `topic-test` REG test cases (conditionally required) | Required when the plan touches shared code paths. Verifies existing endpoints/behavior are unchanged. |
-| Regression gate (if present) | A deterministic gate may exist in the adopting repo's `.claude/hooks/` — e.g. one that checks: if the plan doc's "Current Code" section references files under shared directories, the test doc MUST contain at least one `### REG-###` heading. Check before relying on it. |
+| Regression gate (if adopted) | The plugin's `regression-gate` checks: if the plan doc's "Current Code" section references files under the repo's `sharedDirs`, the test doc MUST contain at least one `### REG-###` heading (applies when the repo has adopted the hooks). Check before relying on it. |
 | `topic-test` side-effect checks | Each test case documents side effects (cache keys, DB documents, logs, external calls) with verification commands. |
 | `topic-test` SMK (Smoke & Sanity) cases | Verify the service boots, core endpoints are reachable, backing stores are connected — baseline health. |
 | `topic-test` PERF cases (optional) | Response time, throughput, latency percentiles with measured metrics and target thresholds. |
@@ -331,7 +331,7 @@ Each principle states **why it is needed** (the root failure mode that justifies
 - Check for **un-sanitized inputs** and missing validation on all user-facing endpoints.
 - Run **secret scanners** (e.g. `gitleaks`, `trufflehog`) to catch API keys, tokens, and credentials before they reach the repo.
 - **Never read sensitive files** (stack-dependent: env/config files, profile files, keys, credentials — even "just to check a value"). All placeholder/env values come from the adopting repo's placeholder reference doc (e.g. `docs/PLACEHOLDER_REFERENCE.md`) — see the plugin's Shared: Sensitive File Scope rule.
-- A deterministic secret-scan gate may exist in the adopting repo's `.claude/hooks/` (e.g. enforcing the "no real secrets in docs" rule repo-wide) — check before relying on it.
+- The plugin's `secret-scan` gate enforces the "no real secrets in docs" rule repo-wide (PostToolUse check + PreToolUse block) when the repo has adopted the hooks — check before relying on it.
 
 **Anti-pattern:** Shipping an endpoint that echoes raw user input into a query without sanitization.
 
@@ -377,7 +377,7 @@ Each principle states **why it is needed** (the root failure mode that justifies
 | `${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-plan-doc-writing.md` | "Reuse Existing Code" rule — grep the repo's helper/utility/service directories for equivalents before specifying new functions. |
 | `topic-init` Step 2 — Explore the codebase | Minimum 2 source files read + 1 grep. The exploration phase naturally surfaces existing helpers and patterns. |
 | Adopting-repo instructions (`CLAUDE.md`/`AGENTS.md`) architecture patterns | Documents existing patterns (e.g. "When adding a new external database, follow the existing pattern...") so the AI knows what to reuse. |
-| Helper-reuse gate (if present) | A deterministic gate may exist in the adopting repo's `.claude/hooks/` — e.g. one that mechanically checks the plan doc's "Current Code" section references real files. Check before relying on it. |
+| `doc-reference-gate` (if adopted) | The plugin's `doc-reference-gate` mechanically checks the plan doc's "Current Code" section references real files, when the repo has adopted the hooks (a `.claude/hooks.config.json` in the repo root). Check before relying on it. |
 | `topic-plan` "Current Code" per phase | Documents the file(s) and function(s) as they exist today, so the implementation matches the existing style. |
 
 ---

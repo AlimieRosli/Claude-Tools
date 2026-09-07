@@ -139,7 +139,7 @@ The **§5.5 Non-Functional Requirements** subsection is required for `Feature` t
 
 This is the **only** doc created by default. Follow the writing rules in [`rules/topic-main-doc-writing.md`](${CLAUDE_PLUGIN_ROOT}/skills/topic-init/rules/topic-main-doc-writing.md) — the file you Read in Mandatory reads #5; do not restate those rules here.
 
-Rule-following here is LLM-enforced (best-effort). If the adopting repo has deterministic gates (e.g. a hook watcher in its `.claude/hooks/` — check before relying on them), those are the deterministic backstop — they do not check the Requirements section itself, but they can catch TOC drift in the doc mechanically, regardless of which editor/agent made the edit.
+Rule-following here is LLM-enforced (best-effort). If the repo has adopted the plugin's deterministic gates (a `.claude/hooks.config.json` in the repo root — check before relying on it), those are the deterministic backstop — they do not check the Requirements section itself, but they can catch TOC drift in the doc mechanically, regardless of which editor/agent made the edit.
 
 ### 3.2 — Update an existing main doc
 
@@ -207,7 +207,7 @@ After creating the file(s), report:
 - Path(s) of file(s) created
 - Any `<!-- TODO -->` items (gaps not found in the codebase)
 - What to run next:
-  - **A hook watcher / deterministic doc gate, if the adopting repo has one** (e.g. a `.claude/hooks/` watcher task in the editor that checks `docs/ref/**/*.md` for TOC sync on every save — check the repo before relying on this) — recommend the user run it now if present. It deterministically (no LLM) catches TOC drift that a rule-following LLM pass could miss. Leave it running in the background while iterating on the doc.
+  - **A hook watcher / deterministic doc gate, if the repo has adopted the plugin's hooks** (adoption = a `.claude/hooks.config.json` in the repo root; an editor watcher task — e.g. the `👁 Run Hook Watcher` VS Code task — checks `docs/ref/**/*.md` for TOC sync on every save — check the repo before relying on this) — recommend the user run it now if present. It deterministically (no LLM) catches TOC drift that a rule-following LLM pass could miss. Leave it running in the background while iterating on the doc.
   - `/topic-plan <module-name> <topic-name>` — to write the implementation plan doc
   - `/topic-test <module-name> <topic-name>` — to write the test cases doc
   - `/doc-conciseness-review <path-to-doc.md>` — to tighten prose before committing

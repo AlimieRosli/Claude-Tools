@@ -223,6 +223,6 @@ After completing all work for this skill, the AI **must** deliver the **per-prom
 - Never run `git commit` / `git push` — the human owns all git operations.
 - Never read sensitive files — env/config values come from the adopting repo's placeholder reference doc.
 - **The session & model reminder (Step 9) is mandatory** — never skip it, even for single-phase runs.
-- Deterministic doc gates may exist in the adopting repo's `.claude/hooks/` — check before relying on them.
+- The plugin's deterministic doc gates apply when the repo has adopted them (a `.claude/hooks.config.json` in the repo root) — check before relying on them.
 
 *Adapt paths/commands to your repository's actual layout and tooling.*
