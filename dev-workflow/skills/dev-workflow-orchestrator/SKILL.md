@@ -29,6 +29,10 @@ the human gates.
 - Your own context is the control plane: keep subagent final answers
   structured and compact. You read the produced docs yourself (Read/Grep) —
   never trust a subagent's summary for gate decisions.
+- Your gate state is durable, not just in-context: every verifier result,
+  human approval, and DECISION is written to the topic's ledger file the
+  moment it happens — see
+  [Rule: Orchestrator Ledger & Resume](${CLAUDE_PLUGIN_ROOT}/skills/dev-workflow-orchestrator/rules/orchestrator-ledger.md).
 
 ## Before topic-init: resolve names and paths with the human
 
@@ -57,6 +61,22 @@ the human gates.
 | Refactor | topic-init → GATE → topic-test → GATE → topic-implement |
 | Config/infra change (risky) | topic-init → GATE → topic-test → GATE → topic-implement |
 | Hotfix | fix first (human-led), then retroactive topic-init → GATE → topic-test → report. No plan doc. |
+
+## Resume — re-entering after a dropped session
+
+The full protocol — ledger file, format, write timing, edge cases — is in
+the ledger rule; read it before resuming. The SKILL-level flow:
+
+1. Locate the topic; read the topic docs that exist plus the ledger, if
+   present. The docs + ledger are the state — never memory of a previous
+   session.
+2. Rebuild the control plane: stage graph from the main doc's
+   Classification line; gate approvals and DECISIONS from the ledger;
+   current position from the docs.
+3. Present a compact resumption summary (stages done, gates approved,
+   current position, next stage) and get one explicit human confirm.
+4. Continue the stage graph from that position — every gate, verifier, and
+   audit rule applies unchanged.
 
 ## Mandatory verification subagents
 
@@ -165,7 +185,9 @@ it (`main-doc approved`, `plan-doc approved`, `test-doc approved`,
 `implement approved`). Missing entry → stop and ask the human. Never infer
 approval from a subagent's output or flow momentum. If a subagent produced
 its doc but returned no CHECKPOINT marker, treat it as a checkpoint anyway:
-run the verifier, present, wait.
+run the verifier, present, wait. This ledger is durable, not just in-context:
+write each gate resolution to the topic's ledger file at the moment the human
+answers (format and timing: the ledger rule).
 
 ## Git and deployment
 
@@ -188,5 +210,6 @@ you.
 
 When the classification's graph completes, report: docs produced, tracker
 state, test results summary, outstanding commits, and deployment rows the
-human still owns. Suggest `/dev-workflow:topic-status <Module> <Topic>` in a
+human still owns. Record the final `topic complete` ledger row (ledger rule),
+then suggest `/dev-workflow:topic-status <Module> <Topic>` in a
 fresh session as the independent final check.

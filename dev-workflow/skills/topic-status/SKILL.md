@@ -52,6 +52,7 @@ Read each of these files with the Read tool at the indicated point. Inline refer
 
 1. BEFORE any step: [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/locate-topic.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/locate-topic.md) — required to resolve `<module>/<topic>` correctly; Step 1 depends on it.
 2. BEFORE Step 2: the topic docs at `docs/ref/<MODULE>/<TOPIC>/` — the main doc (`<PREFIX>.md`) is always required; the plan doc (`<PREFIX>_PLAN.md`) and test doc (`<PREFIX>_TEST.md`) whenever they exist. Steps 3–4 report from these docs; never report a status from a doc you have not Read in this run.
+3. BEFORE Step 4: the **orchestrator ledger** (`<PREFIX>_ORCH.md` in the same folder) — only if it exists. Step 4's Orchestration line reads from it; an absent ledger means the topic was never orchestrated (or no gate was reached yet) — omit the section, never invent one.
 
 ---
 
@@ -79,6 +80,7 @@ Read the docs that exist in the topic folder, in this order (Mandatory reads #2 
 1. **Main doc** (`<PREFIX>.md`) — always required. Extract: Classification, Recommended flow, Current State, Target State, Open Questions (and their status).
 2. **Plan doc** (`<PREFIX>_PLAN.md`) — if it exists. Extract: Progress Tracker (**Status and `Steps` (`<ticked>/<total>`) columns** — the Steps count shows per-phase step completion at a glance), Deployment Status table, Open Questions (and their status), the current/next phase.
 3. **Test doc** (`<PREFIX>_TEST.md`) — if it exists. Extract: the **Test Results Dashboard table** (per-case Status, NEG pre/post-fix results, Last Run) — fall back to per-case `**Result:**` lines only if the dashboard is missing — and overall test status.
+4. **Orchestrator ledger** (`<PREFIX>_ORCH.md`) — if it exists (Mandatory reads #3). Extract: which stages are approved, and whether any gate row is `pending` or `changes requested`. Read-only like the docs — never edit it.
 
 If only the main doc exists, the topic is at the "plan doc" stage. If main + plan exist but no test doc, the topic is at the "test doc" stage. If all three exist, check the Progress Tracker and test results to determine the exact position.
 
@@ -136,6 +138,9 @@ Present a concise status report:
 
 ### Open Questions
 <one line: "All resolved" or "N unresolved — see <doc> §<section>">
+
+### Orchestration
+<only if an orchestrator ledger exists — omit entirely otherwise: one line naming the stages approved so far and any `pending`/`changes requested` gate, plus: if gates are already approved and the flow is mid-graph, recommend resuming via the orchestrator skill instead of running individual skills.>
 
 ### Next Step
 <ONE sentence: which skill to run, which phase to start, which tests to run, or deploy step. Reference the plan doc for details — do NOT restate phase content, code changes, or test flow order here.>
