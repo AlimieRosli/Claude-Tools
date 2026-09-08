@@ -1,7 +1,6 @@
 ---
 description: "Plan Doc Verifier. Verifies a topic plan doc (docs/ref/<module>/<topic>/<PREFIX>_PLAN.md) for correctness, completeness, and soundness against the current codebase — requirements fully covered & traceable, code changes match the adopting repo's coding conventions (feature layering, error handling, logging, reuse/anti-spaghetti), design-level security/OWASP review of the planned changes, every referenced file/function/config key/endpoint/DB name matches the actual source, rollback plausible, NFR coverage, phasing sane, branch & commit hygiene. USE FOR: verifying a plan doc before the human review checkpoint in topic-plan, or re-verifying after edits. INVOKE WITH: /plan-doc-verify <path-to-plan-doc.md>"
 argument-hint: "<path-to-plan-doc.md>"
-disable-model-invocation: true
 ---
 
 # Plan Doc Verify
