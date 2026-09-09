@@ -486,6 +486,7 @@ section{padding:70px 0 24px}
   <div class="navsec">Foundations</div>
   <div class="navitem" data-goto="principles"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 15 8.5 22 9.3l-5 4.9 1.2 7L12 17.8 5.8 21l1.2-7-5-4.9 7-.8z"/></svg>19 Principles<span class="railcount">19</span></div>
   <div class="navitem" data-goto="faq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3m.1 4h.01"/></svg>FAQ & Answers<span class="railcount" id="c-faq"></span></div>
+  <a class="navitem" href="todo.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2.5" width="16" height="19" rx="2.5"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>TODO Board<span class="railcount">6</span></a>
   <div class="footnote">Everything on this page is interconnected — click any card, node, chip or row to see its connections.</div>
 </nav>
 
@@ -499,7 +500,7 @@ section{padding:70px 0 24px}
       <p class="hero-sub">A reusable AI-assisted development workflow for Claude Code. Every piece of work is a <b>topic</b> — documented, planned, tested, and deployed through a <b>state graph of nodes</b>: skills, rules, templates and deterministic gates that scale with risk. This explorer renders every file, rule and transition of the plugin as one interactive map.</p>
       <div class="hero-cta">
         <button class="btn btn-primary" data-goto="workflow">Explore the workflow →</button>
-        <button class="btn btn-ghost" data-goto="skills">Browse 11 skills</button>
+        <button class="btn btn-ghost" data-goto="skills">Browse the skills</button>
         <button class="btn btn-ghost" id="tourBtn">⚡ Quick tour</button>
       </div>
       <div class="hero-stats" id="heroStats"></div>
@@ -585,7 +586,7 @@ section{padding:70px 0 24px}
   <section id="skills">
     <div class="sec-head rv">
       <div class="sec-eyebrow">Executable nodes · skills/</div>
-      <h2 class="sec-title">The <span class="grad-text">11 skills</span></h2>
+      <h2 class="sec-title">The <span class="grad-text">skills</span></h2>
       <p class="sec-sub">Each skill is a slash-command procedure — <span class="mono" style="font-size:12px">/dev-workflow:&lt;name&gt;</span> — and one node of the graph. Filter by role, click for the full step-by-step procedure, gates and connections.</p>
     </div>
     <div class="filter-row rv" id="skillFilters"></div>
@@ -652,7 +653,7 @@ section{padding:70px 0 24px}
   <!-- ============ FILES ============ -->
   <section id="files">
     <div class="sec-head rv">
-      <div class="sec-eyebrow">Every file · 51 and counting</div>
+      <div class="sec-eyebrow">Every file · the full tree</div>
       <h2 class="sec-title">Plugin <span class="grad-text">anatomy</span> — file explorer</h2>
       <p class="sec-sub">The complete tree of <span class="mono" style="font-size:12px">Claude-Tools</span>. Click a file to see its role, its size, and what it connects to.</p>
     </div>
@@ -847,7 +848,18 @@ const SKILLS=[
  checks:['1. Every recorded scope entry now shows the new gitCommitSha; re-pin any stale entry','2. No new scope entries and no casing-duplicate entries \u2014 offer to remove any from the JSON','3. Remind: the update applies only after a fresh chat session (or /reload-plugins in some builds)','4. Compare reported SHA against the plugin repo\u2019s latest commit if asked'],
  gates:['Never pass a scope flag the plugin was not already installed in \u2014 a stray install shadows the real one','Re-pin fallback when update says \u2018already latest\u2019 while repo\u2019s latest commit is newer: uninstall + install at the same scope','Local scope: run from the exact projectPath spelling recorded in the registry','Project scope failing on missing marketplace registration \u2192 point the user at /dev-workflow:workflow-adopt','Other projects\u2019 local entries: list and ask, never touch unprompted'],
  confirm:'Confirm every recorded scope shows the new gitCommitSha; no new or casing-duplicate scopes; remind the update applies only after a fresh chat session.',
- quotes:['\u2018the resolved version is the commit SHA\u2019 \u2014 Step 3','\u2018extra scope entries shadow the real install and go stale\u2019 \u2014 description']}
+ quotes:['\u2018the resolved version is the commit SHA\u2019 \u2014 Step 3','\u2018extra scope entries shadow the real install and go stale\u2019 \u2014 description']},
+
+{id:'todo-board',name:'TODO Board',command:'/dev-workflow:todo-board [verb] [T-XX]',file:'skills/todo-board/SKILL.md',optional:true,
+ tagline:'Maintenance entry point \u2014 logs, works and closes plugin TODO items on the monitor board.',
+ description:'Single entry point for all plugin-maintenance work in the source repo: adds findings to the TODO board (monitor/todo.html) as items, picks items up and performs the plugin change/fix, moves finished items to the Completed Log, parks/unparks, and reports board status. Any request to add, change, fix or extend the plugin starts here.',
+ produces:'Updated monitor/todo.html (item cards, status chips, every count synced) plus the actual plugin-source change for worked items',
+ requires:['monitor/todo.html read end to end before any step','Plugin-maintenance mode (root CLAUDE.md) \u2014 edit dev-workflow/ source and the board only'],
+ steps:[{n:'1',title:'Read the Board',detail:'monitor/todo.html end to end; note next free ID, counts, open items'},{n:'2',title:'Classify the Request',detail:'add / work / done / park / unpark / status; a plugin change without an item becomes add, then work'},{n:'3',title:'Do the Verb',detail:'add: insert OPEN card at the top of the grid; work: flip WIP, change dev-workflow/ source, move to Completed Log with date + resolution; park/unpark: move between sections'},{n:'4',title:'Sync the Board',detail:'Count-sync checklist \u2014 5 hero tiles, flow bar widths + legend, rail counts, next-free-ID, dates, filter chips, prose counts'},{n:'5',title:'Report',detail:'Board state, plugin-source change, self-update re-pin reminder'}],
+ checks:['1. Every edit bumps all count locations \u2014 hero tiles, flow bar, rail counts, next-free-ID, dates, filter chips, prose counts','2. One item = one <article class="item"> with an ID chip, status chip and (open items) priority chip','3. Closed items get a real date and a concrete resolution \u2014 never a bare \u2018done\u2019 when detail exists','4. New node added? \u2192 node registration duties per workflow-self-correct Step 1'],
+ gates:['scope plugin-maintenance \u2014 edit dev-workflow/ source and the board only; never an adopting repo, never docs/ref/ here','Never run git commit / git push \u2014 the human owns git','Changes reach consumer sessions only after push + /dev-workflow:self-update + a fresh session'],
+ confirm:'Board counts synced, plugin-source change reported, self-update re-pin reminder given.',
+ quotes:['\u2018One item = one entry with an ID\u2019 \u2014 board intro','\u2018Statuses: OPEN \u2192 WIP \u2192 DONE (or KIV if parked)\u2019 \u2014 board intro']}
 ];
 
 const RULES=[
@@ -1017,6 +1029,7 @@ const FILES=[
 {path:'dev-workflow/skills/workflow-self-correct/SKILL.md',size:'12.4 KB',kind:'skill',desc:'Meta self-correction node \u2014 consolidates duplicates, keeps one fact in one place, registers new workflow nodes.'},
 {path:'dev-workflow/skills/workflow-adopt/SKILL.md',size:'9.3 KB',kind:'skill',desc:'Repo onboarding \u2014 writes/merges the managed AGENTS.md block; scaffolds when absent; --remove strips it.'},
 {path:'dev-workflow/skills/self-update/SKILL.md',size:'3.5 KB',kind:'skill',desc:'Updates the plugin to the latest marketplace commit SHA; verifies every installed scope moved; re-pins stale scopes.'},
+{path:'dev-workflow/skills/todo-board/SKILL.md',size:'6.2 KB',kind:'skill',desc:'Maintenance entry point — logs, works and closes plugin TODO items on the monitor/todo.html board; syncs all board counts.'},
 {path:'dev-workflow/skills/topic-init/rules/topic-main-doc-writing.md',size:'4.1 KB',kind:'rule',desc:'Main-doc writing rules \u2014 blocking \u00a72 Requirements, no files-to-modify/code blocks, no unverified metrics, OQ table shape, \u00a75.5 NFRs.'},
 {path:'dev-workflow/skills/topic-plan/rules/topic-plan-doc-writing.md',size:'10.9 KB',kind:'rule',desc:'Plan-doc writing rules \u2014 commit hygiene, Action Overview, Reuse Existing Code, Requirement Coverage, Open Questions gate, Documentation Update phase.'},
 {path:'dev-workflow/skills/topic-implement/rules/topic-implementation-execution.md',size:'8.2 KB',kind:'rule',desc:'Implementation execution rules \u2014 plan-order execution, progress sync after every phase, no-tests-between-phases, unit-test timing, Reuse binding, bounded repair, related-doc sync, cleanup sweep.'},
@@ -1407,13 +1420,13 @@ qa.addEventListener('click',e=>{const c=e.target.closest('.qcard');if(!c)return;
 $('#tourBtn').addEventListener('click',()=>{
   goto('workflow',()=>toast('🧭 The state graph — pan, zoom, and trace preset routes'));
   setTimeout(()=>{goto('matrix',()=>toast('📐 Decision matrix — click a row to trace its route'));},2600);
-  setTimeout(()=>{goto('skills',()=>toast('⚡ 11 skills — click any card for its full procedure'));},5200);
+  setTimeout(()=>{goto('skills',()=>toast('⚡ every skill — click any card for its full procedure'));},5200);
   setTimeout(()=>toast('✨ Ctrl+K searches everything. Click anything to see its connections.'),7800);
 });
 
 /* ================= SKILLS / RULES / TEMPLATES / DOCS ================= */
 const SK_COLORS={core:['rgba(139,92,246,.16)','rgba(139,92,246,.4)'],verify:['rgba(244,114,182,.13)','rgba(244,114,182,.4)'],meta:['rgba(45,212,191,.12)','rgba(45,212,191,.4)'],entry:['rgba(34,211,238,.12)','rgba(34,211,238,.4)']};
-function skillKind(s){return s.id==='topic-status'?'entry':(s.id==='doc-conciseness-review'||s.id==='workflow-self-correct'||s.id==='workflow-adopt'||s.id==='self-update')?'meta':(s.id.endsWith('-verify'))?'verify':'core';}
+function skillKind(s){return s.id==='topic-status'?'entry':(s.id==='doc-conciseness-review'||s.id==='workflow-self-correct'||s.id==='workflow-adopt'||s.id==='self-update'||s.id==='todo-board')?'meta':(s.id.endsWith('-verify'))?'verify':'core';}
 const SKILL_FILTERS=[['all','All 11'],['core','Topic docs'],['verify','Verify'],['meta','Meta & upkeep'],['entry','Session entry']];
 function renderSkillGrid(f){
   const g=$('#skillGrid');g.innerHTML='';

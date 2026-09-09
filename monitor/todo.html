@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>dev-workflow · TODO Monitor</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗂️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   dev-workflow · TODO Monitor — monitor/todo.html
+   Single-file board. No build, no deps.
+   MAINTAINED BY: the todo-board skill (/dev-workflow:todo-board) —
+   one item = one <article class="item">; the skill owns the count-sync checklist.
+   ============================================================ */
+:root{
+  --bg0:#04060d; --bg1:#080c18;
+  --surface:rgba(148,163,255,.045); --surface2:rgba(148,163,255,.085);
+  --line:rgba(148,163,255,.12); --line2:rgba(148,163,255,.22);
+  --txt:#edf1ff; --txt2:#a3adc9; --txt3:#5f6a88;
+  --violet:#8b5cf6; --purple:#a78bfa; --cyan:#22d3ee; --blue:#60a5fa;
+  --emerald:#34d399; --amber:#fbbf24; --red:#f87171; --orange:#fb923c; --slate:#94a3b8;
+  --grad:linear-gradient(120deg,#8b5cf6 0%,#6366f1 35%,#22d3ee 100%);
+  --font-d:'Sora',ui-sans-serif,system-ui,sans-serif;
+  --font-b:'Inter',ui-sans-serif,system-ui,sans-serif;
+  --font-m:'JetBrains Mono',ui-monospace,monospace;
+  --r-lg:20px; --r-md:14px;
+  --shadow-1:0 4px 24px rgba(2,4,12,.5);
+  --shadow-2:0 18px 60px rgba(2,4,12,.65);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg0);color:var(--txt);font-family:var(--font-b);font-size:15px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:rgba(139,92,246,.4);color:#fff}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--bg0)}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#2a3354,#1b2240);border-radius:8px;border:2px solid var(--bg0)}
+a{color:var(--cyan);text-decoration:none}
+.mono{font-family:var(--font-m)}
+.grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* ---------- ambient background ---------- */
+#bgfx{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+#bgfx .orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.36;will-change:transform}
+#bgfx .o1{width:640px;height:640px;background:radial-gradient(circle,rgba(99,74,238,.32),transparent 65%);top:-220px;left:-120px;animation:drift1 26s ease-in-out infinite alternate}
+#bgfx .o2{width:560px;height:560px;background:radial-gradient(circle,rgba(14,165,233,.22),transparent 65%);top:8%;right:-180px;animation:drift2 32s ease-in-out infinite alternate}
+#bgfx .o3{width:700px;height:700px;background:radial-gradient(circle,rgba(217,70,170,.13),transparent 65%);bottom:-280px;left:24%;animation:drift3 38s ease-in-out infinite alternate}
+@keyframes drift1{to{transform:translate(90px,70px) scale(1.12)}}
+@keyframes drift2{to{transform:translate(-70px,110px) scale(.92)}}
+@keyframes drift3{to{transform:translate(120px,-60px) scale(1.08)}}
+#bgfx .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(148,163,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(148,163,255,.045) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse 90% 70% at 50% 0%,#000 20%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse 90% 70% at 50% 0%,#000 20%,transparent 75%)}
+
+/* ---------- topbar ---------- */
+#topbar{position:fixed;top:0;left:0;right:0;height:64px;z-index:60;display:flex;align-items:center;gap:16px;padding:0 22px;
+  background:rgba(5,7,15,.72);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+#topbar .brand{display:flex;align-items:center;gap:11px;font-family:var(--font-d);font-weight:700;font-size:15.5px;white-space:nowrap}
+#topbar .brand .logo{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:17px;background:var(--grad);box-shadow:0 4px 18px rgba(99,102,241,.45)}
+#topbar .brand small{display:block;font-family:var(--font-b);font-weight:500;font-size:10.5px;color:var(--txt3);letter-spacing:.6px;text-transform:uppercase}
+#topbar .spacer{flex:1}
+.sync-badge{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:99px;border:1px solid rgba(52,211,153,.3);background:rgba(52,211,153,.08);font-size:11.5px;color:#8ff0cc;font-weight:600;white-space:nowrap}
+.sync-badge .dot{width:7px;height:7px;border-radius:50%;background:var(--emerald);box-shadow:0 0 10px var(--emerald);animation:pulse 2.4s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.ghbtn{display:flex;align-items:center;gap:7px;padding:8px 13px;border-radius:11px;border:1px solid var(--line);background:var(--surface);color:var(--txt2);font-size:12.5px;font-weight:600;transition:.2s;white-space:nowrap}
+.ghbtn:hover{border-color:var(--line2);color:#fff;transform:translateY(-1px)}
+#progress{position:fixed;top:64px;left:0;height:2px;width:0;background:var(--grad);z-index:59;box-shadow:0 0 10px rgba(139,92,246,.6)}
+
+/* ---------- side rail ---------- */
+#rail{position:fixed;top:64px;left:0;bottom:0;width:240px;z-index:50;padding:18px 12px;display:flex;flex-direction:column;gap:3px;
+  background:rgba(6,9,18,.6);backdrop-filter:blur(14px);border-right:1px solid var(--line);overflow-y:auto}
+#rail .navsec{font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:var(--txt3);padding:16px 13px 6px;font-weight:700}
+#rail .navitem{display:flex;align-items:center;gap:12px;padding:10px 13px;border-radius:11px;color:var(--txt2);font-size:13.5px;font-weight:500;transition:.18s;position:relative;white-space:nowrap;border:1px solid transparent}
+#rail .navitem svg{width:18px;height:18px;flex:none;opacity:.75}
+#rail .navitem:hover{color:var(--txt);background:var(--surface)}
+#rail .navitem.active{color:#fff;background:linear-gradient(90deg,rgba(139,92,246,.16),rgba(34,211,238,.07));border-color:rgba(139,92,246,.28)}
+#rail .navitem.active svg{opacity:1;color:var(--purple)}
+#rail .navitem.active::before{content:'';position:absolute;left:-12px;top:20%;bottom:20%;width:3px;border-radius:3px;background:var(--grad)}
+#rail .railcount{margin-left:auto;font-family:var(--font-m);font-size:10px;color:var(--txt3);background:rgba(148,163,255,.07);padding:2px 7px;border-radius:20px;border:1px solid var(--line)}
+#rail .footnote{margin-top:auto;padding:14px 13px 6px;font-size:10.5px;color:var(--txt3);line-height:1.5}
+
+/* ---------- layout ---------- */
+#main{position:relative;z-index:2;margin-left:236px;padding:64px 34px 0}
+section{padding:64px 0 26px;max-width:1100px;margin:0 auto;scroll-margin-top:80px}
+.sec-head{margin-bottom:28px}
+.sec-eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-m);font-size:10.5px;letter-spacing:2.4px;text-transform:uppercase;color:var(--purple);margin-bottom:12px;font-weight:700}
+.sec-eyebrow::before{content:'';width:26px;height:1px;background:var(--grad)}
+.sec-title{font-family:var(--font-d);font-size:clamp(26px,3.4vw,36px);font-weight:800;letter-spacing:-.5px;line-height:1.15}
+.sec-sub{color:var(--txt2);max-width:720px;margin-top:10px;font-size:14.5px}
+.sec-sub b{color:var(--txt);font-weight:600}
+
+/* ---------- hero ---------- */
+#top{padding-top:52px}
+.hero-pill{display:inline-flex;align-items:center;gap:9px;padding:7px 15px;border-radius:99px;border:1px solid rgba(139,92,246,.35);
+  background:linear-gradient(90deg,rgba(139,92,246,.13),rgba(34,211,238,.08));font-size:12px;color:#cfc4ff;font-weight:600;margin-bottom:24px;letter-spacing:.3px}
+.hero-pill .pdot{width:7px;height:7px;border-radius:50%;background:var(--purple);box-shadow:0 0 10px var(--purple);animation:pulse 2s infinite}
+h1.hero-title{font-family:var(--font-d);font-size:clamp(36px,5.4vw,62px);font-weight:800;line-height:1.05;letter-spacing:-1.6px}
+h1 .thin{font-weight:500;color:var(--txt2)}
+.hero-sub{font-size:clamp(14.5px,1.6vw,16.5px);color:var(--txt2);max-width:700px;margin-top:20px;line-height:1.75}
+.hero-sub b{color:#fff;font-weight:600}
+
+/* ---------- hero concept art (overview) ---------- */
+.hero-shell{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(290px,.95fr);gap:44px;align-items:center;position:relative;z-index:2}
+.hero-copy{min-width:0}
+.hero-art{position:relative;border-radius:24px;min-height:360px;overflow:hidden;border:1px solid var(--line2);
+  background:radial-gradient(120% 90% at 50% 0%,rgba(99,102,241,.16),transparent 60%),linear-gradient(180deg,rgba(10,14,30,.55),rgba(4,6,13,.8));
+  box-shadow:var(--shadow-2),inset 0 0 60px rgba(99,102,241,.1)}
+.hero-art::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,6,13,0) 55%,rgba(4,6,13,.55));pointer-events:none}
+.hero-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.hero-scene{position:absolute;top:0;left:0;right:0;height:620px;z-index:-1;pointer-events:none;overflow:hidden;
+  mask-image:linear-gradient(180deg,#000 45%,transparent 98%);-webkit-mask-image:linear-gradient(180deg,#000 45%,transparent 98%)}
+.hero-scene img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;opacity:.42;filter:saturate(1.15)}
+.a-spin{transform-box:fill-box;transform-origin:center;animation:artSpin 32s linear infinite}
+.a-spin-r{transform-box:fill-box;transform-origin:center;animation:artSpin 48s linear infinite reverse}
+.a-float{animation:artFloat 7s ease-in-out infinite}
+.a-float-2{animation:artFloat 9s ease-in-out -2.5s infinite}
+.a-rise{animation:artRise 6s linear infinite}
+.a-tw{animation:twinkle 4.2s ease-in-out infinite}
+.a-ray{animation:rayShift 7s ease-in-out infinite}
+@keyframes artSpin{to{transform:rotate(1turn)}}
+@keyframes artFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes artRise{0%{transform:translateY(16px);opacity:0}25%{opacity:.9}100%{transform:translateY(-30px);opacity:0}}
+@keyframes twinkle{0%,100%{opacity:.2}50%{opacity:.9}}
+@keyframes rayShift{0%,100%{opacity:.1}50%{opacity:.24}}
+@media (prefers-reduced-motion:reduce){.hero-art *,.hero-scene *{animation:none!important}}
+
+/* stat tiles */
+.hero-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:44px}
+.hstat{padding:18px 16px;border-radius:var(--r-md);border:1px solid var(--line);background:var(--surface);position:relative;overflow:hidden;transition:.25s}
+.hstat:hover{transform:translateY(-4px);border-color:var(--line2);box-shadow:var(--shadow-2)}
+.hstat::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad);opacity:0;transition:.25s}
+.hstat:hover::after{opacity:1}
+.hstat .num{font-family:var(--font-d);font-size:28px;font-weight:800;letter-spacing:-1px}
+.hstat .lbl{font-size:10.5px;color:var(--txt2);margin-top:3px;letter-spacing:.5px;font-weight:600}
+.hstat .ic{position:absolute;right:12px;top:12px;font-size:14px;opacity:.6}
+.c-blue{color:var(--blue)} .c-emerald{color:var(--emerald)} .c-slate{color:var(--slate)} .c-red{color:var(--red)} .c-amber{color:var(--amber)}
+
+/* flow bar */
+.flowbar-wrap{margin-top:26px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface);padding:18px 20px}
+.flowbar-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.flowbar-head .t{font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:var(--txt3);font-weight:700}
+.flowbar{height:10px;border-radius:99px;overflow:hidden;display:flex;background:rgba(148,163,255,.06);border:1px solid var(--line)}
+.flowbar span{height:100%;transition:width .8s cubic-bezier(.22,1,.3,1)}
+.fb-open{background:linear-gradient(90deg,#3b82f6,#60a5fa)}
+.fb-kiv{background:linear-gradient(90deg,#475569,#64748b)}
+.fb-done{background:linear-gradient(90deg,#059669,#34d399)}
+.flowbar-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:11px;font-size:11px;color:var(--txt2)}
+.flowbar-legend .li{display:flex;align-items:center;gap:7px}
+.flowbar-legend .sw{width:10px;height:10px;border-radius:4px}
+
+/* chips (status & priority) */
+.chip{display:inline-flex;align-items:center;gap:7px;padding:4px 12px;border-radius:99px;font-size:10.5px;font-weight:700;letter-spacing:1.1px;font-family:var(--font-m);white-space:nowrap}
+.chip .d{width:6px;height:6px;border-radius:50%;flex:none}
+.st-open{color:#93c5fd;background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.32)} .st-open .d{background:var(--blue);box-shadow:0 0 8px var(--blue)}
+.st-wip{color:#fdba74;background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.32)} .st-wip .d{background:var(--orange);box-shadow:0 0 8px var(--orange)}
+.st-done{color:#6ee7b7;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.32)} .st-done .d{background:var(--emerald);box-shadow:0 0 8px var(--emerald)}
+.st-kiv{color:#cbd5e1;background:rgba(148,163,184,.09);border:1px solid rgba(148,163,184,.3)} .st-kiv .d{background:var(--slate)}
+.pr-high{color:#fca5a5;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.32)} .pr-high .d{background:var(--red);box-shadow:0 0 8px var(--red)}
+.pr-med{color:#fde68a;background:rgba(251,191,36,.09);border:1px solid rgba(251,191,36,.3)} .pr-med .d{background:var(--amber);box-shadow:0 0 8px var(--amber)}
+.pr-low{color:#6ee7b7;background:rgba(52,211,153,.09);border:1px solid rgba(52,211,153,.3)} .pr-low .d{background:var(--emerald);box-shadow:0 0 8px var(--emerald)}
+
+/* ---------- item cards ---------- */
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.item{padding:22px;border-radius:var(--r-lg);border:1px solid var(--line);background:var(--surface);position:relative;overflow:hidden;display:flex;flex-direction:column;gap:12px;transition:.24s;scroll-margin-top:96px}
+.item::before{content:'';position:absolute;inset:0;background:radial-gradient(420px 160px at 18% 0%,var(--glow,rgba(139,92,246,.12)),transparent 70%);opacity:.7;pointer-events:none}
+.item:hover{transform:translateY(-4px);border-color:var(--edge,var(--line2));box-shadow:var(--shadow-2)}
+.item.open-item{--glow:rgba(96,165,250,.11);--edge:rgba(96,165,250,.35)}
+.item.wip-item{--glow:rgba(251,146,60,.11);--edge:rgba(251,146,60,.35)}
+.item.kiv-item{--glow:rgba(148,163,184,.09);--edge:rgba(148,163,184,.32)}
+.item.done-item{--glow:rgba(52,211,153,.08);--edge:rgba(52,211,153,.3)}
+.item-top{display:flex;align-items:flex-start;gap:12px;position:relative}
+.iid{font-family:var(--font-m);font-size:11px;font-weight:700;letter-spacing:.5px;color:#d6c9ff;background:rgba(139,92,246,.14);border:1px solid rgba(139,92,246,.38);padding:5px 10px;border-radius:9px;flex:none;margin-top:1px}
+.item h3{font-family:var(--font-d);font-size:15.5px;font-weight:700;line-height:1.3;flex:1;padding-right:4px}
+.badges{display:flex;gap:8px;flex-wrap:wrap;position:relative}
+.item p{font-size:12.8px;color:var(--txt2);line-height:1.65;position:relative}
+.item p b{color:#e2e8ff;font-weight:600}
+.done-when{margin-top:auto;padding:12px 15px;border-radius:11px;border:1px solid rgba(139,92,246,.28);background:rgba(139,92,246,.07);
+  font-size:12.2px;color:var(--txt2);line-height:1.6;position:relative}
+.done-when .dw-tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-m);font-size:9.5px;letter-spacing:1.6px;text-transform:uppercase;color:#c4b5fd;font-weight:700;margin-right:8px}
+.kv-res{padding:12px 15px;border-radius:11px;border:1px solid rgba(52,211,153,.26);background:rgba(52,211,153,.06);font-size:12.2px;color:var(--txt2);line-height:1.65;position:relative}
+.kv-res .dw-tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-m);font-size:9.5px;letter-spacing:1.6px;text-transform:uppercase;color:#6ee7b7;font-weight:700;margin-right:8px}
+code{font-family:var(--font-m);font-size:10.8px;background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.16);padding:2px 7px;border-radius:6px;color:#8fe8f5}
+.datechip{margin-left:auto;font-family:var(--font-m);font-size:10px;color:var(--txt3);display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+
+/* filters */
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.fchip{padding:7px 15px;border-radius:99px;border:1px solid var(--line);font-size:12px;font-weight:600;color:var(--txt2);transition:.16s;background:rgba(10,14,28,.5);cursor:pointer;font-family:var(--font-b)}
+.fchip:hover{color:#fff;border-color:var(--line2)}
+.fchip.on{color:#fff;background:var(--grad);border-color:transparent;box-shadow:0 4px 16px rgba(99,102,241,.35)}
+.fchip .n{font-family:var(--font-m);font-size:9.5px;opacity:.75;margin-left:5px}
+
+/* ---------- intake ---------- */
+.intake-shell{border-radius:var(--r-lg);border:1px dashed rgba(139,92,246,.4);background:rgba(139,92,246,.05);padding:26px}
+.intake-note{font-size:13px;color:var(--txt2);margin-bottom:16px}
+.intake-note b{color:#e2e8ff}
+.tmpl{font-family:var(--font-m);font-size:12.3px;line-height:2;color:var(--txt2);background:rgba(7,10,20,.75);border:1px solid var(--line);border-radius:14px;padding:20px 24px;overflow-x:auto;white-space:pre}
+.tmpl .c1{color:#c4b5fd} .tmpl .c2{color:#8fe8f5} .tmpl .c3{color:var(--txt3)}
+
+/* ---------- footer ---------- */
+footer{margin-left:236px;border-top:1px solid var(--line);padding:36px 34px 44px;position:relative;z-index:2;
+  display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;color:var(--txt3);font-size:12px}
+footer .flinks{display:flex;gap:18px;flex-wrap:wrap}
+
+/* ---------- reveal ---------- */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.22,1,.3,1),transform .7s cubic-bezier(.22,1,.3,1)}
+.rv.in{opacity:1;transform:none}
+
+/* ---------- responsive ---------- */
+@media (max-width:1080px){.grid2{grid-template-columns:1fr}.hero-stats{grid-template-columns:repeat(3,1fr)}.hero-shell{grid-template-columns:1fr;gap:26px}.hero-art{min-height:320px;max-width:560px}.hero-scene{height:440px}}
+@media (max-width:820px){
+  #rail{transform:translateX(-100%);transition:transform .3s}
+  #rail.open{transform:none}
+  #railToggle{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;border:1px solid var(--line);color:var(--txt2);background:none;font-size:16px;cursor:pointer}
+  #main,footer{margin-left:0;padding-left:18px;padding-right:18px}
+  .hero-stats{grid-template-columns:repeat(2,1fr)}
+  .badges .datechip{margin-left:0}
+}
+#railToggle{display:none}
+</style>
+</head>
+<body>
+<div id="bgfx"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="grid"></div></div>
+
+<header id="topbar">
+  <button id="railToggle" title="Menu">☰</button>
+  <div class="brand"><div class="logo">🗂️</div><div>dev-workflow<small>todo monitor</small></div></div>
+  <div class="spacer"></div>
+  <span class="sync-badge"><span class="dot"></span>last updated 2026-09-09</span>
+  <a class="ghbtn" href="index.html">🧭 Explorer</a>
+  <a class="ghbtn" href="https://github.com/AlimieRosli/Claude-Tools" target="_blank" rel="noopener">⭐ GitHub</a>
+  <div id="progress"></div>
+</header>
+
+<nav id="rail">
+  <div class="navsec">Board</div>
+  <div class="navitem" data-goto="top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5 12 3l9 7.5V21H3z"/></svg>Overview<span class="railcount">15</span></div>
+  <div class="navitem" data-goto="open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Open items<span class="railcount">6</span></div>
+  <div class="navitem" data-goto="kiv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>KIV (parked)<span class="railcount">1</span></div>
+  <div class="navitem" data-goto="done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Completed log<span class="railcount">8</span></div>
+  <div class="navitem" data-goto="intake"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>New item intake</div>
+  <div class="footnote">One item = one ID. Move entries down to the Completed Log when done, with the date and how they were resolved.</div>
+</nav>
+
+<main id="main">
+
+  <!-- ============ HERO · concept-art backdrop (overview only) ============ -->
+  <div class="hero-scene" aria-hidden="true">
+    <img src="../assets/images/todo-hero-backdrop.jpg" alt="" loading="eager">
+  </div>
+
+  <!-- ============ HERO ============ -->
+  <section id="top">
+    <div class="hero-shell">
+      <div class="hero-copy">
+        <div class="hero-pill"><span class="pdot"></span>MAINTENANCE BOARD · PLUGIN SOURCE REPO <span class="mono" style="color:#9ff3e6">@claude-tools</span></div>
+        <h1 class="hero-title"><span class="grad-text">TODO</span> <span class="thin">&amp; maintenance log</span></h1>
+        <p class="hero-sub">Everything to <b>do / upgrade / fix</b> in the <b>dev-workflow</b> plugin. One item = one entry with an ID.
+        Statuses flow <span class="chip st-open"><span class="d"></span>OPEN</span> → <span class="chip st-wip"><span class="d"></span>WIP</span> → <span class="chip st-done"><span class="d"></span>DONE</span>, or park as <span class="chip st-kiv"><span class="d"></span>KIV</span>.</p>
+      </div>
+
+      <div class="hero-art" aria-hidden="true">
+        <img src="../assets/images/todo-hero-board.jpg" alt="Holographic kanban board concept art" loading="eager">
+      </div>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hstat"><div class="num c-blue">6</div><div class="lbl">OPEN</div><div class="ic">🔵</div></div>
+      <div class="hstat"><div class="num c-emerald">0</div><div class="lbl">WIP</div><div class="ic">🟠</div></div>
+      <div class="hstat"><div class="num c-slate">1</div><div class="lbl">KIV · PARKED</div><div class="ic">⚪</div></div>
+      <div class="hstat"><div class="num c-emerald">8</div><div class="lbl">DONE</div><div class="ic">🟢</div></div>
+      <div class="hstat"><div class="num c-red">1</div><div class="lbl">HIGH PRIORITY</div><div class="ic">🔥</div></div>
+    </div>
+
+    <div class="flowbar-wrap">
+      <div class="flowbar-head"><span class="t">Pipeline distribution</span><span class="mono" style="font-size:10.5px;color:var(--txt3)">next free ID · T-16</span></div>
+      <div class="flowbar"><span class="fb-open" style="width:40%"></span><span class="fb-kiv" style="width:7%"></span><span class="fb-done" style="width:53%"></span></div>
+      <div class="flowbar-legend">
+        <span class="li"><span class="sw fb-open"></span>Open · 6</span>
+        <span class="li"><span class="sw fb-kiv"></span>Parked · 1</span>
+        <span class="li"><span class="sw fb-done"></span>Done · 8</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ OPEN ITEMS ============ -->
+  <section id="open">
+    <div class="sec-head rv">
+      <div class="sec-eyebrow">Actionable now</div>
+      <h2 class="sec-title">Open <span class="grad-text">items</span></h2>
+      <p class="sec-sub">Six items in flight. <b>T-03 is the only HIGH-priority item</b> — it destroys unrelated Redis state on every test run. Filter by priority:</p>
+    </div>
+    <div class="filter-row rv" id="prFilter">
+      <button class="fchip on" data-pr="all">All<span class="n">6</span></button>
+      <button class="fchip" data-pr="high">HIGH<span class="n">1</span></button>
+      <button class="fchip" data-pr="medium">MEDIUM<span class="n">5</span></button>
+    </div>
+    <div class="grid2" id="openGrid">
+
+      <article class="item open-item rv" data-pr="high" id="t-03">
+        <div class="item-top"><span class="iid">T-03</span><h3>Test isolation: flush only the data under test</h3></div>
+        <div class="badges"><span class="chip st-open"><span class="d"></span>OPEN</span><span class="chip pr-high"><span class="d"></span>HIGH</span></div>
+        <p><b>Problem:</b> running tests currently flushes all Redis data — destroys unrelated state.</p>
+        <p><b>Goal:</b> tests flush only the keys / prefixes related to the data being tested.</p>
+        <div class="done-when"><span class="dw-tag">✓ Done when</span>test skill / setup no longer issues a blanket <code>FLUSH</code>; scoped cleanup documented.</div>
+      </article>
+
+      <article class="item open-item rv" data-pr="medium" id="t-02">
+        <div class="item-top"><span class="iid">T-02</span><h3>HITL explanations: compact, readable, diagrammed</h3></div>
+        <div class="badges"><span class="chip st-open"><span class="d"></span>OPEN</span><span class="chip pr-med"><span class="d"></span>MEDIUM</span></div>
+        <p><b>Goal:</b> every human-approval / HITL moment presents a compact explanation — short, scannable, with a diagram where the flow is non-obvious (mermaid or ASCII).</p>
+        <div class="done-when"><span class="dw-tag">Done when</span>approval gates rendered by orchestrator / topic skills follow a compact format; doc templates updated if needed.</div>
+      </article>
+
+      <article class="item open-item rv" data-pr="medium" id="t-04">
+        <div class="item-top"><span class="iid">T-04</span><h3>Post-implementation hooks-log sweep</h3></div>
+        <div class="badges"><span class="chip st-open"><span class="d"></span>OPEN</span><span class="chip pr-med"><span class="d"></span>MEDIUM</span></div>
+        <p><b>Goal:</b> after all implementation is done, check the hooks logs and (a) auto-fix anything the AI can fix, (b) hand remaining issues to the human <b>with a recommended solution</b>.</p>
+        <div class="done-when"><span class="dw-tag">Done when</span>orchestrator (or a rule) performs this sweep as a finishing step.</div>
+      </article>
+
+      <article class="item open-item rv" data-pr="medium" id="t-05">
+        <div class="item-top"><span class="iid">T-05</span><h3>Infra ownership: AI checks, human runs</h3></div>
+        <div class="badges"><span class="chip st-open"><span class="d"></span>OPEN</span><span class="chip pr-med"><span class="d"></span>MEDIUM</span></div>
+        <p><b>Goal:</b> AI never starts Docker / Redis infra — that stays with the human. AI only: (1) checks whether infra is up, (2) runs tests, (3) reminds the human when infra is down or broken.</p>
+        <p><b>Needs:</b> a standard way to check infra connectivity — one defined command / contract, not ad-hoc checks.</p>
+        <div class="done-when"><span class="dw-tag">Done when</span>skills state the ownership split and use the standard connectivity check.</div>
+      </article>
+
+      <article class="item open-item rv" data-pr="medium" id="t-06">
+        <div class="item-top"><span class="iid">T-06</span><h3>Coding conventions: no long / metadata comments</h3></div>
+        <div class="badges"><span class="chip st-open"><span class="d"></span>OPEN</span><span class="chip pr-med"><span class="d"></span>MEDIUM</span></div>
+        <p><b>Goal:</b> no long comments in code; never leave implementation-tracking comments like <code>// step 3</code> / <code>// phase 2</code>.</p>
+        <p>Best placed as a shared rule so all implement-phase skills enforce it.</p>
+        <div class="done-when"><span class="dw-tag">Done when</span>rule exists (or existing rule extended) and is referenced by <code>topic-implement</code>.</div>
+      </article>
+
+      <article class="item open-item rv" data-pr="medium" id="t-07">
+        <div class="item-top"><span class="iid">T-07</span><h3>Coding quality bar: readable, maintainable, reusable</h3></div>
+        <div class="badges"><span class="chip st-open"><span class="d"></span>OPEN</span><span class="chip pr-med"><span class="d"></span>MEDIUM</span></div>
+        <p><b>Goal:</b> codify the quality bar — easy to read, no spaghetti, extract functions, shared utilities, constants / enums files, proper file split for reuse.</p>
+        <p>Related to <b>T-06</b>; consider one "coding standards" rule covering both.</p>
+        <div class="done-when"><span class="dw-tag">Done when</span>quality bar written as a shared rule enforced in implementation guidance.</div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============ KIV ============ -->
+  <section id="kiv">
+    <div class="sec-head rv">
+      <div class="sec-eyebrow">Parked</div>
+      <h2 class="sec-title">KIV — <span class="grad-text">keep in view</span></h2>
+      <p class="sec-sub">Parked deliberately, with a revisit condition. Not dead — just not now.</p>
+    </div>
+    <div class="grid2" style="grid-template-columns:1fr">
+      <article class="item kiv-item rv" id="t-08">
+        <div class="item-top"><span class="iid">T-08</span><h3>Reusable across harnesses</h3></div>
+        <div class="badges"><span class="chip st-kiv"><span class="d"></span>KIV</span></div>
+        <p><b>Objective:</b> make the workflow / skills reusable outside Claude Code (other AI harnesses).</p>
+        <div class="done-when" style="border-color:rgba(148,163,184,.25);background:rgba(148,163,184,.05)"><span class="dw-tag" style="color:var(--txt3)">Revisit</span>after current skill / phase work settles.</div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ COMPLETED LOG ============ -->
+  <section id="done">
+    <div class="sec-head rv">
+      <div class="sec-eyebrow">Shipped</div>
+      <h2 class="sec-title">Completed <span class="grad-text">log</span></h2>
+      <p class="sec-sub">Same structure as open items — objective plus how it was resolved. Recent first.</p>
+    </div>
+    <div class="grid2" id="doneGrid">
+
+      <article class="item done-item rv in" id="t-15">
+        <div class="item-top"><span class="iid">T-15</span><h3>TODO board: HTML monitor + todo-board skill</h3></div>
+        <div class="badges"><span class="chip st-done"><span class="d"></span>DONE</span><span class="datechip">📅 2026-09-09</span></div>
+        <p><b>Objective:</b> replace the markdown TODO doc with a styled HTML board and a skill that maintains it as the single entry point for plugin-maintenance work.</p>
+        <div class="kv-res"><span class="dw-tag">Resolved</span><code>docs/TODO.md</code> + <code>docs/</code> removed; <code>monitor/todo.html</code> created (stat tiles, flow bar, colored chips, filters); <code>dev-workflow/skills/todo-board/</code> created (scope plugin-maintenance); registered in CLAUDE.md, context-mode.md, plugin.json and the Explorer page.</div>
+      </article>
+
+      <article class="item done-item rv" id="t-01">
+        <div class="item-top"><span class="iid">T-01</span><h3>Runtime log handoff: stop the copy-paste loop</h3></div>
+        <div class="badges"><span class="chip st-done"><span class="d"></span>DONE</span><span class="datechip">📅 2026-09-09</span></div>
+        <p><b>Objective:</b> hand runtime logs from human to AI without the copy-paste loop.</p>
+        <div class="kv-res"><span class="dw-tag">Resolved</span>shared rule <code>dev-workflow/skills/_shared/rules/runtime-log-handoff.md</code> — evidence handed over as a file path the AI reads, never a chat paste; one concrete command per round-trip. Wired into <code>topic-implement</code> (Mandatory read #9) and <code>topic-test</code> (Mandatory read #8); registered in the guide's Shared Rules table. Orchestrator inherits via delegation — no direct reference needed.</div>
+      </article>
+
+      <article class="item done-item rv" id="t-14">
+        <div class="item-top"><span class="iid">T-14</span><h3>Separate project-workflow mode from plugin-maintenance mode</h3></div>
+        <div class="badges"><span class="chip st-done"><span class="d"></span>DONE</span><span class="datechip">📅 2026-09-09</span></div>
+        <p><b>Objective:</b> separate the project-workflow mode from plugin-maintenance mode.</p>
+        <div class="kv-res"><span class="dw-tag">Resolved</span>shared rule <code>_shared/rules/context-mode.md</code> — 4 scopes (project-workflow / consumer-hook-ops / plugin-maintenance / workflow-governance), mode detection, hard boundaries, mode-crossing requests stopped &amp; re-routed. <code>scope:</code> field + leading <code>SCOPE:</code> sentence added to all 15 SKILL.md; orchestrator mode gate before topic-init; root <code>CLAUDE.md</code> declares this repo is the plugin source (topic flow never run here).</div>
+      </article>
+
+      <article class="item done-item rv" id="t-09">
+        <div class="item-top"><span class="iid">T-09</span><h3>Test doc header table for all test-status checks</h3></div>
+        <div class="badges"><span class="chip st-done"><span class="d"></span>DONE</span><span class="datechip">📅 —</span></div>
+        <p><b>Objective:</b> the test doc needs a header table for all test-status checks.</p>
+        <div class="kv-res"><span class="dw-tag">Resolved</span>done.</div>
+      </article>
+
+      <article class="item done-item rv" id="t-10">
+        <div class="item-top"><span class="iid">T-10</span><h3>Move all hooks to the plugin; watcher still works</h3></div>
+        <div class="badges"><span class="chip st-done"><span class="d"></span>DONE</span><span class="datechip">📅 —</span></div>
+        <p><b>Objective:</b> move all hooks to the plugin while the watcher still works.</p>
+        <div class="kv-res"><span class="dw-tag">Resolved</span>done.</div>
+      </article>
+
+      <article class="item done-item rv" id="t-11">
+        <div class="item-top"><span class="iid">T-11</span><h3>Open questions resolved before proceeding on approval</h3></div>
+        <div class="badges"><span class="chip st-done"><span class="d"></span>DONE</span><span class="datechip">📅 —</span></div>
+        <p><b>Objective:</b> on human approval of the main / plan / test doc, all open questions must be resolved (except blockers like "needs test first") — remind the human before proceeding.</p>
+        <div class="kv-res"><span class="dw-tag">Resolved</span>LLM-enforced, no hook.</div>
+      </article>
+
+      <article class="item done-item rv" id="t-12">
+        <div class="item-top"><span class="iid">T-12</span><h3>How to start implementation once all docs approved</h3></div>
+        <div class="badges"><span class="chip st-done"><span class="d"></span>DONE</span><span class="datechip">📅 —</span></div>
+        <p><b>Objective:</b> define how to start implementation once all docs are approved.</p>
+        <div class="kv-res"><span class="dw-tag">Resolved</span>always use <code>topic-implement</code>.</div>
+      </article>
+
+      <article class="item done-item rv" id="t-13">
+        <div class="item-top"><span class="iid">T-13</span><h3>Human-approval check on reading PLACEHOLDER files</h3></div>
+        <div class="badges"><span class="chip st-done"><span class="d"></span>DONE</span><span class="datechip">📅 —</span></div>
+        <p><b>Objective:</b> human-approval check when reading PLACEHOLDER files.</p>
+        <div class="kv-res"><span class="dw-tag">Resolved</span>LLM-enforced.</div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============ INTAKE ============ -->
+  <section id="intake">
+    <div class="sec-head rv">
+      <div class="sec-eyebrow">Triage</div>
+      <h2 class="sec-title">New item <span class="grad-text">intake</span></h2>
+      <p class="sec-sub">Add new findings here, then move them into Open items with an ID. <b>Next free: T-16.</b></p>
+    </div>
+    <div class="intake-shell rv">
+      <p class="intake-note">Copy this skeleton into <b>Open items</b> and fill it in — one item = one ID:</p>
+      <div class="tmpl"><span class="c1">### T-XX — &lt;title&gt;</span>
+
+<span class="c2">- **Status:**</span> OPEN  ·  <span class="c2">**Priority:**</span> HIGH | MEDIUM | LOW
+<span class="c2">- Problem / observation:</span> <span class="c3">&lt;what was observed&gt;</span>
+<span class="c2">- Goal:</span> <span class="c3">&lt;what good looks like&gt;</span>
+<span class="c2">- **Done when:**</span> <span class="c3">&lt;verifiable completion condition&gt;</span></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <span>dev-workflow · TODO monitor · synced 2026-09-09</span>
+  <div class="flinks">
+    <a href="index.html">🧭 Plugin Explorer</a>
+    <a href="https://github.com/AlimieRosli/Claude-Tools" target="_blank" rel="noopener">⭐ GitHub</a>
+  </div>
+</footer>
+
+<script>
+/* scroll progress */
+const prog=document.getElementById('progress');
+addEventListener('scroll',()=>{
+  const h=document.documentElement, max=h.scrollHeight-h.clientHeight;
+  prog.style.width=(max>0?(h.scrollTop/max)*100:0)+'%';
+},{passive:true});
+
+/* reveal on scroll */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.08,rootMargin:'0px 0px -6% 0px'});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+
+/* scroll-spy */
+const navItems=[...document.querySelectorAll('#rail .navitem')];
+const secs=navItems.map(n=>document.getElementById(n.dataset.goto)).filter(Boolean);
+const spy=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting){
+    navItems.forEach(n=>n.classList.toggle('active',n.dataset.goto===e.target.id));
+  }});
+},{rootMargin:'-35% 0px -55% 0px'});
+secs.forEach(s=>spy.observe(s));
+navItems.forEach(n=>n.addEventListener('click',()=>document.getElementById(n.dataset.goto)?.scrollIntoView({behavior:'smooth'})));
+
+/* priority filter on open items */
+const fchips=[...document.querySelectorAll('#prFilter .fchip')];
+const openCards=[...document.querySelectorAll('#openGrid .item')];
+fchips.forEach(c=>c.addEventListener('click',()=>{
+  fchips.forEach(x=>x.classList.toggle('on',x===c));
+  const pr=c.dataset.pr;
+  openCards.forEach(card=>{card.style.display=(pr==='all'||card.dataset.pr===pr)?'':'none'});
+}));
+
+/* mobile rail toggle */
+const rail=document.getElementById('rail');
+document.getElementById('railToggle')?.addEventListener('click',()=>rail.classList.toggle('open'));
+document.querySelectorAll('#rail .navitem').forEach(n=>n.addEventListener('click',()=>rail.classList.remove('open')));
+</script>
+</body>
+</html>

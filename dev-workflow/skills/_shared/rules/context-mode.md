@@ -1,6 +1,6 @@
 # Shared: Context Mode (Scope Separation Between Project Work and Plugin Work)
 
-Used by the orchestrator (mode gate before topic-init) and by every maintenance / governance skill (`hook-fix`, `hook-init`, `self-update`, `workflow-adopt`, `workflow-self-correct`). This is a shared reference file, not a skill itself — it is loaded when linked from a skill's own SKILL.md.
+Used by the orchestrator (mode gate before topic-init) and by every maintenance / governance skill (`hook-fix`, `hook-init`, `self-update`, `todo-board`, `workflow-adopt`, `workflow-self-correct`). This is a shared reference file, not a skill itself — it is loaded when linked from a skill's own SKILL.md.
 
 ## Purpose
 
@@ -14,7 +14,7 @@ Every dev-workflow skill declares exactly one scope in its SKILL.md frontmatter 
 | ----- | ------- | ------ |
 | `project-workflow` | Deliver work in an **adopting repo** through the topic flow — the adopting repo's code and its `docs/ref/` topic docs | orchestrator, `topic-*`, doc verifiers, doc-conciseness-review |
 | `consumer-hook-ops` | Operate the **installed hooks** in an adopting repo — fix gate failures reported there | `hook-fix` |
-| `plugin-maintenance` | Change the **plugin's own source** (skills, rules, hooks cores, registry) in the plugin source repo, or its installed state | `hook-init`, `self-update` |
+| `plugin-maintenance` | Change the **plugin's own source** (skills, rules, hooks cores, registry) in the plugin source repo, or its installed state | `todo-board`, `hook-init`, `self-update` |
 | `workflow-governance` | Maintain **workflow infrastructure** in whichever repo holds it — adoption boilerplate, workflow docs/rules/templates dedup | `workflow-adopt`, `workflow-self-correct` |
 
 ## Detecting the Mode

@@ -28,8 +28,8 @@ requirement (see
   hooks/cores, install state, adoption boilerplate, or its source repo — is
   **plugin-maintenance / workflow-governance**, not project-workflow. Do not
   orchestrate it: no topic-init, no topic docs, no gates. Name the matching
-  maintenance skill (`hook-init`, `self-update`, `workflow-self-correct`,
-  `workflow-adopt`) and stop.
+  maintenance skill (`todo-board`, `hook-init`, `self-update`,
+  `workflow-self-correct`, `workflow-adopt`) and stop.
 - A requirement about the **adopting repo's product code**, delivered through
   the topic flow, is project-workflow — continue below.
 - Genuinely ambiguous → ask the human which mode they mean. Never guess.
