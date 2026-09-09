@@ -1,6 +1,7 @@
 ---
 name: hook-init
-description: "Hook Initializer for the dev-workflow plugin's deterministic hook system. Adds a new hook (gate OR transform) to the plugin's hooks/ registry: classifies the request, greps cores/ + lib/ for an existing core/helper to reuse, writes hooks/cores/<name>-core.js with { meta (incl. files), check|apply, fix? }, adds the registry entry (gates[] or transforms[]), and verifies via validate() + a direct check run. Per-repo data goes through lib/project-config.js, never hardcoded. USE FOR: adding a new hook gate or transform. INVOKE WITH: /dev-workflow:hook-init <HookName> <Description>"
+scope: plugin-maintenance
+description: "SCOPE: plugin-maintenance — adds hooks to the dev-workflow plugin's own source repo; never runs in an adopting repo against project code. Hook Initializer for the dev-workflow plugin's deterministic hook system. Adds a new hook (gate OR transform) to the plugin's hooks/ registry: classifies the request, greps cores/ + lib/ for an existing core/helper to reuse, writes hooks/cores/<name>-core.js with { meta (incl. files), check|apply, fix? }, adds the registry entry (gates[] or transforms[]), and verifies via validate() + a direct check run. Per-repo data goes through lib/project-config.js, never hardcoded. USE FOR: adding a new hook gate or transform. INVOKE WITH: /dev-workflow:hook-init <HookName> <Description>"
 argument-hint: "<HookName> <Description>"
 ---
 

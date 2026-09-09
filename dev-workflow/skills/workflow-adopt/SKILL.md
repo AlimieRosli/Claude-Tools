@@ -1,5 +1,6 @@
 ---
-description: "Onboards an adopting repo to the dev-workflow workflow: writes or merges the standardized topic-workflow section into AGENTS.md (managed anchor block — idempotent, re-runnable), scaffolds AGENTS.md/CLAUDE.md when absent, surfaces conflicts with existing AI-instructions instead of overwriting them, and cleanly removes the managed section on opt-out. USE FOR: setting up a repo to use the dev-workflow skills; syncing an already-adopted repo's boilerplate after a plugin update; removing the workflow integration from a repo. INVOKE WITH: /workflow-adopt [--remove]"
+scope: workflow-governance
+description: "SCOPE: workflow-governance — operates on workflow infrastructure (AGENTS.md/CLAUDE.md boilerplate, hooks config), never on project code or topic content. Onboards an adopting repo to the dev-workflow workflow: writes or merges the standardized topic-workflow section into AGENTS.md (managed anchor block — idempotent, re-runnable), scaffolds AGENTS.md/CLAUDE.md when absent, surfaces conflicts with existing AI-instructions instead of overwriting them, and cleanly removes the managed section on opt-out. USE FOR: setting up a repo to use the dev-workflow skills; syncing an already-adopted repo's boilerplate after a plugin update; removing the workflow integration from a repo. INVOKE WITH: /workflow-adopt [--remove]"
 argument-hint: "[--remove]"
 ---
 

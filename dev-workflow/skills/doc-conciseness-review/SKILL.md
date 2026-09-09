@@ -1,5 +1,6 @@
 ---
-description: "Second-pass conciseness reviewer for topic docs in the adopting repo. Tightens prose without dropping any fact, link, TODO, or number. USE FOR: running right after any topic skill (topic-init, topic-plan, topic-implement, topic-test). INVOKE WITH: /doc-conciseness-review <path-to-doc.md>"
+scope: project-workflow
+description: "SCOPE: project-workflow — tightens a topic doc of an adopting repo, never a dev-workflow plugin source file. Second-pass conciseness reviewer for topic docs in the adopting repo. Tightens prose without dropping any fact, link, TODO, or number. USE FOR: running right after any topic skill (topic-init, topic-plan, topic-implement, topic-test). INVOKE WITH: /doc-conciseness-review <path-to-doc.md>"
 argument-hint: "<path-to-doc.md>"
 disable-model-invocation: true
 ---

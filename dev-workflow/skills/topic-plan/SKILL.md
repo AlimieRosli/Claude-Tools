@@ -1,5 +1,6 @@
 ---
-description: "Topic Plan Doc Owner. Writes and maintains the implementation plan doc for a topic — phases, steps, branch & deployment tracking, commit log, progress tracker, and risks. USE FOR: planning a new feature/fix after the main doc exists; updating an existing plan doc with new commits, deployment status, or phase progress. INVOKE WITH: /topic-plan <module-name> <topic-name>"
+scope: project-workflow
+description: "SCOPE: project-workflow — acts on an adopting repo's code and docs/ref/ topic docs, never on the dev-workflow plugin itself. Topic Plan Doc Owner. Writes and maintains the implementation plan doc for a topic — phases, steps, branch & deployment tracking, commit log, progress tracker, and risks. USE FOR: planning a new feature/fix after the main doc exists; updating an existing plan doc with new commits, deployment status, or phase progress. INVOKE WITH: /topic-plan <module-name> <topic-name>"
 argument-hint: "<ModuleName> <TopicName>"
 ---
 

@@ -1,5 +1,6 @@
 ---
-description: "Topic Documentation Initializer. Writes the main doc for a new module/topic in the target repo. Plan and test docs are NOT created by default — only on request. USE FOR: starting work on a new feature, task, investigation, or fix; bootstrapping a docs/ref/<module>/<topic>/ folder. INVOKE WITH: /topic-init <module-name> <topic-name>"
+scope: project-workflow
+description: "SCOPE: project-workflow — acts on an adopting repo's code and docs/ref/ topic docs, never on the dev-workflow plugin itself. Topic Documentation Initializer. Writes the main doc for a new module/topic in the target repo. Plan and test docs are NOT created by default — only on request. USE FOR: starting work on a new feature, task, investigation, or fix; bootstrapping a docs/ref/<module>/<topic>/ folder. INVOKE WITH: /topic-init <module-name> <topic-name>"
 argument-hint: "<ModuleName> <TopicName>"
 ---
 

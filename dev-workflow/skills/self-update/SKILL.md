@@ -1,6 +1,7 @@
 ---
 name: self-update
-description: "Update the dev-workflow plugin from its marketplace to the latest commit SHA. The plugin manifest deliberately omits `version`, so Claude Code resolves the version from the git commit SHA — `claude plugin update` is SHA-faithful and is the primary tool. Refresh the marketplace clone first, update, then verify every installed scope actually moved to the new SHA (fall back to uninstall+install per stale scope). Never install at a scope that did not already hold the plugin — extra scope entries shadow the real install and go stale, and local-scope keys are raw cwd paths with no Windows drive-letter casing normalization."
+scope: plugin-maintenance
+description: "SCOPE: plugin-maintenance — touches only the plugin's install state, never an adopting repo's project files. Update the dev-workflow plugin from its marketplace to the latest commit SHA. The plugin manifest deliberately omits `version`, so Claude Code resolves the version from the git commit SHA — `claude plugin update` is SHA-faithful and is the primary tool. Refresh the marketplace clone first, update, then verify every installed scope actually moved to the new SHA (fall back to uninstall+install per stale scope). Never install at a scope that did not already hold the plugin — extra scope entries shadow the real install and go stale, and local-scope keys are raw cwd paths with no Windows drive-letter casing normalization."
 ---
 
 ## Step 1 — Refresh the marketplace clone

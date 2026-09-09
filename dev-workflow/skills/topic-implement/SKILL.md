@@ -1,5 +1,6 @@
 ---
-description: "Topic Implementation Executor. Executes a topic's plan doc phase by phase — from the pre-implementation Smoke & Sanity / NEG pre-fix gate through every implementation phase (plan-doc progress updated after each) to the post-implementation test gates and final cleanup — keeping every related doc in sync with what was actually done. Produces no doc of its own: the plan doc is its instruction source and its progress record. USE FOR: implementing a planned topic; resuming an in-progress implementation; executing the plan's Testing & Validation phase. INVOKE WITH: /topic-implement <module-name> <topic-name>"
+scope: project-workflow
+description: "SCOPE: project-workflow — acts on an adopting repo's code and docs/ref/ topic docs, never on the dev-workflow plugin itself. Topic Implementation Executor. Executes a topic's plan doc phase by phase — from the pre-implementation Smoke & Sanity / NEG pre-fix gate through every implementation phase (plan-doc progress updated after each) to the post-implementation test gates and final cleanup — keeping every related doc in sync with what was actually done. Produces no doc of its own: the plan doc is its instruction source and its progress record. USE FOR: implementing a planned topic; resuming an in-progress implementation; executing the plan's Testing & Validation phase. INVOKE WITH: /topic-implement <module-name> <topic-name>"
 argument-hint: "<ModuleName> <TopicName>"
 ---
 
@@ -61,6 +62,7 @@ Read each of these files with the Read tool at the indicated point. Inline refer
 6. BEFORE Step 4: [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md) — the single source of truth for the gate behavior, summary table format, and presentation rules; Step 4 depends on it.
 7. BEFORE delivering the Step 9 reminders: [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md) — the exact text of the per-prompt and per-session discipline rules; Step 9 depends on it.
 8. BEFORE Step 5 (and again before Step 7): [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/temporary-artifacts.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/temporary-artifacts.md) — scratch scripts/generated files go under the repo-root `.ai-tmp/` folder with scoped deletion at task end; Step 5 creates artifacts there, Step 7's cleanup sweep deletes them.
+9. BEFORE requesting runtime evidence from the human (any failure diagnosis in Steps 5–7): [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/runtime-log-handoff.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/runtime-log-handoff.md) — the AI never runs the service; every log/output request is one concrete command whose output lands in a file the AI reads itself — never a chat paste.
 
 ---
 

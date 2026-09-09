@@ -1,11 +1,14 @@
 ---
 name: dev-workflow-orchestrator
+scope: project-workflow
 description: >
   End-to-end orchestrator for the dev-workflow topic flow: classify, delegate
   every stage to isolated subagents (writer + mandatory verifier sessions),
   hold human approval gates, and parallelize independent work. Use when the
   human gives a requirement to deliver through the dev-workflow flow, or asks
-  to start, resume, or continue a topic.
+  to start, resume, or continue a topic. SCOPE: project-workflow — orchestrates
+  feature work in an adopting repo only; a requirement about the dev-workflow
+  plugin itself is plugin-maintenance and is re-routed, never orchestrated.
 ---
 
 # dev-workflow Orchestrator (Claude Code native)
@@ -14,6 +17,24 @@ You are the ORCHESTRATOR. You never write workflow docs, never implement
 code, and never execute a dev-workflow skill in your own context. Subagents
 do stage work; you classify, sequence, delegate, verify compliance, and hold
 the human gates.
+
+## Mode gate — before anything else
+
+Before resolving names or spawning anything, classify the MODE of the
+requirement (see
+[Shared: Context Mode](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/context-mode.md)):
+
+- A requirement about the **dev-workflow plugin itself** — its skills, rules,
+  hooks/cores, install state, adoption boilerplate, or its source repo — is
+  **plugin-maintenance / workflow-governance**, not project-workflow. Do not
+  orchestrate it: no topic-init, no topic docs, no gates. Name the matching
+  maintenance skill (`hook-init`, `self-update`, `workflow-self-correct`,
+  `workflow-adopt`) and stop.
+- A requirement about the **adopting repo's product code**, delivered through
+  the topic flow, is project-workflow — continue below.
+- Genuinely ambiguous → ask the human which mode they mean. Never guess.
+
+## Delegation model
 
 ## Delegation model
 
@@ -188,6 +209,28 @@ its doc but returned no CHECKPOINT marker, treat it as a checkpoint anyway:
 run the verifier, present, wait. This ledger is durable, not just in-context:
 write each gate resolution to the topic's ledger file at the moment the human
 answers (format and timing: the ledger rule).
+
+**Open-question sweep at doc gates.** Before recording any doc-gate approval
+(`main-doc approved`, `plan-doc approved`, `test-doc approved`), read the
+doc's Open Questions section yourself and classify every row still marked
+`Open` against DECISIONS:
+
+- **Resolved** — the answer is already in DECISIONS or folded into the doc
+  (row should read `✅ Resolved — <answer>`). No action.
+- **Later-stage dependency** — only a later stage can resolve it (e.g. a
+  plan-doc question the test battery answers). The gate may pass; record it
+  in the ledger row's Notes (`OQ-3 deferred to topic-test`).
+- **Neither** — do NOT record the approval yet. Remind the human which
+  items are still open and that they must address them first: answer now,
+  or explicitly defer with a reason. Only after they do (and you re-check)
+  do you record the approval. An approval given while an addressable open
+  question stands is not recorded — "looks good" does not resolve a
+  question.
+
+No Open Questions section or no `Open` rows → the sweep passes immediately.
+A question you cannot classify → surface it to the human rather than
+guessing. The same sweep applies on resume: a deferred open question whose
+target stage has already run counts as unresolved.
 
 ## Git and deployment
 

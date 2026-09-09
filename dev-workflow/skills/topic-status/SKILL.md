@@ -1,5 +1,6 @@
 ---
-description: "Topic Status. A lightweight read-only node that reads the topic docs (main/plan/test) and reports where the topic is in the workflow and what the next step is — which skill to run, which phase to implement, which tests to run, or whether to deploy. No docs are created or edited. USE FOR: resuming work after a session break; checking progress before starting a new session; answering 'where are we with this topic and what's next?'. INVOKE WITH: /topic-status <module-name> <topic-name>"
+scope: project-workflow
+description: "SCOPE: project-workflow — acts on an adopting repo's docs/ref/ topic docs, never on the dev-workflow plugin itself. Topic Status. A lightweight read-only node that reads the topic docs (main/plan/test) and reports where the topic is in the workflow and what the next step is — which skill to run, which phase to implement, which tests to run, or whether to deploy. No docs are created or edited. USE FOR: resuming work after a session break; checking progress before starting a new session; answering 'where are we with this topic and what's next?'. INVOKE WITH: /topic-status <module-name> <topic-name>"
 argument-hint: "<ModuleName> <TopicName>"
 ---
 

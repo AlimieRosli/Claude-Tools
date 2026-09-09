@@ -1,6 +1,7 @@
 ---
 name: hook-fix
-description: "Hook Fixer for the dev-workflow plugin's deterministic doc gates. Resolves an issue captured by a hook gate (or transform) and confirms the report goes green. Reads <project>/.claude/hooks/reports/latest.json (or a named gate), locates the failing core in the plugin's hooks/cores/, applies the fix (mechanical or AI-authored), re-runs the check via the user shim. Works in any repo that adopted the hooks via .claude/hooks.config.json. USE FOR: fixing a hook-gate failure. INVOKE WITH: /dev-workflow:hook-fix <GateName | report-file>"
+scope: consumer-hook-ops
+description: "SCOPE: consumer-hook-ops — fixes a hook-gate failure in the repo that adopted the hooks; reads the plugin's cores but never edits them (a broken core is a plugin-maintenance defect — see the context-mode rule). Hook Fixer for the dev-workflow plugin's deterministic doc gates. Resolves an issue captured by a hook gate (or transform) and confirms the report goes green. Reads <project>/.claude/hooks/reports/latest.json (or a named gate), locates the failing core in the plugin's hooks/cores/, applies the fix (mechanical or AI-authored), re-runs the check via the user shim. Works in any repo that adopted the hooks via .claude/hooks.config.json. USE FOR: fixing a hook-gate failure. INVOKE WITH: /dev-workflow:hook-fix <GateName | report-file>"
 argument-hint: "<GateName | report-file>"
 ---
 

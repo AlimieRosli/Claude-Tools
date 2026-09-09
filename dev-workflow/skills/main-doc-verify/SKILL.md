@@ -1,5 +1,6 @@
 ---
-description: "Main Doc Verifier. Verifies a topic main doc (docs/ref/<module>/<topic>/<PREFIX>.md) for correctness, reliability, and accuracy against the current codebase — requirements cited, external claims (pricing/quota/SLA) sourced, no invented metrics, no code blocks, §5.5 NFR present, and every file path/function/endpoint/DB name matches the actual source. USE FOR: verifying a main doc before the human review checkpoint, or re-verifying after edits. INVOKE WITH: /main-doc-verify <path-to-main-doc.md>"
+scope: project-workflow
+description: "SCOPE: project-workflow — verifies a topic doc of an adopting repo, never a dev-workflow plugin source file. Main Doc Verifier. Verifies a topic main doc (docs/ref/<module>/<topic>/<PREFIX>.md) for correctness, reliability, and accuracy against the current codebase — requirements cited, external claims (pricing/quota/SLA) sourced, no invented metrics, no code blocks, §5.5 NFR present, and every file path/function/endpoint/DB name matches the actual source. USE FOR: verifying a main doc before the human review checkpoint, or re-verifying after edits. INVOKE WITH: /main-doc-verify <path-to-main-doc.md>"
 argument-hint: "<path-to-main-doc.md>"
 ---
 

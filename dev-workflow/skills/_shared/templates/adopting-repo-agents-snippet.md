@@ -10,7 +10,7 @@
 
 ### Topic workflow (dev-workflow plugin)
 
-This repo uses the **`dev-workflow` plugin** (Claude Code) for AI-assisted development: topic documentation skills, shared rules, doc templates, and the AI-Assisted Development Principles. The plugin ships **no hooks and no repo files** — everything below is the contract between this repo and the plugin.
+This repo uses the **`dev-workflow` plugin** (Claude Code) for AI-assisted development: topic documentation skills, shared rules, doc templates, and the AI-Assisted Development Principles. The plugin installs **no repo files of its own** — the deterministic hooks are opt-in per repo (see the defensive rule below); everything else below is the contract between this repo and the plugin.
 
 **Invocation** — skills are invoked as namespaced commands:
 
@@ -18,6 +18,7 @@ This repo uses the **`dev-workflow` plugin** (Claude Code) for AI-assisted devel
 - `/dev-workflow:topic-plan` · `/dev-workflow:topic-test` · `/dev-workflow:topic-implement` · `/dev-workflow:topic-status` — plan doc, test doc, plan execution (phase by phase), and progress status
 - `/dev-workflow:main-doc-verify` · `/dev-workflow:plan-doc-verify` — verification passes for main/plan docs
 - `/dev-workflow:doc-conciseness-review <path-to-doc.md>` — second-pass doc tightening
+- `/dev-workflow:hook-fix <GateName | report-file>` — fix a deterministic-gate failure reported in this repo (only meaningful where the hooks are adopted — see the defensive rule below)
 - `/dev-workflow:workflow-self-correct <target>` — de-duplicate the workflow docs
 - `/dev-workflow:workflow-adopt [--remove]` — apply this snippet to the repo (merge/scaffold/sync), or remove the managed section on opt-out
 - `/dev-workflow:self-update` — re-pin the plugin install after its marketplace repo is updated
@@ -39,6 +40,6 @@ This repo uses the **`dev-workflow` plugin** (Claude Code) for AI-assisted devel
 | Main / plan / test doc naming | `<!-- e.g. <PREFIX>.md / <PREFIX>_PLAN.md / <PREFIX>_TEST.md -->` |
 | Default classification overrides | `<!-- e.g. "bug fixes on X always need REG cases", "investigations go to docs/ref/Investigation/" — or 'none' -->` |
 | Deterministic hooks (optional) | `<!-- e.g. '.claude/hooks/ registers TOC-sync, secret-scan, env-scope gates' — or 'none installed; rules are LLM-enforced' -->` |
-| Repo-local skills | `<!-- e.g. '.claude/skills/hook-fix, hook-init' — skills meaningless without local machinery, or 'none' -->` |
+| Repo-local skills | `<!-- e.g. '.claude/skills/<repo-specific skill>' — plugin skills (incl. hook-fix) are already namespaced; never create a repo-local copy of a plugin skill, or 'none' -->` |
 
 **What this repo keeps local vs. what the plugin ships:** any rule, template, or reference doc that is true for every adopting repo belongs to the plugin (propose changes there via `/dev-workflow:workflow-self-correct`); anything true only of this repo belongs in this file or `.claude/`. When the two drift, fix the source — never patch over a plugin rule with a repo-local copy.
