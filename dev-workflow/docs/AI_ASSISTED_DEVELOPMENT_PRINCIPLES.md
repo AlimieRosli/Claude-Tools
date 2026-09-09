@@ -330,12 +330,12 @@ Each principle states **why it is needed** (the root failure mode that justifies
 - Scan for **OWASP Top 10** flaws (injection, XSS, broken auth, etc.) in generated code.
 - Check for **un-sanitized inputs** and missing validation on all user-facing endpoints.
 - Run **secret scanners** (e.g. `gitleaks`, `trufflehog`) to catch API keys, tokens, and credentials before they reach the repo.
-- **Never read sensitive files** (stack-dependent: env/config files, profile files, keys, credentials — even "just to check a value"). All placeholder/env values come from the adopting repo's placeholder reference doc (e.g. `docs/PLACEHOLDER_REFERENCE.md`) — see the plugin's Shared: Sensitive File Scope rule.
+- **Never read sensitive files** (stack-dependent: env/config files, profile files, keys, credentials — even "just to check a value"). All placeholder/env values come from the adopting repo's placeholder reference doc (e.g. `docs/PLACEHOLDER_REFERENCE.md`) — which itself is read only with human approval (a Claude Code `permissions.ask` `Read` rule; see the plugin's Shared: Sensitive File Scope rule).
 - The plugin's `secret-scan` gate enforces the "no real secrets in docs" rule repo-wide (PostToolUse check + PreToolUse block) when the repo has adopted the hooks — check before relying on it.
 
 **Anti-pattern:** Shipping an endpoint that echoes raw user input into a query without sanitization.
 
-**Enforcement:** Secret-scan gate for docs (if present); external scanners (`gitleaks`/`trufflehog`) for code; sensitive-file-scope rule for AI file access — **Hook + external tool + skill rule**.
+**Enforcement:** Secret-scan gate for docs (if present); external scanners (`gitleaks`/`trufflehog`) for code; sensitive-file-scope rule plus Claude Code `permissions.deny` `Read` rules for AI file access — **Hook + permission rules + external tool + skill rule**.
 
 ---
 

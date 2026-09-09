@@ -39,7 +39,7 @@ Fields:
 - **Stage** — the skill that reached a gate (`topic-init`, `main-doc-verify`, `topic-plan`, `topic-test`, `topic-implement`).
 - **Verifier** — the verification node's result for that stage's doc: `PASS` / `FAIL` / `—` (stage has no verifier).
 - **Human Approval** — `approved` / `changes requested` / `pending` (checkpoint presented, human has not answered yet).
-- **Notes** — outstanding commit reminders, explicitly waived gates, anything the next session must know. The human's words that accompany an approval go in DECISIONS, not here.
+- **Notes** — outstanding commit reminders, explicitly waived gates, anything the next session must know. Record open questions allowed past the gate on a later-stage dependency as `<OQ id> deferred to <stage>` (e.g. `OQ-3 deferred to topic-test`) — the [SKILL.md](`${CLAUDE_PLUGIN_ROOT}/skills/dev-workflow-orchestrator/SKILL.md`) open-question sweep relies on this row to re-check them. The human's words that accompany an approval go in DECISIONS, not here.
 - **DECISIONS** — every human decision folded into subagent DECISIONS, appended verbatim, one dated line each. This is the durable DECISIONS source on resume; the orchestrator never re-derives, paraphrases, or softens them.
 
 ## Ledger Writes (when)
