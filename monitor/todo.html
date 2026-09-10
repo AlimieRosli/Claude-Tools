@@ -225,7 +225,7 @@ footer .flinks{display:flex;gap:18px;flex-wrap:wrap}
   <button id="railToggle" title="Menu">☰</button>
   <div class="brand"><div class="logo">🗂️</div><div>dev-workflow<small>todo monitor</small></div></div>
   <div class="spacer"></div>
-  <span class="sync-badge"><span class="dot"></span>last updated 2026-09-09</span>
+  <span class="sync-badge"><span class="dot"></span>last updated 2026-09-10</span>
   <a class="ghbtn" href="index.html">🧭 Explorer</a>
   <a class="ghbtn" href="https://github.com/AlimieRosli/Claude-Tools" target="_blank" rel="noopener">⭐ GitHub</a>
   <div id="progress"></div>
@@ -233,10 +233,10 @@ footer .flinks{display:flex;gap:18px;flex-wrap:wrap}
 
 <nav id="rail">
   <div class="navsec">Board</div>
-  <div class="navitem" data-goto="top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5 12 3l9 7.5V21H3z"/></svg>Overview<span class="railcount">15</span></div>
-  <div class="navitem" data-goto="open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Open items<span class="railcount">6</span></div>
+  <div class="navitem" data-goto="top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5 12 3l9 7.5V21H3z"/></svg>Overview<span class="railcount">16</span></div>
+  <div class="navitem" data-goto="open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Open items<span class="railcount">5</span></div>
   <div class="navitem" data-goto="kiv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>KIV (parked)<span class="railcount">1</span></div>
-  <div class="navitem" data-goto="done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Completed log<span class="railcount">8</span></div>
+  <div class="navitem" data-goto="done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Completed log<span class="railcount">10</span></div>
   <div class="navitem" data-goto="intake"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>New item intake</div>
   <div class="footnote">One item = one ID. Move entries down to the Completed Log when done, with the date and how they were resolved.</div>
 </nav>
@@ -264,20 +264,20 @@ footer .flinks{display:flex;gap:18px;flex-wrap:wrap}
     </div>
 
     <div class="hero-stats">
-      <div class="hstat"><div class="num c-blue">6</div><div class="lbl">OPEN</div><div class="ic">🔵</div></div>
+      <div class="hstat"><div class="num c-blue">5</div><div class="lbl">OPEN</div><div class="ic">🔵</div></div>
       <div class="hstat"><div class="num c-emerald">0</div><div class="lbl">WIP</div><div class="ic">🟠</div></div>
       <div class="hstat"><div class="num c-slate">1</div><div class="lbl">KIV · PARKED</div><div class="ic">⚪</div></div>
-      <div class="hstat"><div class="num c-emerald">8</div><div class="lbl">DONE</div><div class="ic">🟢</div></div>
-      <div class="hstat"><div class="num c-red">1</div><div class="lbl">HIGH PRIORITY</div><div class="ic">🔥</div></div>
+      <div class="hstat"><div class="num c-emerald">10</div><div class="lbl">DONE</div><div class="ic">🟢</div></div>
+      <div class="hstat"><div class="num c-red">0</div><div class="lbl">HIGH PRIORITY</div><div class="ic">🔥</div></div>
     </div>
 
     <div class="flowbar-wrap">
-      <div class="flowbar-head"><span class="t">Pipeline distribution</span><span class="mono" style="font-size:10.5px;color:var(--txt3)">next free ID · T-16</span></div>
-      <div class="flowbar"><span class="fb-open" style="width:40%"></span><span class="fb-kiv" style="width:7%"></span><span class="fb-done" style="width:53%"></span></div>
+      <div class="flowbar-head"><span class="t">Pipeline distribution</span><span class="mono" style="font-size:10.5px;color:var(--txt3)">next free ID · T-17</span></div>
+      <div class="flowbar"><span class="fb-open" style="width:31%"></span><span class="fb-kiv" style="width:6%"></span><span class="fb-done" style="width:63%"></span></div>
       <div class="flowbar-legend">
-        <span class="li"><span class="sw fb-open"></span>Open · 6</span>
+        <span class="li"><span class="sw fb-open"></span>Open · 5</span>
         <span class="li"><span class="sw fb-kiv"></span>Parked · 1</span>
-        <span class="li"><span class="sw fb-done"></span>Done · 8</span>
+        <span class="li"><span class="sw fb-done"></span>Done · 10</span>
       </div>
     </div>
   </section>
@@ -287,21 +287,22 @@ footer .flinks{display:flex;gap:18px;flex-wrap:wrap}
     <div class="sec-head rv">
       <div class="sec-eyebrow">Actionable now</div>
       <h2 class="sec-title">Open <span class="grad-text">items</span></h2>
-      <p class="sec-sub">Six items in flight. <b>T-03 is the only HIGH-priority item</b> — it destroys unrelated Redis state on every test run. Filter by priority:</p>
+      <p class="sec-sub">Five items in flight. <b>No HIGH-priority items open</b> — the biggest is T-16 (stack-aware content layer), a plugin-wide cost refactor. Filter by priority:</p>
     </div>
     <div class="filter-row rv" id="prFilter">
-      <button class="fchip on" data-pr="all">All<span class="n">6</span></button>
-      <button class="fchip" data-pr="high">HIGH<span class="n">1</span></button>
+      <button class="fchip on" data-pr="all">All<span class="n">5</span></button>
+      <button class="fchip" data-pr="high">HIGH<span class="n">0</span></button>
       <button class="fchip" data-pr="medium">MEDIUM<span class="n">5</span></button>
     </div>
     <div class="grid2" id="openGrid">
 
-      <article class="item open-item rv" data-pr="high" id="t-03">
-        <div class="item-top"><span class="iid">T-03</span><h3>Test isolation: flush only the data under test</h3></div>
-        <div class="badges"><span class="chip st-open"><span class="d"></span>OPEN</span><span class="chip pr-high"><span class="d"></span>HIGH</span></div>
-        <p><b>Problem:</b> running tests currently flushes all Redis data — destroys unrelated state.</p>
-        <p><b>Goal:</b> tests flush only the keys / prefixes related to the data being tested.</p>
-        <div class="done-when"><span class="dw-tag">✓ Done when</span>test skill / setup no longer issues a blanket <code>FLUSH</code>; scoped cleanup documented.</div>
+      <article class="item open-item rv" data-pr="medium" id="t-16">
+        <div class="item-top"><span class="iid">T-16</span><h3>Stack-aware content layer</h3></div>
+        <div class="badges"><span class="chip st-open"><span class="d"></span>OPEN</span><span class="chip pr-med"><span class="d"></span>MEDIUM</span></div>
+        <p><b>Problem:</b> templates / rules / skills ship all stack content (Redis, Mongo, gateway…) to every repo — a repo without that tech still pays tokens for it, every session. The audit covers <b>every always-loaded surface</b>: templates, rules, skills, <b>subagent definitions</b> and <b>hooks</b>.</p>
+        <p><b>Goal:</b> core files speak in categories ("the cache", "the database", "the CLI"); per-tech details live in tiny <code>stack-*</code> reference files read only on demand; one stack list per repo, read by skills, hooks and subagents alike.</p>
+        <p><b>Phases:</b> 1 · category-shaped content layer (templates / rules / skills / subagents) → 2 · tiny stack files → 3 · stack list recorded at <code>topic-init</code> → 4 · config-driven hook allowlist. Phases 3–4 wait for a second real stack to appear.</p>
+        <div class="done-when"><span class="dw-tag">Done when</span>the always-loaded layer carries no hard-coded stack content; stack detail loads on demand, guided by the repo's stack list.</div>
       </article>
 
       <article class="item open-item rv" data-pr="medium" id="t-02">
@@ -324,14 +325,6 @@ footer .flinks{display:flex;gap:18px;flex-wrap:wrap}
         <p><b>Goal:</b> AI never starts Docker / Redis infra — that stays with the human. AI only: (1) checks whether infra is up, (2) runs tests, (3) reminds the human when infra is down or broken.</p>
         <p><b>Needs:</b> a standard way to check infra connectivity — one defined command / contract, not ad-hoc checks.</p>
         <div class="done-when"><span class="dw-tag">Done when</span>skills state the ownership split and use the standard connectivity check.</div>
-      </article>
-
-      <article class="item open-item rv" data-pr="medium" id="t-06">
-        <div class="item-top"><span class="iid">T-06</span><h3>Coding conventions: no long / metadata comments</h3></div>
-        <div class="badges"><span class="chip st-open"><span class="d"></span>OPEN</span><span class="chip pr-med"><span class="d"></span>MEDIUM</span></div>
-        <p><b>Goal:</b> no long comments in code; never leave implementation-tracking comments like <code>// step 3</code> / <code>// phase 2</code>.</p>
-        <p>Best placed as a shared rule so all implement-phase skills enforce it.</p>
-        <div class="done-when"><span class="dw-tag">Done when</span>rule exists (or existing rule extended) and is referenced by <code>topic-implement</code>.</div>
       </article>
 
       <article class="item open-item rv" data-pr="medium" id="t-07">
@@ -370,6 +363,20 @@ footer .flinks{display:flex;gap:18px;flex-wrap:wrap}
       <p class="sec-sub">Same structure as open items — objective plus how it was resolved. Recent first.</p>
     </div>
     <div class="grid2" id="doneGrid">
+
+      <article class="item done-item rv in" id="t-03">
+        <div class="item-top"><span class="iid">T-03</span><h3>Test isolation: flush only the data under test</h3></div>
+        <div class="badges"><span class="chip st-done"><span class="d"></span>DONE</span><span class="datechip">📅 2026-09-10</span></div>
+        <p><b>Objective:</b> tests flush only the keys / prefixes related to the data being tested.</p>
+        <div class="kv-res"><span class="dw-tag">Resolved</span>template's two <code>FLUSHDB</code> examples replaced with prefix-scoped deletes (<code>--scan --pattern '&lt;prefix&gt;:*' | xargs DEL</code>) + prohibition note; scoped-cleanup rule added to <code>topic-test</code> rules (Environment Scope) — cleanup deletes only documented keys, blanket wipe prohibited on shared local infra, exception only for a documented dedicated test instance. Written category-shaped (inherits cleanly into T-16 phase 1).</div>
+      </article>
+
+      <article class="item done-item rv in" id="t-06">
+        <div class="item-top"><span class="iid">T-06</span><h3>Coding conventions: no long / metadata comments</h3></div>
+        <div class="badges"><span class="chip st-done"><span class="d"></span>DONE</span><span class="datechip">📅 2026-09-10</span></div>
+        <p><b>Objective:</b> no long comments in code; never leave implementation-tracking comments like <code>// step 3</code> / <code>// phase 2</code>.</p>
+        <div class="kv-res"><span class="dw-tag">Resolved</span>shared rule <code>dev-workflow/skills/_shared/rules/code-comment-style.md</code> — comments explain the code, never the workflow: no phase/step/plan/progress metadata, one short line, no commented-out code or speculative TODOs. Wired into <code>topic-implement</code> (Mandatory read #5, per-phase coding-conventions guidance, Final Cleanup Sweep comment-style check) and registered in the guide's Shared Rules table. T-07 stays open — merge candidate for a wider coding-standards rule.</div>
+      </article>
 
       <article class="item done-item rv in" id="t-15">
         <div class="item-top"><span class="iid">T-15</span><h3>TODO board: HTML monitor + todo-board skill</h3></div>
@@ -435,7 +442,7 @@ footer .flinks{display:flex;gap:18px;flex-wrap:wrap}
     <div class="sec-head rv">
       <div class="sec-eyebrow">Triage</div>
       <h2 class="sec-title">New item <span class="grad-text">intake</span></h2>
-      <p class="sec-sub">Add new findings here, then move them into Open items with an ID. <b>Next free: T-16.</b></p>
+      <p class="sec-sub">Add new findings here, then move them into Open items with an ID. <b>Next free: T-17.</b></p>
     </div>
     <div class="intake-shell rv">
       <p class="intake-note">Copy this skeleton into <b>Open items</b> and fill it in — one item = one ID:</p>
@@ -451,7 +458,7 @@ footer .flinks{display:flex;gap:18px;flex-wrap:wrap}
 </main>
 
 <footer>
-  <span>dev-workflow · TODO monitor · synced 2026-09-09</span>
+  <span>dev-workflow · TODO monitor · synced 2026-09-10</span>
   <div class="flinks">
     <a href="index.html">🧭 Plugin Explorer</a>
     <a href="https://github.com/AlimieRosli/Claude-Tools" target="_blank" rel="noopener">⭐ GitHub</a>

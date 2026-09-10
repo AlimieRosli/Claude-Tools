@@ -49,6 +49,7 @@ Follow the [Shared: Topic Doc Writing Conventions](`${CLAUDE_PLUGIN_ROOT}/skills
 
 - Match the repo's layering and patterns (e.g. endpoint → controller → service in an Express.js-style backend — *adapt to the repo's layout*).
 - Error handling and logging follow [Shared: Error Handling Conventions](`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/error-handling.md`) — every `catch` logs before responding, every error response is returned, guard clauses first; use the repo's structured logger, never `console.log`.
+- Comment style follows [Shared: Code Comment Style](`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/code-comment-style.md`) — comments explain the code, never the workflow: no phase/step/plan/progress metadata in code, keep comments to one short line, no commented-out code or speculative TODOs. The plan doc is the only progress record.
 - **Never read sensitive files** — env/config values come from the adopting repo's placeholder reference doc (see [Shared: Sensitive File Scope](`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/sensitive-file-scope.md`)).
 - **Scratch work has one home** — any throwaway script, generated data file, or probe output the implementation needs goes under the repo-root `.ai-tmp/` folder (see [Shared: Temporary Artifacts & Scratch Work](`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/temporary-artifacts.md`)), never in source directories; delete what the task created when its purpose is served.
 
@@ -65,6 +66,7 @@ Follow the [Shared: Topic Doc Writing Conventions](`${CLAUDE_PLUGIN_ROOT}/skills
 After all phases are ✅ and the post-implementation test gates have run:
 
 - **Remove temporary instrumentation** — debug logs added only for verification, scratch files, commented-out experiments. Production code keeps only the logging the plan specified.
+- **Comment-style sweep** — no workflow-metadata comments survived (phase/step/plan references, progress markers) and no long narrator comments; per [Shared: Code Comment Style](`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/code-comment-style.md`).
 - **Delete `.ai-tmp/` artifacts** — remove everything this topic created under the repo-root `.ai-tmp/` folder (see [Shared: Temporary Artifacts & Scratch Work](`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/temporary-artifacts.md`)), including after a failed run where possible. Scope the deletion to files this task created — never wipe the whole folder blindly.
 - **Resolve every `<!-- TODO: confirm -->`** the implementation was meant to answer; anything still unknown becomes an Open Question in the doc where it was raised.
 - **Doc-sync sweep** — every doc the work touched reflects the final state: plan doc (tracker, Status field, `Last Updated`, deployment as reported), test doc results (per `topic-test`), main doc drift (per `topic-init` update rules).

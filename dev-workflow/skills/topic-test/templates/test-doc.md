@@ -142,8 +142,9 @@ Run this before each **local** test session to restore a clean state (staging is
 
 ```bash
 # --- Cache (Redis example) --- (local only)
-# Flush only the relevant DB (adjust DB number as needed)
-redis-cli -h <LOCAL_REDIS_HOST> -n 0 FLUSHDB
+# Delete ONLY the keys this topic owns — the prefixes documented in the Side-Effects section.
+# NEVER FLUSHDB / FLUSHALL on a shared cache — it wipes unrelated keys (scoped-cleanup rule in the test-doc rules).
+redis-cli -h <LOCAL_REDIS_HOST> --scan --pattern '<prefix>:*' | xargs -r redis-cli -h <LOCAL_REDIS_HOST> DEL
 
 # --- Database (MongoDB example) --- (local only)
 # Drop and re-seed relevant collections
@@ -924,8 +925,8 @@ redis-cli -h <LOCAL_REDIS_HOST> HGET <key> <field>
 # List all keys matching a pattern
 redis-cli -h <LOCAL_REDIS_HOST> KEYS "<prefix>*"
 
-# Flush the relevant DB (reset between tests — local only)
-redis-cli -h <LOCAL_REDIS_HOST> -n 0 FLUSHDB
+# Reset between tests — delete ONLY this topic's documented keys (local only; never FLUSHDB / FLUSHALL)
+redis-cli -h <LOCAL_REDIS_HOST> --scan --pattern '<prefix>:*' | xargs -r redis-cli -h <LOCAL_REDIS_HOST> DEL
 ```
 
 ### Database (MongoDB example)
