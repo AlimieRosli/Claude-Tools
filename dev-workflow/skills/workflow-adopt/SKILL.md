@@ -74,12 +74,13 @@ Check, and record the findings:
 3. **`.claude/settings.json`** — is the `claude-tools` marketplace registered under `extraKnownMarketplaces`? (For team distribution — the plugin being runnable means *your* machine has it; teammates need the project-level registration.)
 4. **Repo layout signals for the adaptation table** — does `docs/` (or a topic-doc tree) exist? What stack/commands (`package.json`, etc.)? Do repo-local hooks or skills exist under `.claude/`?
 5. **Temp-artifact ignore state** — does a repo-root `.gitignore` exist? Does it already ignore `.ai-tmp/` (or a repo-specific equivalent temp folder)? Record for Step 5.
+6. **Branch/deployment declaration** — does `.claude/deploy.yml` (or an equivalent repo-owned convention, e.g. a documented git-flow section) already exist? Record for the adaptation table's "Branch & deployment strategy" row.
 
 ---
 
 ## Step 3 — Resolve the Adaptation Table
 
-The template's adaptation table has fill-in-the-blank rows (doc root, doc naming, classification overrides, deterministic hooks, repo-local skills). For each row:
+The template's adaptation table has fill-in-the-blank rows (doc root, doc naming, classification overrides, deterministic hooks, repo-local skills, branch & deployment strategy). For each row:
 
 - Derive a proposal from the Step 2 survey (e.g. existing `docs/` layout, existing `.claude/hooks/`).
 - Anything you cannot verify from the repo, mark `<!-- TODO: confirm -->` — never guess.
@@ -93,6 +94,7 @@ Before writing, compare the resolved snippet against the repo's existing AI-inst
 
 - The repo already defines its own topic-doc convention (different doc root or naming).
 - The repo states a rule that conflicts with a workflow rule (e.g. different git-ownership or server-startup policy).
+- The repo already documents its own branching/deployment flow — record it in the "Branch & deployment strategy" row (as `.claude/deploy.yml` if the team agrees to one) rather than letting the generic shape silently contradict it.
 - The repo already has a workflow section written by hand (pre-template adoption).
 
 For each conflict, present both sides and ask the human which wins. Record the resolution in the adaptation table's "classification overrides" row (or a dedicated overrides row). **Never silently insert boilerplate that contradicts existing rules** — coexisting contradictory rules are worse than either alone. If the human cannot decide, stop and report; do not write.

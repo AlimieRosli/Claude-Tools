@@ -59,6 +59,7 @@ Read each of these files with the Read tool at the indicated point. Inline refer
 2. BEFORE Step 3 (and again at Step 5): [${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/rules/topic-plan-doc-writing.md](${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/rules/topic-plan-doc-writing.md) — the plan-doc writing rules ("Reuse Existing Code", Documentation Update Phase, Requirement Coverage, Open Questions, Table of Contents & Last Updated rules). Steps 3, 5, 5.1, and 5.2 all depend on it.
 3. BEFORE Step 3 (any env/deploy value is needed): [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/sensitive-file-scope.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/sensitive-file-scope.md) — never read sensitive files (stack-dependent: env/config files, profile files, keys, credentials); env/deploy values come from the adopting repo's placeholder reference doc (e.g. `docs/PLACEHOLDER_REFERENCE.md`).
 3b. BEFORE Step 3 (codebase exploration): [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/temporary-artifacts.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/temporary-artifacts.md) — exploration one-off scripts/probe outputs go under the repo-root `.ai-tmp/` folder and are deleted when Step 3 ends.
+3c. BEFORE Step 4: [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/branch-deployment.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/branch-deployment.md) — the repo's branch/deployment strategy contract (repo-owned declaration, load contract, git-ownership stance); Step 4's branch, commit, and deployment suggestions depend on it.
 4. BEFORE Step 5.1 (first-time write): [${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/templates/plan-doc.md](${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/templates/plan-doc.md) — the doc skeleton; every section heading must come from it.
 5. BEFORE Step 5.3 (only if the user agrees to run the verifier): [${CLAUDE_PLUGIN_ROOT}/skills/plan-doc-verify/SKILL.md](${CLAUDE_PLUGIN_ROOT}/skills/plan-doc-verify/SKILL.md) — the verifier skill's procedure must be read before it is run.
 6. BEFORE Step 5.5: [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/human-review-checkpoint.md) — the single source of truth for the gate behavior, summary table format, and presentation rules of the blocking checkpoint.
@@ -120,12 +121,12 @@ If exploration needs a one-off script or probe (e.g. to test an endpoint or conv
 
 ## Step 4 — Branch, Commit Message & Deployment Status
 
-The plan doc tracks the Git branch, commit message(s), and deployment status for the topic. None of this is auto-detected from `git` — it comes from an AI suggestion (branch/commit) confirmed by the user, or from the user directly (deployment status), since the user may rename the branch or edit the message at any time.
+The plan doc tracks the Git branch, commit message(s), and deployment status for the topic. None of this is auto-detected from `git` — it comes from an AI suggestion (branch/commit) confirmed by the user, or from the user directly (deployment status), since the user may rename the branch or edit the message at any time. Branch naming and the per-environment flow follow the repo's branch/deployment strategy (Mandatory reads #3c): if the repo declares one (`.claude/deploy.yml`), phrase every suggestion per it; if not, use the generic shape and note that no strategy is declared.
 
 ### 4.1 — Suggest a working branch name and commit message
 
 Based on the topic's main doc (what's being built/fixed/investigated), suggest:
-- A working branch name, following the repo's existing branch naming convention (check recent branches with `git branch -a` if unsure — never copy a convention from docs without verifying).
+- A working branch name: if the repo declares a branch/deployment strategy (Mandatory reads #3c), take the naming convention from its declaration instead of exploring; otherwise follow the repo's existing branch naming convention (check recent branches with `git branch -a` if unsure — never copy a convention from docs without verifying).
 - A commit message in **Conventional Commits** format (e.g. `feat(scope): message`, `fix(scope): message`), matching the style already used in this repo. Keep it **concise** — a short subject line that states what changed, without mentioning implementation phases or internal workflow steps (e.g. `feat(payments): migrate shipping-cost API to new endpoints`, not `feat(payments): ... — Phases 1–3 code, Phase 4 validation`).
 - **Hotfix marker:** if the topic is a **hotfix** (a change deployed directly to production without going through the normal release cycle — e.g. an urgent bug fix or a contained change that must ship immediately), append `[HOTFIX]` to the end of the commit subject. This is the repo's SOP for flagging hotfix commits. Example: `feat(payments): migrate shipping-cost API to new endpoints [HOTFIX]`. Only add it when the topic is genuinely a hotfix — do not add it to normal feature/fix commits.
 
@@ -133,7 +134,7 @@ Present both as a suggestion and let the user confirm or override — never assu
 
 ### 4.2 — Determine deployment status
 
-Deployment status is supplied by the user as work progresses — do not infer it from branch names or CI status. Record per environment (adapt the environment list to the repo's actual deployment environments; Working Branch / Development / Staging / Production is the typical shape):
+Deployment status is supplied by the user as work progresses — do not infer it from branch names or CI status. Record per environment (adapt the environment list to the repo's actual deployment environments — per the repo's branch/deployment declaration when present; Working Branch / Development / Staging / Production is the typical shape):
 - Environment name (Working Branch, Development, Staging/STG, Production/PRD)
 - Status: ✅ Deployed / ✅ Merged / ⏳ Pending / ❌ Blocked / ☐ Not Started
 - Branch or note (e.g. `prd — cherry-pick only (branches diverged)`)

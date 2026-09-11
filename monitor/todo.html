@@ -142,6 +142,7 @@ h1 .thin{font-weight:500;color:var(--txt2)}
 .flowbar{height:10px;border-radius:99px;overflow:hidden;display:flex;background:rgba(148,163,255,.06);border:1px solid var(--line)}
 .flowbar span{height:100%;transition:width .8s cubic-bezier(.22,1,.3,1)}
 .fb-open{background:linear-gradient(90deg,#3b82f6,#60a5fa)}
+.fb-wip{background:linear-gradient(90deg,#f97316,#fb923c)}
 .fb-kiv{background:linear-gradient(90deg,#475569,#64748b)}
 .fb-done{background:linear-gradient(90deg,#059669,#34d399)}
 .flowbar-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:11px;font-size:11px;color:var(--txt2)}
@@ -233,10 +234,10 @@ footer .flinks{display:flex;gap:18px;flex-wrap:wrap}
 
 <nav id="rail">
   <div class="navsec">Board</div>
-  <div class="navitem" data-goto="top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5 12 3l9 7.5V21H3z"/></svg>Overview<span class="railcount">16</span></div>
-  <div class="navitem" data-goto="open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Open items<span class="railcount">5</span></div>
+  <div class="navitem" data-goto="top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5 12 3l9 7.5V21H3z"/></svg>Overview<span class="railcount">17</span></div>
+  <div class="navitem" data-goto="open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Open items<span class="railcount">4</span></div>
   <div class="navitem" data-goto="kiv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>KIV (parked)<span class="railcount">1</span></div>
-  <div class="navitem" data-goto="done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Completed log<span class="railcount">10</span></div>
+  <div class="navitem" data-goto="done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Completed log<span class="railcount">11</span></div>
   <div class="navitem" data-goto="intake"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>New item intake</div>
   <div class="footnote">One item = one ID. Move entries down to the Completed Log when done, with the date and how they were resolved.</div>
 </nav>
@@ -264,20 +265,21 @@ footer .flinks{display:flex;gap:18px;flex-wrap:wrap}
     </div>
 
     <div class="hero-stats">
-      <div class="hstat"><div class="num c-blue">5</div><div class="lbl">OPEN</div><div class="ic">🔵</div></div>
-      <div class="hstat"><div class="num c-emerald">0</div><div class="lbl">WIP</div><div class="ic">🟠</div></div>
+      <div class="hstat"><div class="num c-blue">4</div><div class="lbl">OPEN</div><div class="ic">🔵</div></div>
+      <div class="hstat"><div class="num c-emerald">1</div><div class="lbl">WIP</div><div class="ic">🟠</div></div>
       <div class="hstat"><div class="num c-slate">1</div><div class="lbl">KIV · PARKED</div><div class="ic">⚪</div></div>
-      <div class="hstat"><div class="num c-emerald">10</div><div class="lbl">DONE</div><div class="ic">🟢</div></div>
+      <div class="hstat"><div class="num c-emerald">11</div><div class="lbl">DONE</div><div class="ic">🟢</div></div>
       <div class="hstat"><div class="num c-red">0</div><div class="lbl">HIGH PRIORITY</div><div class="ic">🔥</div></div>
     </div>
 
     <div class="flowbar-wrap">
-      <div class="flowbar-head"><span class="t">Pipeline distribution</span><span class="mono" style="font-size:10.5px;color:var(--txt3)">next free ID · T-17</span></div>
-      <div class="flowbar"><span class="fb-open" style="width:31%"></span><span class="fb-kiv" style="width:6%"></span><span class="fb-done" style="width:63%"></span></div>
+      <div class="flowbar-head"><span class="t">Pipeline distribution</span><span class="mono" style="font-size:10.5px;color:var(--txt3)">next free ID · T-18</span></div>
+      <div class="flowbar"><span class="fb-open" style="width:23%"></span><span class="fb-wip" style="width:6%"></span><span class="fb-kiv" style="width:6%"></span><span class="fb-done" style="width:65%"></span></div>
       <div class="flowbar-legend">
-        <span class="li"><span class="sw fb-open"></span>Open · 5</span>
+        <span class="li"><span class="sw fb-open"></span>Open · 4</span>
+        <span class="li"><span class="sw fb-wip"></span>WIP · 1</span>
         <span class="li"><span class="sw fb-kiv"></span>Parked · 1</span>
-        <span class="li"><span class="sw fb-done"></span>Done · 10</span>
+        <span class="li"><span class="sw fb-done"></span>Done · 11</span>
       </div>
     </div>
   </section>
@@ -287,21 +289,23 @@ footer .flinks{display:flex;gap:18px;flex-wrap:wrap}
     <div class="sec-head rv">
       <div class="sec-eyebrow">Actionable now</div>
       <h2 class="sec-title">Open <span class="grad-text">items</span></h2>
-      <p class="sec-sub">Five items in flight. <b>No HIGH-priority items open</b> — the biggest is T-16 (stack-aware content layer), a plugin-wide cost refactor. Filter by priority:</p>
+      <p class="sec-sub">Four items open. <b>No HIGH-priority items</b> — T-16 (stack-aware content layer, the biggest) is now <b>WIP: implementation plan drafted, execution pending approval</b>. Filter by priority:</p>
     </div>
     <div class="filter-row rv" id="prFilter">
-      <button class="fchip on" data-pr="all">All<span class="n">5</span></button>
+      <button class="fchip on" data-pr="all">All<span class="n">4</span></button>
       <button class="fchip" data-pr="high">HIGH<span class="n">0</span></button>
-      <button class="fchip" data-pr="medium">MEDIUM<span class="n">5</span></button>
+      <button class="fchip" data-pr="medium">MEDIUM<span class="n">4</span></button>
     </div>
     <div class="grid2" id="openGrid">
 
-      <article class="item open-item rv" data-pr="medium" id="t-16">
+      <article class="item wip-item rv" data-pr="medium" id="t-16">
         <div class="item-top"><span class="iid">T-16</span><h3>Stack-aware content layer</h3></div>
-        <div class="badges"><span class="chip st-open"><span class="d"></span>OPEN</span><span class="chip pr-med"><span class="d"></span>MEDIUM</span></div>
+        <div class="badges"><span class="chip st-wip"><span class="d"></span>WIP</span><span class="chip pr-med"><span class="d"></span>MEDIUM</span></div>
         <p><b>Problem:</b> templates / rules / skills ship all stack content (Redis, Mongo, gateway…) to every repo — a repo without that tech still pays tokens for it, every session. The audit covers <b>every always-loaded surface</b>: templates, rules, skills, <b>subagent definitions</b> and <b>hooks</b>.</p>
         <p><b>Goal:</b> core files speak in categories ("the cache", "the database", "the CLI"); per-tech details live in tiny <code>stack-*</code> reference files read only on demand; one stack list per repo, read by skills, hooks and subagents alike.</p>
-        <p><b>Phases:</b> 1 · category-shaped content layer (templates / rules / skills / subagents) → 2 · tiny stack files → 3 · stack list recorded at <code>topic-init</code> → 4 · config-driven hook allowlist. Phases 3–4 wait for a second real stack to appear.</p>
+        <p><b>Phases:</b> 1 · category-shaped content layer (templates / rules / skills / subagents) ✅ → 2 · tiny stack files ✅ → 3 · stack list resolved at <code>workflow-adopt</code> (adaptation-table row, human-confirmed; <code>topic-init</code> is a consumer — reads it, proposes additions when exploration finds an undeclared stack) → 4 · config-driven hook allowlist. Phases 3–4 wait for a second real stack to appear.</p>
+        <p><b>Design decided (2026-09-10):</b> the stack list lives in a <b>separate repo-owned file</b> (proposed <code>.claude/stack.yml</code>), referenced by the managed boilerplate — team edits survive adopt re-runs.</p>
+        <p><b>Progress (2026-09-10):</b> phases 1–2 done — canonical rule <code>_shared/rules/stack-content-layer.md</code> + seeded <code>_shared/stack/stack-redis.md</code> / <code>stack-mongodb.md</code>; templates, rules, skills and docs re-shaped to categories (test-doc template was the biggest: 64 stack hits → 0 outside stack files); grep-verified clean. Hooks stay hard-coded until phase 4.</p>
         <div class="done-when"><span class="dw-tag">Done when</span>the always-loaded layer carries no hard-coded stack content; stack detail loads on demand, guided by the repo's stack list.</div>
       </article>
 
@@ -363,6 +367,13 @@ footer .flinks{display:flex;gap:18px;flex-wrap:wrap}
       <p class="sec-sub">Same structure as open items — objective plus how it was resolved. Recent first.</p>
     </div>
     <div class="grid2" id="doneGrid">
+
+      <article class="item done-item rv in" id="t-17">
+        <div class="item-top"><span class="iid">T-17</span><h3>Repo-owned branch &amp; deployment strategy (soft enforcement)</h3></div>
+        <div class="badges"><span class="chip st-done"><span class="d"></span>DONE</span><span class="datechip">📅 2026-09-10</span></div>
+        <p><b>Objective:</b> per-company branching/deployment flows (working → staging → production, cherry-pick vs merge) honored per repo — without hard-coding one repo's strategy in the shared plugin.</p>
+        <div class="kv-res"><span class="dw-tag">Resolved</span>shared rule <code>dev-workflow/skills/_shared/rules/branch-deployment.md</code> — two layers: the always-loaded core speaks in branch <i>roles</i> (working / staging / production), and the concrete strategy lives in a repo-owned <code>.claude/deploy.yml</code> declaration (pinned via the <code>workflow-adopt</code> adaptation table, team-edited, never silently changed). Load contract: declaration present → phrase suggestions per it; absent → generic shape, never invent a flow. Git-ownership stance kept: the AI prepares the per-role command list (branch/cherry-pick/merge + Conventional Commits messages); the human executes every <code>git commit</code>/<code>git push</code>. Wired into <code>topic-plan</code> (mandatory read #3c, Steps 4.1/4.2), <code>topic-implement</code> (mandatory read #10, Step 5.3, execution rules), the plan-doc template note, the managed adopt snippet row, and <code>workflow-adopt</code> (survey item 6, adaptation list, conflict example). Soft enforcement only — a PreToolUse Bash push-gate remains a possible follow-up.</div>
+      </article>
 
       <article class="item done-item rv in" id="t-03">
         <div class="item-top"><span class="iid">T-03</span><h3>Test isolation: flush only the data under test</h3></div>
@@ -442,7 +453,7 @@ footer .flinks{display:flex;gap:18px;flex-wrap:wrap}
     <div class="sec-head rv">
       <div class="sec-eyebrow">Triage</div>
       <h2 class="sec-title">New item <span class="grad-text">intake</span></h2>
-      <p class="sec-sub">Add new findings here, then move them into Open items with an ID. <b>Next free: T-17.</b></p>
+      <p class="sec-sub">Add new findings here, then move them into Open items with an ID. <b>Next free: T-18.</b></p>
     </div>
     <div class="intake-shell rv">
       <p class="intake-note">Copy this skeleton into <b>Open items</b> and fill it in — one item = one ID:</p>

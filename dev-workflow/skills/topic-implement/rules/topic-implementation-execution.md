@@ -47,7 +47,7 @@ Follow the [Shared: Topic Doc Writing Conventions](`${CLAUDE_PLUGIN_ROOT}/skills
 
 ## Coding Conventions During Implementation
 
-- Match the repo's layering and patterns (e.g. endpoint → controller → service in an Express.js-style backend — *adapt to the repo's layout*).
+- Match the repo's layering and patterns (the repo's request-layering convention — *adapt to the repo's layout*).
 - Error handling and logging follow [Shared: Error Handling Conventions](`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/error-handling.md`) — every `catch` logs before responding, every error response is returned, guard clauses first; use the repo's structured logger, never `console.log`.
 - Comment style follows [Shared: Code Comment Style](`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/code-comment-style.md`) — comments explain the code, never the workflow: no phase/step/plan/progress metadata in code, keep comments to one short line, no commented-out code or speculative TODOs. The plan doc is the only progress record.
 - **Never read sensitive files** — env/config values come from the adopting repo's placeholder reference doc (see [Shared: Sensitive File Scope](`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/sensitive-file-scope.md`)).
@@ -75,5 +75,6 @@ After all phases are ✅ and the post-implementation test gates have run:
 ## Git Ownership
 
 - The human performs all git operations. Suggest commit messages in Conventional Commits format when the user asks; record commit messages and deployment status **only as the user reports them** (per the `topic-plan` Step 4 rules — never query `git log`/`git branch` to auto-detect or verify).
+- When the repo declares a branch/deployment strategy ([Shared: Branch & Deployment](`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/branch-deployment.md`)), the AI's role is **preparation only** — the per-role branch/cherry-pick/merge command list per the declared flow, handed to the human to execute. Never improvise a flow when none is declared.
 
 *Adapt paths/commands to your repository's actual layout and tooling.*

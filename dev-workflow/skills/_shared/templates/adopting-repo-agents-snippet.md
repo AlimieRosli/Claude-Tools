@@ -41,5 +41,6 @@ This repo uses the **`dev-workflow` plugin** (Claude Code) for AI-assisted devel
 | Default classification overrides | `<!-- e.g. "bug fixes on X always need REG cases", "investigations go to docs/ref/Investigation/" — or 'none' -->` |
 | Deterministic hooks (optional) | `<!-- e.g. '.claude/hooks/ registers TOC-sync, secret-scan, env-scope gates' — or 'none installed; rules are LLM-enforced' -->` |
 | Repo-local skills | `<!-- e.g. '.claude/skills/<repo-specific skill>' — plugin skills (incl. hook-fix) are already namespaced; never create a repo-local copy of a plugin skill, or 'none' -->` |
+| Branch & deployment strategy | `<!-- e.g. '.claude/deploy.yml — branch roles, flow, commit convention' — or 'none; generic shape applies' -->` |
 
 **What this repo keeps local vs. what the plugin ships:** any rule, template, or reference doc that is true for every adopting repo belongs to the plugin (propose changes there via `/dev-workflow:workflow-self-correct`); anything true only of this repo belongs in this file or `.claude/`. When the two drift, fix the source — never patch over a plugin rule with a repo-local copy.

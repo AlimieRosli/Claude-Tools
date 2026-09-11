@@ -45,7 +45,7 @@
 
 ### Deployment Status
 
-<!-- Adapt the environment rows to the repo's actual deployment environments; Working Branch / Development / Staging / Production is the typical shape. -->
+<!-- Adapt the environment rows to the repo's actual deployment environments; Working Branch / Development / Staging / Production is the typical shape. If the repo declares a branch/deployment strategy (.claude/deploy.yml), name the environments/branches per it. -->
 
 | Environment | Status | Branch / Note |
 |---|---|---|

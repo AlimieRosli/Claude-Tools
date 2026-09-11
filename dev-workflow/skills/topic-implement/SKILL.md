@@ -63,6 +63,7 @@ Read each of these files with the Read tool at the indicated point. Inline refer
 7. BEFORE delivering the Step 9 reminders: [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/topic-doc-writing-conventions.md) — the exact text of the per-prompt and per-session discipline rules; Step 9 depends on it.
 8. BEFORE Step 5 (and again before Step 7): [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/temporary-artifacts.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/temporary-artifacts.md) — scratch scripts/generated files go under the repo-root `.ai-tmp/` folder with scoped deletion at task end; Step 5 creates artifacts there, Step 7's cleanup sweep deletes them.
 9. BEFORE requesting runtime evidence from the human (any failure diagnosis in Steps 5–7): [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/runtime-log-handoff.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/runtime-log-handoff.md) — the AI never runs the service; every log/output request is one concrete command whose output lands in a file the AI reads itself — never a chat paste.
+10. BEFORE Step 7 (and before any branch/deploy command suggestion in Step 5.3 or Step 8): [${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/branch-deployment.md](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/branch-deployment.md) — the repo's branch/deployment strategy contract (declaration load contract, git-ownership stance); Step 7's deployment recording and any suggested branch/merge commands defer to it.
 
 ---
 
@@ -159,7 +160,7 @@ Never batch progress updates to the end of the run — `topic-status` reads the 
 
 If the code, behavior, or Done-When verification does not match the plan (missing helper, changed behavior, failing verification): attempt a **bounded repair — up to 3 fix attempts**, re-running the failing check after each. Still failing → **stop**, record the finding in the plan doc (an Open Questions row or a revised phase), and tell the human. Never silently improvise a different design, and never expand scope beyond the main doc's §2.1 + the plan's Requirement Coverage — new ideas become open questions or follow-up topics, not silent additions.
 
-Record commit messages and deployment status **only as the user reports them** (per the `topic-plan` Step 4 rules); the human performs all git operations.
+Record commit messages and deployment status **only as the user reports them** (per the `topic-plan` Step 4 rules); the human performs all git operations. When the repo declares a branch/deployment strategy (Mandatory reads #10), prepare the per-role command list (branch/cherry-pick/merge, per the declared flow) for the human to execute — do not improvise a flow when none is declared.
 
 ---
 
@@ -167,7 +168,7 @@ Record commit messages and deployment status **only as the user reports them** (
 
 After **ALL** implementation phases are ✅ — and never between phases:
 
-1. **Full unit-test suite once** (e.g. `npm test` — per the repo's runner) when any phase named `UNIT-` cases: after all phases, **before** the NEG post-fix pass, infrastructure-free.
+1. **Full unit-test suite once** (the repo's test-suite command) when any phase named `UNIT-` cases: after all phases, **before** the NEG post-fix pass, infrastructure-free.
 2. **NEG post-fix** — every `NEG-###` case now returns the correct rejection; both result lines get filled.
 3. **Positive Flow (`TC-`)** — happy paths green.
 4. **Conditionally-required and requested categories** — REG (shared code paths), STG (after staging deploy), PERF (concrete NFR target), EC/ERR (on request) — in exactly the test doc's **Testing Flow order**. Do not invent a different order.
