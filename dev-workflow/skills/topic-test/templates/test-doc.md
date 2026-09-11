@@ -1,6 +1,6 @@
 # <Topic Name> — Test Cases
 
-> *Adapt paths/commands to your repository's actual layout and tooling — service name, dev-start command, test runner, logger, DB/Cache CLIs, gateway prefixes. The Mongo/Redis commands below are generic examples (e.g. via `mongosh`/`redis-cli` if your stack uses Mongo/Redis); substitute your stack's equivalents.*
+> *Adapt paths/commands to your repository's actual layout and tooling — service name, dev-start command, test runner, logger, gateway prefixes. Command syntax for the cache, database, and any other stack technology comes from the repo's **stack file** — see the Stack Content Layer rule (`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/stack-content-layer.md`); where no stack file exists, write `<!-- TODO: confirm -->` placeholders and ask the human.*
 
 > **Service / Module:** `<ServiceName>`
 > **Status:** Draft
@@ -49,8 +49,8 @@
     - [PERF-001 — ](#perf-001--)
   - [Testing Flow](#testing-flow)
   - [Side-Effect Verification Guide](#side-effect-verification-guide)
-    - [Redis](#redis)
-    - [MongoDB](#mongodb)
+    - [Cache](#cache)
+    - [Database](#database)
     - [Logs](#logs)
   - [Pass Criteria (Feature Complete)](#pass-criteria-feature-complete)
   - [Open Questions](#open-questions)
@@ -102,37 +102,35 @@ Tests run on exactly two environments — **Local** and **Staging** only. No oth
 
 The service running on the developer's machine. Direct access — no API Gateway, no gateway prefix.
 
-- [ ] **Service running locally** — reuse the already-running instance. **Do NOT run the dev-start command (e.g. `npm start`) if it is already up** — if it has a port-killing pre-start step (e.g. `npx kill-port <port>`), it kills any existing instance on the port. First verify it is up: `curl -s -o /dev/null -w "%{http_code}" "<LOCAL_API_URL>/<endpoint>"` (expect `200`/`401`, not `000`). If a restart is needed, ask the user to do it manually and continue only after they confirm. URL: `<LOCAL_API_URL>` <!-- TODO: confirm — e.g. http://localhost:<port> -->.
+- [ ] **Service running locally** — reuse the already-running instance. **Do NOT run the repo's dev-start command if it is already up** — if it has a port-killing pre-start step, it kills any existing instance on the port. First verify it is up: `curl -s -o /dev/null -w "%{http_code}" "<LOCAL_API_URL>/<endpoint>"` (expect `200`/`401`, not `000`). If a restart is needed, ask the user to do it manually and continue only after they confirm. URL: `<LOCAL_API_URL>` <!-- TODO: confirm — e.g. http://localhost:<port> -->.
 - [ ] **Config source (stack-dependent):** the dev-start command loads the repo's gitignored env/config file (file name varies by stack — see the Sensitive File Scope rule). Set local config vars (e.g. an external-service API key) in that gitignored file, not in committed files.
-- [ ] **Log level:** the repo's structured logger (e.g. a pino-based `server/lib/logger.js` with a `loggerFor('ComponentName')` helper) typically defaults to `debug` for non-production runs (`LOG_LEVEL` env var overrides it, if supported). For local debugging, `log.debug(...)` output is visible in the dev-server terminal — no need to set `LOG_LEVEL` unless you want to filter. **Do NOT use `console.log` for debugging** — use `log.debug`/`log.info` via the repo's logger helper so output is structured and redacted.
-- [ ] **Cache (e.g. Redis):** `<LOCAL_REDIS_HOST>` <!-- TODO: confirm — e.g. 127.0.0.1:6379 -->. Inspect with `redis-cli` (if your stack uses Redis).
-- [ ] **Database (e.g. MongoDB):** `<LOCAL_DB_HOST>` <!-- TODO: confirm -->. Databases named `<db-prefix><name>` (no staging prefix). Inspect with `mongosh` (if your stack uses MongoDB).
+- [ ] **Log level:** the repo's structured logger typically defaults to `debug` for non-production runs (a log-level env var overrides it, if supported). For local debugging, debug-level output is visible in the dev-server terminal — no need to change the level unless you want to filter. **Do NOT use raw console output for debugging** — use the repo's logger helper so output is structured and redacted.
+- [ ] **Cache:** `<LOCAL_CACHE_HOST>` <!-- TODO: confirm — host:port of the cache -->. Inspect with the cache CLI — command syntax from the repo's stack file (Stack Content Layer rule).
+- [ ] **Database:** `<LOCAL_DB_HOST>` <!-- TODO: confirm -->. Databases named `<db-prefix><name>` (no staging prefix). Inspect with the database CLI — command syntax from the repo's stack file.
 - [ ] Env vars set (e.g. external API keys).
 - [ ] Seed data loaded (see Setup / Reset below).
 
 ```bash
 # Verify local service is up
 curl -s "<LOCAL_API_URL>/<endpoint>" | jq .
-# Verify cache (Redis example)
-redis-cli -h <LOCAL_REDIS_HOST> PING   # → PONG
-# Verify database (MongoDB example)
-mongosh "<LOCAL_DB_HOST>" --eval "db.adminCommand('listDatabases')"
+# Verify cache and database — command syntax from the repo's stack file
+# (Stack Content Layer rule); without one, leave <!-- TODO: confirm -->.
 ```
 
 ### Staging
 
-Staging service reached **via the API Gateway** — the endpoint path **must include the gateway's route prefix** (e.g. a `/cr`-style prefix the Gateway strips before forwarding `/api/...` to the service — confirm the actual prefix for the target deployment). Requires VPN or office network access if the gateway is internal.
+Staging service reached **via the API Gateway** — the endpoint path **must include the gateway's route prefix** (the segment the gateway strips before forwarding the request to the service — confirm the actual prefix for the target deployment). Requires VPN or office network access if the gateway is internal.
 
 - **API endpoint:** `<STG_GATEWAY_URL>/<gateway-prefix>/api/<endpoint>` <!-- TODO: confirm the gateway domain and prefix -->.
-- **Headers:** `X-User-Role: guest` (example default role header — change/adapt only if the topic or the repo's gateway needs a different role/header).
-- **Database (e.g. MongoDB):** No CLI access. Read-only via the **MongoDB Atlas** web UI (if your stack uses Atlas). Databases prefixed with the staging prefix (e.g. `<stg-prefix><name>`). No `mongosh` commands.
-- **Cache (e.g. Redis):** No CLI access. Read-only via **Redis Insight** (desktop app, if your stack uses Redis). No `redis-cli` commands.
+- **Headers:** `<role-header>: <default-role>` <!-- TODO: confirm — the repo's default role/auth header for staging calls -->.
+- **Database:** No CLI access. Read-only via the stack's management web UI (the repo's stack file names the console, if declared). Databases prefixed with the staging prefix (e.g. `<stg-prefix><name>`). No database CLI commands.
+- **Cache:** No CLI access. Read-only via the stack's management web UI (the repo's stack file names the console, if it defines one). No cache CLI commands.
 - **Access:** VPN or office network required (if the gateway is internal).
-- **⚠️ Prohibited on Staging:** never run `mongosh` / `redis-cli` / any CLI or direct connection to staging databases or caches, and never write/delete/update staging data. Staging data is inspected **only** via the management web UIs (e.g. Atlas for MongoDB, Redis Insight for Redis) — **manual, human-performed** steps. The AI must not attempt to connect to staging infrastructure; it prepares the manual steps and asks the user to run them.
+- **⚠️ Prohibited on Staging:** never run the cache/database CLI (or any CLI or direct connection) against staging databases or caches, and never write/delete/update staging data. Staging data is inspected **only** via the stack's management web UIs — **manual, human-performed** steps. The AI must not attempt to connect to staging infrastructure; it prepares the manual steps and asks the user to run them.
 
 ```bash
-# Example staging call — note the gateway prefix and default role header
-curl -s -H "X-User-Role: guest" \
+# Example staging call — note the gateway prefix and the repo's default role header
+curl -s -H "<role-header>: <default-role>" \
   "<STG_GATEWAY_URL>/<gateway-prefix>/api/<endpoint>" | jq .
 ```
 
@@ -141,22 +139,17 @@ curl -s -H "X-User-Role: guest" \
 Run this before each **local** test session to restore a clean state (staging is read-only — no reset needed):
 
 ```bash
-# --- Cache (Redis example) --- (local only)
-# Delete ONLY the keys this topic owns — the prefixes documented in the Side-Effects section.
-# NEVER FLUSHDB / FLUSHALL on a shared cache — it wipes unrelated keys (scoped-cleanup rule in the test-doc rules).
-redis-cli -h <LOCAL_REDIS_HOST> --scan --pattern '<prefix>:*' | xargs -r redis-cli -h <LOCAL_REDIS_HOST> DEL
+# --- Cache --- (local only)
+# Reset ONLY the keys this topic owns — the prefixes documented in the Side-Effects section.
+# NEVER wipe the whole cache on a shared instance — it destroys unrelated keys (scoped-cleanup rule in the test-doc rules).
+# Command syntax: the repo's stack file (Stack Content Layer rule).
 
-# --- Database (MongoDB example) --- (local only)
-# Drop and re-seed relevant collections
-mongosh "<LOCAL_DB_HOST>" --eval 'db.<collection>.deleteMany({})'
-
-# --- Seed Data --- (local only)
-# Insert test fixtures if needed
-mongosh "<LOCAL_DB_HOST>" --eval 'db.<collection>.insertMany([ /* TODO: seed docs */ ])''
+# --- Database --- (local only)
+# Drop and re-seed the relevant collections — command syntax from the repo's stack file.
 
 # --- Service ---
 # Restart to clear in-memory state
-# (from the repo directory — the user's documented run practice, e.g. `npm start`)
+# (from the repo directory — the user's documented run practice)
 ```
 
 ---
@@ -195,21 +188,18 @@ HTTP 200
 
 **How to Run:**
 ```bash
-# Redis / cache example
-redis-cli -h <LOCAL_REDIS_HOST> PING
-# MongoDB / database example
-mongosh "<LOCAL_DB_HOST>" --eval 'db.runCommand({ ping: 1 })'
+# Verify the cache and database respond to their ping/health command —
+# command syntax from the repo's stack file (Stack Content Layer rule)
 ```
 
 **Expected Result:**
 ```
-PONG
-{ ok: 1 }
+Each technology's success response for its ping/health command (e.g. a pong-style or ok-style output)
 ```
 
 **Pass Criteria:**
-- [ ] Cache responds `PONG` (Redis example)
-- [ ] Database responds `{ ok: 1 }` (MongoDB example)
+- [ ] Cache responds to its ping/health command
+- [ ] Database responds to its ping/health command
 
 ---
 
@@ -400,7 +390,7 @@ HTTP 500
 **Pass Criteria:**
 - [ ] Response status is `200`
 - [ ] Response body matches expected schema
-- [ ] Cache key exists with correct TTL (verify with e.g. `redis-cli TTL <key>`)
+- [ ] Cache key exists with correct TTL (verify with the cache CLI — syntax from the repo's stack file)
 - [ ] No error logs in service output
 
 ---
@@ -481,7 +471,7 @@ HTTP 500
 
 ## Test Cases — Unit Tests (Recommended)
 
-**Recommended — generate when a plan phase touches function-level logic in the repo's service/helper/util layer (e.g. in one Express.js layout: `server/database/service/`, `server/helpers/`, `server/utils/`, or `server/service/`); skip for pure route/doc/config-only changes.** Unit tests are white-box, in-process, and infrastructure-free: mock at the seam the repo's services actually use (e.g. in a Mongoose-based codebase, the shared `models` default export — `import models from '../schema'`) and any module with import-time side effects (e.g. a structured logger's worker-thread transport); supply stand-in chain methods (`findOne`, `updateOne`, `save`, …). No real DB/cache/HTTP, no container infra, no running server. The full test-suite command (e.g. `npm test`) runs **after ALL implementation phases** and **before the NEG post-fix pass** — do not run it between phases. Use the repo's logger helper (e.g. `loggerFor('ComponentName')`) for diagnostic output, never `console.log`. See the `UNIT-` rule in the rules file (`${CLAUDE_PLUGIN_ROOT}/skills/topic-test/rules/topic-test-doc-writing.md`).
+**Recommended — generate when a plan phase touches function-level logic in the repo's service/helper/util layer; skip for pure route/doc/config-only changes.** Unit tests are white-box, in-process, and infrastructure-free: mock at the seam the repo's data-access layer actually uses (e.g. the shared model/schema module the services import) and any module with import-time side effects (e.g. a structured logger's transport worker); supply stand-in chain methods for the data-access API the services call. No real DB/cache/HTTP, no container infra, no running server. The repo's full test-suite command runs **after ALL implementation phases** and **before the NEG post-fix pass** — do not run it between phases. Use the repo's logger helper for diagnostic output, never raw console output. See the `UNIT-` rule in the rules file (`${CLAUDE_PLUGIN_ROOT}/skills/topic-test/rules/topic-test-doc-writing.md`).
 
 <!-- Topic touches no service/helper/util logic (pure endpoint/doc/config change)? Omit this section entirely — do not leave empty placeholders. Delete this comment once resolved. -->
 
@@ -490,16 +480,16 @@ HTTP 500
 **Scenario:** <!-- One line, e.g. "UserService.findByX calls the underlying model lookup with the active-email filter and returns the result, with the models seam mocked" -->
 **Why This Test Is Needed:** <!-- e.g. "Exercises an error-path branch (switch on e.name) invisible to HTTP-level tests — proves the mocking seam works" -->
 **Category:** <!-- Happy Path | Error Path — ValidationError | Error Path — Default | Mocking Seam / No-Infra -->
-**Precondition:** <!-- Phase adding the logic is complete; a colocated test file exists (e.g. `__tests__/<Service>.test.js`) with the data-access seam mocked (e.g. `jest.mock('../../schema')`) -->
+**Precondition:** <!-- Phase adding the logic is complete; a colocated test file exists in the repo's test location, with the data-access seam mocked per the repo's test conventions -->
 
 **How to Run:**
 ```bash
-# Run a single case (adapt to your test runner, e.g. jest)
-npm test -- -t "<case name>" 2>&1 | tee /tmp/unit001.log
+# Run a single case (adapt the flags to the repo's test runner)
+<test-runner> -- <case filter> 2>&1 | tee /tmp/unit001.log
 grep -E "PASS|FAIL|Tests" /tmp/unit001.log
 
 # Or run the full suite (all UNIT-### + any future cases)
-npm test 2>&1 | tee /tmp/unit.log
+<full-test-suite-command> 2>&1 | tee /tmp/unit.log
 ```
 
 **Expected Positive Result (correct implementation):**
@@ -514,17 +504,17 @@ Tests  1 passed
 ```
 FAIL ... <Service>.test.js
   ✕ <case name>
-    <data-access error, e.g. MongooseError: Can't call `findOne()` on a model without a connection>   # mock not applied → real data-access layer reached
+    <data-access driver error, e.g. a "model called without a connection" style error>   # mock not applied → real data-access layer reached
 ```
 
 **Expected Side Effects:**
 - Database: No reads/writes (mocked). Cache: none.
-- Logs: none (no `console.log`; mocked logger is a no-op).
+- Logs: none (raw console output prohibited; mocked logger is a no-op).
 
 **Pass Criteria:**
 - [ ] The mocked data-access method was called with the expected argument
 - [ ] The mocked resolve/reject value flows through the service unchanged (happy path) or maps to the correct thrown error (error path)
-- [ ] No real database connection attempted (no DB infra needed; no connection errors like `MongooseError`/`ECONNREFUSED`)
+- [ ] No real database connection attempted (no DB infra needed; no driver or connection errors)
 
 ---
 
@@ -641,13 +631,13 @@ FAIL ... <Service>.test.js
 ### ERR-001 — <!-- Cache down -->
 
 **Scenario:** <!-- e.g. "Cache is unavailable — cache reads/writes fail" -->
-**Trigger:** <!-- How to simulate. e.g. "Stop the cache: redis-cli SHUTDOWN or kill the process" -->
+**Trigger:** <!-- How to simulate. e.g. "Stop the cache with the stop command from the repo's stack file, or kill the process" -->
 
 **Steps:**
-1. Stop the cache: `redis-cli SHUTDOWN` (or `docker stop <cache-container>`)
+1. Stop the cache — stop command from the repo's stack file (or stop its container)
 2. Send a normal request to the endpoint
 3. Observe response and service logs
-4. Restart the cache: e.g. `redis-server` (or `docker start <cache-container>`)
+4. Restart the cache — start command from the repo's stack file (or start its container)
 
 **Expected Status:** `200` (if fallback) or `500` (if the cache is mandatory)
 **Expected Response Body:**
@@ -778,8 +768,8 @@ FAIL ... <Service>.test.js
 
 **How to Run:**
 ```bash
-# Staging call — note the gateway prefix and default role header
-curl -s -H "X-User-Role: guest" \
+# Staging call — note the gateway prefix and the repo's default role header
+curl -s -H "<role-header>: <default-role>" \
   "<STG_GATEWAY_URL>/<gateway-prefix>/api/<endpoint>" | jq .
 ```
 
@@ -846,7 +836,7 @@ for i in {1..20}; do curl -s -o /dev/null -w "%{time_total}\n" "<LOCAL_API_URL>/
 
 ## Testing Flow
 
-Execute tests in this order. Confirm each category passes before moving to the next. **Negative Flow is required TWICE — a pre-fix pass BEFORE the fix/feature is implemented, and a post-fix pass AFTER, to confirm each case now rejects correctly.** **Unit Tests (recommended) run after ALL implementation phases as a full test-suite run (e.g. `npm test`), before the NEG post-fix pass** — do not run the suite between implementation phases. Positive Flow runs AFTER the fix.
+Execute tests in this order. Confirm each category passes before moving to the next. **Negative Flow is required TWICE — a pre-fix pass BEFORE the fix/feature is implemented, and a post-fix pass AFTER, to confirm each case now rejects correctly.** **Unit Tests (recommended) run after ALL implementation phases as a full test-suite run (the repo's test-suite command), before the NEG post-fix pass** — do not run the suite between implementation phases. Positive Flow runs AFTER the fix.
 
 ```
 Phase 0 — Smoke & Sanity (required, run first)
@@ -893,8 +883,8 @@ Phase 6 — Performance (optional, only if section is included)
   21. PERF-001 → Confirm latency/throughput meets target threshold
 
 Phase 7 — Side-Effect Spot Checks
-  22. Verify cache keys from TC-001 (e.g. via redis-cli)
-  23. Verify database documents if any test writes data (e.g. via mongosh)
+  22. Verify cache keys from TC-001 (cache CLI per the repo's stack file)
+  23. Verify database documents if any test writes data (database CLI per the repo's stack file)
   24. Check service logs for unexpected errors across all phases
 ```
 
@@ -902,48 +892,26 @@ Phase 7 — Side-Effect Spot Checks
 
 ## Side-Effect Verification Guide
 
-Reference commands for verifying side effects mentioned in individual test cases. (Mongo/Redis examples — substitute your stack's equivalents.)
+Reference checklist for verifying side effects mentioned in individual test cases. Command syntax for the cache and database comes from the repo's **stack file** — load it per the Stack Content Layer rule (`${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/stack-content-layer.md`), which also governs what to do when the repo's stack list names no technology for the category.
 
-### Cache (Redis example)
+### Cache
 
-```bash
-# Check if a key exists
-redis-cli -h <LOCAL_REDIS_HOST> EXISTS <key>
+Checklist (commands from the repo's stack file):
 
-# Check key type
-redis-cli -h <LOCAL_REDIS_HOST> TYPE <key>
+- [ ] Key exists
+- [ ] Key type matches what the implementation writes
+- [ ] TTL matches the expected value
+- [ ] Stored value (string or field-level) matches the expected shape
+- [ ] Reset between tests deletes ONLY this topic's documented keys (local only; never a whole-instance wipe — scoped-cleanup rule in the test-doc rules)
 
-# Check TTL (seconds remaining)
-redis-cli -h <LOCAL_REDIS_HOST> TTL <key>
+### Database
 
-# Get string value
-redis-cli -h <LOCAL_REDIS_HOST> GET <key>
+Checklist (commands from the repo's stack file):
 
-# Get hash field
-redis-cli -h <LOCAL_REDIS_HOST> HGET <key> <field>
-
-# List all keys matching a pattern
-redis-cli -h <LOCAL_REDIS_HOST> KEYS "<prefix>*"
-
-# Reset between tests — delete ONLY this topic's documented keys (local only; never FLUSHDB / FLUSHALL)
-redis-cli -h <LOCAL_REDIS_HOST> --scan --pattern '<prefix>:*' | xargs -r redis-cli -h <LOCAL_REDIS_HOST> DEL
-```
-
-### Database (MongoDB example)
-
-```bash
-# Count documents in a collection
-mongosh "<LOCAL_DB_HOST>" --eval 'db.<collection>.countDocuments({})'
-
-# Find a specific document
-mongosh "<LOCAL_DB_HOST>" --eval 'db.<collection>.findOne({ <query> })'
-
-# Find documents created in the last 5 minutes (timestamp-based)
-mongosh "<LOCAL_DB_HOST>" --eval 'db.<collection>.find({ createdAt: { $gte: new Date(Date.now() - 5*60*1000) } }).toArray()'
-
-# Drop a collection (reset between tests — local only)
-mongosh "<LOCAL_DB_HOST>" --eval 'db.<collection>.drop()'
-```
+- [ ] Document count matches the expected number of writes
+- [ ] The expected document(s) exist and match the query shape
+- [ ] Recent writes carry the expected timestamps
+- [ ] Reset between tests (local only) removes only the collections/documents the topic owns
 
 ### Logs
 

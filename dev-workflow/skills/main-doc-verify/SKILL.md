@@ -105,7 +105,7 @@ This is the core accuracy check. For every file path, function name, endpoint, D
 2. **Read** the relevant source files (at least the ones the doc's Current State §3 and Technical Details §5 depend on).
 3. Confirm the doc's claims match the actual source — file paths exist, function names are real, endpoints/route prefixes match, and DB/collection names match the repo's actual schema/model registration and config layer.
 
-*Adapt verification targets to your repository's actual layout and tooling — e.g. in an Express.js + Mongoose app, confirm DB/collection names against the model/schema registration module and the central config file.*
+*Adapt verification targets to your repository's actual layout and tooling — confirm database/collection names against the repo's model/schema registration module and the central config file, wherever the repo keeps them.*
 
 **Fail** if any referenced path/symbol/endpoint/DB name does not exist or is described inaccurately. Use `<!-- TODO: confirm -->` for anything you cannot verify rather than guessing.
 

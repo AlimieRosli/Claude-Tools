@@ -89,10 +89,10 @@ Read [`${CLAUDE_PLUGIN_ROOT}/skills/plan-doc-verify/rules/plan-doc-verify.md`]($
 
 Read the adopting repo's guidance now (e.g. its `AGENTS.md` "Coding conventions" / "Working in this repo" sections, or its `CLAUDE.md` equivalent, if present — adapt as needed) and [`${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/rules/topic-plan-doc-writing.md`](${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/rules/topic-plan-doc-writing.md) now if you have not already (Mandatory reads #4), then check that the planned changes conform to those coding conventions and the Reuse rule in that file:
 
-- **Feature layering** — new routes follow the repo's established layering pattern (e.g. in an Express.js app, the feature triple `endpoint → controller → service`); no layer skipping (e.g. a route handler doing DB calls directly).
+- **Feature layering** — new routes follow the repo's established request-layering pattern; no layer skipping (e.g. a route handler doing DB calls directly).
 - **Error handling** — each touched file's error-handling pattern is respected (e.g. an inline-response pattern vs a structured error-response helper + error constants). Every `catch` logs via the repo's logger before responding; every error response is preceded by `return`.
 - **Logging** — the repo's structured logger/child-logger helper is used, never raw `console.log`. Sensitive fields (tokens, passwords, keys, PII) go through the repo's logger redaction config (if it has one), not hand-rolled redaction.
-- **Reuse / anti-spaghetti** — every Phase 1+ block has a **Reuse** field that is genuinely grep-verified. A `none (grep: <keywords>)` must actually have been grepped — flag any Phase 1+ that specifies a new helper/service/utility when an existing equivalent exists in the repo's shared helper/utility/service directories (e.g. in an Express.js backend: `server/helpers/`, `server/utils/`, `server/services/`). This is the maintainability gate: the plan must build on existing utilities, not reinvent them.
+- **Reuse / anti-spaghetti** — every Phase 1+ block has a **Reuse** field that is genuinely grep-verified. A `none (grep: <keywords>)` must actually have been grepped — flag any Phase 1+ that specifies a new helper/service/utility when an existing equivalent exists in the repo's shared helper/utility/service directories. This is the maintainability gate: the plan must build on existing utilities, not reinvent them.
 
 **Fail** if any planned change violates the conventions, or a Reuse field is missing/falsely `none` where a helper exists.
 
@@ -119,7 +119,7 @@ This is the core accuracy check, mirroring `main-doc-verify` Step 5 but applied 
 
 1. **Grep** the workspace for each referenced symbol/path.
 2. **Read** the relevant source files (at least the ones each phase's "Current Code" names).
-3. Confirm the plan's claims match the actual source — file paths exist, function names are real, endpoints/route prefixes match, DB/collection names match the repo's model/schema registration and config wiring (e.g. in a Mongoose/Express app: the schema/model registry and `config.js`), config keys exist in the repo's config module.
+3. Confirm the plan's claims match the actual source — file paths exist, function names are real, endpoints/route prefixes match, DB/collection names match the repo's model/schema registration and config wiring (wherever the repo keeps them), config keys exist in the repo's config module.
 
 **Fail** if any referenced path/symbol/endpoint/DB name/config key does not exist or is described inaccurately. Use `<!-- TODO: confirm -->` for anything you cannot verify rather than guessing.
 
@@ -127,7 +127,7 @@ This is the core accuracy check, mirroring `main-doc-verify` Step 5 but applied 
 
 ## Step 6 — Verify Rollback, NFR Coverage & Phasing Sanity
 
-- **Rollback plausibility** — every phase has a Rollback that is concrete and executable (revert commit, delete a file, toggle a config flag, drop a cache key — e.g. a Redis key, if your stack uses Redis). A vague "restore previous state" fails.
+- **Rollback plausibility** — every phase has a Rollback that is concrete and executable (revert commit, delete a file, toggle a config flag, drop the cache keys the change writes — commands per the repo's stack file). A vague "restore previous state" fails.
 - **NFR coverage** — the main doc's §5.5 Non-Functional Requirements (performance / security / observability targets) are addressed by some phase. A plan that silently drops the NFR section drops a requirement. If the main doc marked NFR `N/A`, confirm the plan does not contradict that.
 - **Phasing sanity** — Phase 0 prerequisites are *real* prerequisites (the phases genuinely depend on them); no phase depends on a later phase; each phase's **Done When** is a verifiable outcome, not a vague "it works"; the Progress Tracker phase list matches the phase headings in the body.
 

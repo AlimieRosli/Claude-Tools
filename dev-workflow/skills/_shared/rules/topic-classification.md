@@ -60,7 +60,7 @@ Restructuring, renaming, extracting, splitting — the external API/behavior sta
 
 ### Q6 — Is this a config/infra change that affects runtime behavior but not code logic?
 
-Examples: cache/Redis key schema changes, env vars, database collection/table structure changes, middleware or pipeline ordering changes — adapt the examples to the target repo's stack.
+Examples: cache key-schema changes, env vars, database collection/table structure changes, middleware or pipeline ordering changes — adapt the examples to the target repo's stack.
 
 - **Yes** → Case: **Config/infra change with risk**. Flow: `topic-init` + `topic-test` (SMK + NEG). `topic-plan` if complex.
 - **No** → Continue to Q7.

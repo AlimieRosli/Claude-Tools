@@ -103,7 +103,7 @@ Based on the docs read in Step 2, determine where the topic is in the workflow. 
 | Plan Progress Tracker: some phases ✅, some ☐, none 🔄 | Between phases | Run `/topic-implement` for the next ☐ phase. **Do NOT run tests** — all phases must be completed first. |
 | Plan Progress Tracker: all phases ✅, NEG post-fix not yet run | After ALL implementation, before NEG post-fix | Run **NEG post-fix** (confirm the fix resolved the bug without breaking the rejection path), then run Positive tests |
 | Test doc: all tests passed (SMK + NEG + POS), Deployment Status: Working Branch only | After testing, before deploy | Deploy: Working Branch → DEV → STG |
-| Deployment Status: STG Deployed, test doc has no STG- results | After STG deploy, before STG verification | Run STG- cases against staging (via the staging API gateway, e.g. a public gateway hostname or a designated gateway path such as `/cr` in some setups) |
+| Deployment Status: STG Deployed, test doc has no STG- results | After STG deploy, before STG verification | Run STG- cases against staging (via the staging API gateway — a public gateway hostname or a designated gateway path; confirm the actual prefix for the target deployment) |
 | Deployment Status: STG verified, PRD not started | After STG verification, before PRD | Cherry-pick `feat:`/`fix:` commits to PRD |
 | Deployment Status: PRD Deployed | Topic complete | Update docs with final results; topic is done |
 

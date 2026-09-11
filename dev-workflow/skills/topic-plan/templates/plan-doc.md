@@ -97,7 +97,7 @@
 
 ## Prerequisites
 
-- [ ] <!-- e.g. the app's database/cache running locally (e.g. via mongosh/redis-cli/docker compose if your stack uses Mongo/Redis) -->
+- [ ] <!-- e.g. the app's database/cache running locally (started the way the repo documents; inspection/reset command syntax from the repo's stack file) -->
 - [ ] <!-- e.g. Env var X is set -->
 - [ ] <!-- e.g. Read file Y before changing it -->
 
@@ -198,7 +198,7 @@
 
 > **Trigger:** This phase is **mandatory when any code change in the implementation phases touches information documented in the repo's API reference or architecture docs**. Examples:
 > - **API reference** — new/changed/removed endpoint, route prefix, HTTP method, request/response field, auth guard, API version tag, or error code.
-> - **Architecture doc** — change to the boot sequence, request layering (e.g. endpoint → controller → service in an Express.js app), database connections/models (e.g. a connection builder / `config.js` in a Mongo-backed app), config keys, middleware order, logging setup, or deployment shape.
+> - **Architecture doc** — change to the boot sequence, the repo's request-layering convention, database connections/models (the repo's connection/model wiring), config keys, middleware order, logging setup, or deployment shape.
 >
 > If **neither** doc is impacted, check both as *Not impacted*, record a one-line justification, and skip the steps — the phase is N/A for this topic.
 

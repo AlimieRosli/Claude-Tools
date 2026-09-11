@@ -232,7 +232,7 @@ Each principle states **why it is needed** (the root failure mode that justifies
 - Write tests that assert **business logic**, not pass-through behavior (see item 16).
 - Run **negative-flow** tests before AND after a fix — before to capture the original behavior, after to confirm the fix resolves it without breaking the rejection path.
 - Run **regression** tests when shared code paths are touched — verify existing endpoints/behavior are unchanged.
-- Document **side-effects** for each test case (cache keys, DB documents, logs, external calls) with verification commands — e.g. via redis-cli/mongosh if your stack uses Redis/Mongo.
+- Document **side-effects** for each test case (cache keys, DB documents, logs, external calls) with verification commands — syntax from the repo's stack file (Stack Content Layer rule).
 - Include **SMK (Smoke & Sanity)** cases to verify the service boots, core endpoints are reachable, and backing stores (DB/cache) are connected — baseline health.
 - Include **PERF cases** (optional) for response time, throughput, latency percentiles with measured metrics and target thresholds.
 
@@ -350,7 +350,7 @@ Each principle states **why it is needed** (the root failure mode that justifies
 - Audit the **supply chain** for known-vulnerable or abandoned dependencies.
 - Ensure **PII** is not sent to model training sets or third-party services.
 
-**Anti-pattern:** Blindly installing a package the AI suggested (e.g. `npm install`, or your package manager's equivalent) without checking its provenance or license.
+**Anti-pattern:** Blindly installing a package the AI suggested (via the repo's package-manager install command) without checking its provenance or license.
 
 **Enforcement:** Human review of AI-suggested deps; license/provenance audit — **Human SOP**.
 
@@ -362,7 +362,7 @@ Each principle states **why it is needed** (the root failure mode that justifies
 
 **Goal:** Enforce project-wide architectural patterns so AI code reuses existing utilities instead of creating duplicate, unmaintainable logic.
 
-- Enforce the repo's **layering** and patterns (see the adopting repo's `AGENTS.md`, if present — e.g. in an Express.js app the feature triple endpoint → controller → service layering).
+- Enforce the repo's **layering** and patterns (see the adopting repo's `AGENTS.md`, if present — the repo's request-layering convention).
 - **Reuse existing utility functions and design systems** — grep before writing new helpers.
 - Reject duplicate logic that diverges from the established pattern.
 - Keep the architecture **Clean / DDD-aligned** as the project dictates.
@@ -439,7 +439,7 @@ Each principle states **why it is needed** (the root failure mode that justifies
 
 **Goal:** Ensure AI-generated endpoints include structured logging, error handling, health checks, and tracing.
 
-- Use **structured logging** via the repo's own logger wrapper (e.g. a pino-based `loggerFor('ComponentName')` in a Node.js backend — *use whatever structured logger your repo provides; never raw `console.log`/print statements in production code*).
+- Use **structured logging** via the repo's own logger wrapper — *use whatever structured logger your repo provides; never raw `console.log`/print statements in production code*.
 - Every `catch` block must **log the error** before responding; every error `res.status()` must be preceded by `return` (adapt to your framework's response idiom — see the adopting repo's `AGENTS.md`, if present).
 - Add **health checks** and **OpenTelemetry tracing** for production monitoring.
 - Ensure sensitive fields are **redacted** from logs (prefer a central redaction config over hand-rolled redaction).

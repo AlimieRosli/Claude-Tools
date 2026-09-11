@@ -106,7 +106,7 @@ Read [Shared: Locating the Topic](${CLAUDE_PLUGIN_ROOT}/skills/_shared/rules/loc
 Read the codebase before writing anything. Use Read, Glob, and Grep tools to find real details.
 
 Key areas to look at — adapt to the target repo's actual layout:
-- Route/endpoint handlers and middleware (e.g. in an Express.js app, the router/endpoint layer)
+- Route/endpoint handlers and middleware (the repo's router/endpoint layer)
 - Controllers or feature modules — business logic
 - Service/database layer — external calls, data access, cache usage
 - Shared helpers or utilities

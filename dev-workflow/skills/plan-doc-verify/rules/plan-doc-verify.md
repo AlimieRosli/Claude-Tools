@@ -24,10 +24,10 @@ For each check, the verifier must produce **PASS / FAIL** with concrete evidence
 
 ### 2. Coding Standards Conformance
 
-- **Feature layering** — new routes follow the repo's established layering pattern (e.g. in an Express.js app, the feature triple `endpoint → controller → service`) per the repo's guidance ("Request layering" / "Architecture" sections, if present); no layer skipping.
+- **Feature layering** — new routes follow the repo's established request-layering pattern per the repo's guidance ("Request layering" / "Architecture" sections, if present); no layer skipping.
 - **Error handling** — each touched file's existing pattern is respected (e.g. an inline-response pattern vs a structured error-response helper + error constants). Every `catch` logs via the repo's logger before responding; every error response is preceded by `return` (per the repo's "Error handling" guidance, if present).
 - **Logging** — the repo's structured logger/child-logger helper is used, never raw `console.log`. Sensitive fields go through the repo's logger redaction config (if it has one), not hand-rolled redaction (per the repo's "Logging" guidance).
-- **Reuse / anti-spaghetti** — every Phase 1+ block has a Reuse field that is genuinely grep-verified (per the "Reuse Existing Code" rule in `topic-plan-doc-writing.md`). A `none (grep: <keywords>)` must actually have been grepped. Flag any Phase 1+ that specifies a new helper/service/utility when an existing equivalent exists in the repo's shared helper/utility/service directories (e.g. in an Express.js backend: `server/helpers/`, `server/utils/`, `server/services/`).
+- **Reuse / anti-spaghetti** — every Phase 1+ block has a Reuse field that is genuinely grep-verified (per the "Reuse Existing Code" in `topic-plan-doc-writing.md`). A `none (grep: <keywords>)` must actually have been grepped. Flag any Phase 1+ that specifies a new helper/service/utility when an existing equivalent exists in the repo's shared helper/utility/service directories.
 
 ### 3. Design-Level Security / OWASP
 
@@ -45,12 +45,12 @@ This is design-level: flag the concern and the mitigation the plan needs. It is 
 ### 4. Accuracy vs Current Code
 
 - Every referenced file path, function name, config key, env var, endpoint, cache/DB key, and DB/collection name in the plan's phases is verified against the actual source (grep + read).
-- File paths exist, function names are real, endpoints/route prefixes match, DB/collection names match the repo's model/schema registration and config wiring (e.g. in a Mongoose/Express app: the schema/model registry and `config.js`), config keys exist in the repo's config module.
+- File paths exist, function names are real, endpoints/route prefixes match, DB/collection names match the repo's model/schema registration and config wiring (wherever the repo keeps them), config keys exist in the repo's config module.
 - Anything unverifiable is marked `<!-- TODO: confirm -->`, not guessed.
 
 ### 5. Rollback, NFR Coverage & Phasing Sanity
 
-- **Rollback plausibility** — every phase has a Rollback that is concrete and executable (revert commit, delete a file, toggle a config flag, drop a cache key — e.g. a Redis key, if your stack uses Redis). A vague "restore previous state" fails.
+- **Rollback plausibility** — every phase has a Rollback that is concrete and executable (revert commit, delete a file, toggle a config flag, drop the cache keys the change writes — commands per the repo's stack file). A vague "restore previous state" fails.
 - **NFR coverage** — the main doc's §5.5 Non-Functional Requirements are addressed by some phase. If the main doc marked NFR `N/A`, confirm the plan does not contradict that.
 - **Phasing sanity** — Phase 0 prerequisites are real prerequisites; no phase depends on a later phase; each phase's Done When is a verifiable outcome; the Progress Tracker phase list matches the phase headings in the body.
 
@@ -78,7 +78,7 @@ The following may be enforced mechanically by the plugin's gates (they apply whe
 - **Doc Impact determination is explicit** — the phase has a *Doc Impact* entry for the repo's main reference docs (e.g. an API reference and an architecture doc, such as `docs/API_REFERENCE.md` and `docs/ARCHITECTURE.md` if present in the adopting repo), each marked Impacted or Not impacted. A blank/missing determination (no per-doc choice and no justification) = FAIL — the writer must make an explicit call, never skip silently.
 - **Trigger correctness** — verify the Impacted/Not-impacted call against the actual code changes the plan describes (read the referenced source):
   - If the implementation phases add/change/remove an endpoint, route prefix, HTTP method, request/response field, auth guard, API version tag, or error code → the API reference doc (e.g. `docs/API_REFERENCE.md`) **must** be marked Impacted. Marking it Not impacted here = FAIL.
-  - If the implementation phases touch the boot sequence, request layering (e.g. `endpoint → controller → service` in an Express.js app), database connections/models (the repo's schema/model registry and config wiring, e.g. the connection builder / `config.js` in a Mongo-backed app), config keys, middleware order, logging setup, or deployment shape → the architecture doc (e.g. `docs/ARCHITECTURE.md`) **must** be marked Impacted. Marking it Not impacted here = FAIL.
+  - If the implementation phases touch the boot sequence, the repo's request-layering convention, database connections/models (the repo's schema/model registry and connection/model wiring), config keys, middleware order, logging setup, or deployment shape → the architecture doc (e.g. `docs/ARCHITECTURE.md`) **must** be marked Impacted. Marking it Not impacted here = FAIL.
   - A *Not impacted* call with no one-line justification = FAIL.
 - **Affected sections are real** — every listed section heading is verified to exist in the named doc (grep + read the repo's reference docs, e.g. `docs/API_REFERENCE.md` / `docs/ARCHITECTURE.md` if present). A heading that does not exist = FAIL.
 - **Content specificity** — the *Content to add/change* entries are concrete (exact paths, methods, fields, diagram changes), not generic placeholders like "update the docs". Vague content = FAIL. Anything not yet confirmable is marked `<!-- TODO: confirm -->`, not guessed.

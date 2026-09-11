@@ -33,7 +33,7 @@ For each check, the verifier must produce **PASS / FAIL** with concrete evidence
 ### 4. Accuracy vs Current Code
 
 - Every referenced file path, function name, endpoint, DB/collection name, config key, and service is verified against the actual source (grep + read).
-- File paths exist, function names are real, endpoints/route prefixes match, and DB/collection names match the repo's actual schema/model registration and config layer (e.g. in an Express.js + Mongoose app, confirm against the schema-registration module and the central config file).
+- File paths exist, function names are real, endpoints/route prefixes match, and DB/collection names match the repo's actual schema/model registration and config layer (wherever the repo keeps them).
 - Anything unverifiable is marked `<!-- TODO: confirm -->`, not guessed.
 
 *Adapt verification targets to your repository's actual layout and tooling.*

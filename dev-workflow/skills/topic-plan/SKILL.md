@@ -91,10 +91,10 @@ Extract:
 
 Read the codebase before writing the plan. The main doc already documents the current state, but the plan needs **implementation-level detail** — exact functions, line numbers, config keys, and call sites.
 
-Key areas to look at (same as `topic-init`, but deeper — adapt to your repository's actual layout; for example, in an Express.js backend these often map to):
-- route handlers and middleware (e.g. a `server/` tree with route registration)
-- business-logic modules (e.g. `server/modules/`)
-- external service calls (e.g. `server/services/` — third-party APIs, cache clients, database clients)
+Key areas to look at (same as `topic-init`, but deeper — adapt to your repository's actual layout):
+- route handlers and middleware (the repo's route-registration layer)
+- business-logic modules (the repo's feature/module layer)
+- external service calls (the repo's service-integration layer — third-party APIs, cache clients, database clients)
 - shared utilities (e.g. `server/helpers/` or `server/utils/`)
 - configuration and constants (e.g. `config/`)
 - dependency manifest (e.g. `package.json`)
@@ -180,7 +180,7 @@ Set all phases to `☐ Not Started` initially. If the work has already started (
 **Requirement Coverage** — **required table.** Maps each main-doc §2.1 requirement item to its phase(s) and test case ID(s). See [`${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/rules/topic-plan-doc-writing.md`](${CLAUDE_PLUGIN_ROOT}/skills/topic-plan/rules/topic-plan-doc-writing.md) ("Requirement Coverage") for the full rule.
 
 **Prerequisites** — list everything that must be true before any code is written:
-- Local infrastructure (e.g. the app's database and cache running — via mongosh/redis-cli/docker compose if your stack uses Mongo/Redis, or your stack's equivalents).
+- Local infrastructure (e.g. the app's database and cache running — started the way the repo documents; command syntax for inspection/reset from the repo's stack file, per the Stack Content Layer rule).
 - Env vars that must be set.
 - Files that must be read first.
 - Open questions from the main doc that must be resolved.
